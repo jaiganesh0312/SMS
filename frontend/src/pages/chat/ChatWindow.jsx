@@ -55,39 +55,61 @@ const ChatWindow = ({ conversation, currentUser, onBack }) => {
     }, [messages]);
 
     // Socket listeners
+    // Socket listeners
     useEffect(() => {
         if (!socket || !conversation) return;
 
         const handleReceiveMessage = (message) => {
             if (message.conversationId === conversation.id) {
                 setMessages((prev) => [...prev, message]);
-                // Mark as read immediately if window is open (Basic implementation)
                 if (message.senderId !== user.id) {
+                    // Keep single read for immediate feedback
                     socket.emit('chat:read', { messageId: message.id });
                 }
             }
         };
 
-        const handleReadReceipt = ({ messageId, conversationId }) => {
+        const handleReadReceipt = ({ messageId, conversationId, status }) => {
             if (conversationId === conversation.id) {
                 setMessages(prev => prev.map(msg =>
-                    msg.id === messageId ? { ...msg, status: 'READ' } : msg
+                    msg.id === messageId ? { ...msg, status: status || 'READ' } : msg
                 ));
             }
         };
 
-        // Also listen for my own messages sent from other devices if needed, 
-        // but for now relying on local update or confirm.
-        // Ideally we listen to everything to stay in sync.
+        const handleStatusUpdate = ({ messageIds, status }) => {
+            setMessages(prev => prev.map(msg =>
+                messageIds.includes(msg.id) ? { ...msg, status } : msg
+            ));
+        };
+
+        const handleConversationRead = ({ conversationId }) => {
+            if (conversationId === conversation.id) {
+                setMessages(prev => prev.map(msg =>
+                    msg.status !== 'READ' ? { ...msg, status: 'READ' } : msg
+                ));
+            }
+        };
 
         socket.on('chat:receive', handleReceiveMessage);
         socket.on('chat:read_receipt', handleReadReceipt);
+        socket.on('chat:status_update', handleStatusUpdate);
+        socket.on('chat:conversation_read', handleConversationRead);
 
         return () => {
             socket.off('chat:receive', handleReceiveMessage);
             socket.off('chat:read_receipt', handleReadReceipt);
+            socket.off('chat:status_update', handleStatusUpdate);
+            socket.off('chat:conversation_read', handleConversationRead);
         };
     }, [socket, conversation, user.id]);
+
+    // Mark conversation as read on open
+    useEffect(() => {
+        if (conversation?.id && socket && isConnected) {
+            socket.emit('chat:mark_conversation_read', { conversationId: conversation.id });
+        }
+    }, [conversation?.id, socket, isConnected]);
 
 
     const handleSend = async () => {

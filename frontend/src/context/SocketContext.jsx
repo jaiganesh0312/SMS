@@ -40,6 +40,12 @@ export const SocketProvider = ({ children }) => {
                 setIsConnected(false);
             });
 
+            // Global listener to acknowledge delivery
+            newSocket.on('chat:receive', (message) => {
+                // If we receive a message, we are online. Confirm delivery.
+                newSocket.emit('chat:mark_delivered', { messageIds: [message.id] });
+            });
+
             setSocket(newSocket);
         }
 

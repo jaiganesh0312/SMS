@@ -51,6 +51,38 @@ const initSocketServer = (httpServer) => {
         // Join school room (optional, for potential school-wide broadcasts)
         socket.join(`school:${socket.user.schoolId}`);
 
+        // Update pending messages to DELIVERED on connect
+        (async () => {
+            try {
+                const pendingMessages = await Message.findAll({
+                    where: {
+                        receiverId: socket.user.id,
+                        status: 'SENT'
+                    }
+                });
+
+                if (pendingMessages.length > 0) {
+                    await Message.update({ status: 'DELIVERED' }, {
+                        where: {
+                            id: pendingMessages.map(m => m.id)
+                        }
+                    });
+
+                    // Notify senders
+                    const senders = [...new Set(pendingMessages.map(m => m.senderId))];
+                    senders.forEach(senderId => {
+                        const msgIds = pendingMessages.filter(m => m.senderId === senderId).map(m => m.id);
+                        io.to(`user:${senderId}`).emit("chat:status_update", {
+                            messageIds: msgIds,
+                            status: 'DELIVERED'
+                        });
+                    });
+                }
+            } catch (err) {
+                console.error("Error updating status on connect:", err);
+            }
+        })();
+
         // Handle sending message
         socket.on("chat:send", async (data, callback) => {
             try {
@@ -96,7 +128,72 @@ const initSocketServer = (httpServer) => {
             }
         });
 
-        // Handle marking as read
+        // Handle marking as delivered (Real-time)
+        socket.on("chat:mark_delivered", async (data) => {
+            try {
+                const { messageIds } = data; // Expecting array
+                if (!messageIds || messageIds.length === 0) return;
+
+                await Message.update({ status: 'DELIVERED' }, {
+                    where: {
+                        id: messageIds,
+                        receiverId: socket.user.id,
+                        status: 'SENT' // Only update if currently SENT
+                    }
+                });
+
+                // Find messages to identify senders to notify
+                const messages = await Message.findAll({
+                    where: { id: messageIds },
+                    attributes: ['id', 'senderId', 'conversationId']
+                });
+
+                // Notify senders
+                messages.forEach(msg => {
+                    io.to(`user:${msg.senderId}`).emit("chat:read_receipt", {
+                        messageId: msg.id,
+                        conversationId: msg.conversationId,
+                        status: 'DELIVERED'
+                    });
+                    // Also emit generic status update for bulk handling if needed
+                });
+
+            } catch (e) {
+                console.error("mark_delivered error:", e);
+            }
+        });
+
+        // Handle marking conversation as read (Bulk)
+        socket.on("chat:mark_conversation_read", async (data) => {
+            try {
+                const { conversationId } = data;
+
+                // Update all messages in this conversation sent to me
+                const [updatedCount] = await Message.update({ status: 'READ' }, {
+                    where: {
+                        conversationId,
+                        receiverId: socket.user.id,
+                        status: { [Op.ne]: 'READ' }
+                    }
+                });
+
+                if (updatedCount > 0) {
+                    // Notify sender (Assuming 1-1 chat, find the other user)
+                    const conversation = await Conversation.findByPk(conversationId);
+                    const otherUserId = conversation.userAId === socket.user.id ? conversation.userBId : conversation.userAId;
+
+                    io.to(`user:${otherUserId}`).emit("chat:conversation_read", {
+                        conversationId,
+                        receiverId: socket.user.id
+                    });
+                }
+
+            } catch (e) {
+                console.error("mark_conversation_read error:", e);
+            }
+        });
+
+        // Handle marking individual message as read (Legacy/Single)
         socket.on("chat:read", async (data) => {
             try {
                 const { messageId } = data;
@@ -105,7 +202,7 @@ const initSocketServer = (httpServer) => {
                 if (message && message.receiverId === socket.user.id && message.status !== 'READ') {
                     await message.update({ status: 'READ' });
                     // Notify sender
-                    io.to(`user:${message.senderId}`).emit("chat:read_receipt", { messageId, conversationId: message.conversationId });
+                    io.to(`user:${message.senderId}`).emit("chat:read_receipt", { messageId, conversationId: message.conversationId, status: 'READ' });
                 }
             } catch (e) {
                 console.error(e);
