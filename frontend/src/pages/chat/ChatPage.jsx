@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Button, Spinner, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, User as UserAvatar } from "@heroui/react";
+import { Icon } from "@iconify/react";
 import chatService from '@/services/chatService';
 import ChatWindow from './ChatWindow';
 import { useAuth } from '@/context/AuthContext';
+import { useSocket } from '@/context/SocketContext';
 
 const ChatPage = () => {
     const [conversations, setConversations] = useState([]);
@@ -15,11 +17,47 @@ const ChatPage = () => {
     const [view, setView] = useState('list'); // 'list' or 'chat'
 
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { user: currentUser } = useAuth(); // rename to avoid conflict
+    const { user: currentUser } = useAuth();
+    const { socket, isConnected } = useSocket();
 
     useEffect(() => {
         fetchConversations();
-    }, []);
+    }, [isConnected]); // Refetch when connection restores
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const handleReceiveMessage = (message) => {
+            setConversations(prev => {
+                const existingIndex = prev.findIndex(c => c.id === message.conversationId);
+
+                if (existingIndex !== -1) {
+                    // Update existing
+                    const updatedConversations = [...prev];
+                    const conversation = updatedConversations[existingIndex];
+                    updatedConversations.splice(existingIndex, 1);
+                    updatedConversations.unshift({
+                        ...conversation,
+                        lastMessage: message,
+                        updatedAt: message.createdAt
+                    });
+                    return updatedConversations;
+                } else {
+                    // New conversation, fetch all to be safe and accurate or just add if we had the object
+                    fetchConversations();
+                    return prev;
+                }
+            });
+        };
+
+        socket.on('chat:receive', handleReceiveMessage);
+
+        // Listen for new conversations explicitly if we add that event, but chat:receive on new convo covers it essentially 
+
+        return () => {
+            socket.off('chat:receive', handleReceiveMessage);
+        };
+    }, [socket]);
 
     const fetchConversations = async () => {
         try {
@@ -94,9 +132,24 @@ const ChatPage = () => {
             <div className={`${view === 'chat' ? 'hidden md:flex' : 'flex'} w-full md:w-80 lg:w-96 flex-col bg-white border-r border-gray-200 z-0`}>
                 <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-white sticky top-0">
                     <h2 className="text-xl font-bold text-gray-800">Messages</h2>
-                    <Button size="sm" color="primary" isIconOnly onPress={handleNewChatClick} className="rounded-full shadow-sm bg-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        {!isConnected && (
+                            <Button
+                                size="sm"
+                                variant="light"
+                                color="warning"
+                                isIconOnly
+                                onPress={() => fetchConversations()}
+                                className="text-yellow-600"
+                                title="Refresh conversations"
+                            >
+                                <Icon icon="mdi:refresh" className="text-xl" />
+                            </Button>
+                        )}
+                        <Button size="sm" color="primary" isIconOnly onPress={handleNewChatClick} className="rounded-full shadow-sm bg-blue-600">
+                            <Icon icon="mdi:message-plus" className="text-xl" />
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="flex-1 overflow-y-auto">

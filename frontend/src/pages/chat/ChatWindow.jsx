@@ -86,18 +86,48 @@ const ChatWindow = ({ conversation, currentUser, onBack }) => {
         setNewMessage(""); // Clear immediately for UX
         setSending(true);
 
-        try {
-            // Optimistic UI update could happen here, but we'll wait for server for reliability first turn
-            const res = await chatService.sendMessage(conversation.id, tempContent, "TEXT");
-            if (res.success) {
-                setMessages((prev) => [...prev, res.data]);
+        const sendMessageViaApi = async () => {
+            try {
+                const res = await chatService.sendMessage(conversation.id, tempContent, "TEXT");
+                if (res.success) {
+                    setMessages((prev) => [...prev, res.data]);
+                }
+            } catch (error) {
+                console.error("Failed to send via API", error);
+                setNewMessage(tempContent); // Restore on final failure
+            } finally {
+                setSending(false);
             }
-        } catch (error) {
-            console.error("Failed to send", error);
-            // Restore message on failure
-            setNewMessage(tempContent);
-        } finally {
-            setSending(false);
+        };
+
+        if (isConnected && socket) {
+            // Socket-first approach
+            const timeout = setTimeout(() => {
+                // Determine if we should fallback if no ack received in time?
+                // For now, let's assume if callback isn't called, it might be stuck.
+                // But generally safe to rely on callback or disconnect.
+                // Implementing a simple fallback if no response in 3s
+                console.warn("Socket timeout, falling back to API");
+                sendMessageViaApi();
+            }, 3000);
+
+            socket.emit('chat:send', {
+                conversationId: conversation.id,
+                content: tempContent,
+                type: "TEXT"
+            }, (response) => {
+                clearTimeout(timeout);
+                if (response.success) {
+                    setMessages((prev) => [...prev, response.data]);
+                    setSending(false);
+                } else {
+                    console.error("Socket error response:", response.error);
+                    sendMessageViaApi(); // Fallback on server error
+                }
+            });
+        } else {
+            // Offline/No Socket
+            sendMessageViaApi();
         }
     };
 
