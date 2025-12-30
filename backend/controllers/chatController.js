@@ -319,17 +319,22 @@ exports.markRead = async (req, res) => {
 exports.getChatUsers = async (req, res) => {
     try {
         const schoolId = req.user.schoolId;
+        const { search } = req.query;
         const currentUserId = req.user.id;
 
         // Fetch all users in school except current user AND STUDENTS
-        // Simple version: just list them. Scalable version: Search/Pagination.
-        // Given the request, we'll list them.
+
+        const whereClause = {
+            schoolId,
+            id: { [Op.ne]: currentUserId },
+        };
+
+        if (search) {
+            whereClause.name = { [Op.like]: `%${search}%` };
+        }
 
         const users = await User.findAll({
-            where: {
-                schoolId,
-                id: { [Op.ne]: currentUserId },
-            },
+            where: whereClause,
             attributes: ["id", "name", "role", "email"],
             order: [["name", "ASC"]],
         });

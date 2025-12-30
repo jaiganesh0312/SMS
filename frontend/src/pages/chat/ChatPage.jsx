@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardBody, Button, Spinner, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, User as UserAvatar } from "@heroui/react";
+import { Card, CardBody, Button, Spinner, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, User as UserAvatar, Input } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import chatService from '@/services/chatService';
 import ChatWindow from './ChatWindow';
@@ -12,6 +12,7 @@ const ChatPage = () => {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]); // For new chat modal
     const [loadingUsers, setLoadingUsers] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
 
     // View state for mobile responsiveness
     const [view, setView] = useState('list'); // 'list' or 'chat'
@@ -81,19 +82,30 @@ const ChatPage = () => {
         setView('chat');
     };
 
-    const handleNewChatClick = async () => {
-        onOpen();
-        setLoadingUsers(true);
-        try {
-            const res = await chatService.getChatUsers();
-            if (res.success) {
-                setUsers(res.data);
+    // Debounced search for users
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const timer = setTimeout(async () => {
+            setLoadingUsers(true);
+            try {
+                const res = await chatService.getChatUsers(searchQuery);
+                if (res.success) {
+                    setUsers(res.data);
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoadingUsers(false);
             }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoadingUsers(false);
-        }
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [searchQuery, isOpen]);
+
+    const handleNewChatClick = () => {
+        setSearchQuery("");
+        onOpen();
     };
 
     const startChat = async (userId) => {
@@ -235,7 +247,21 @@ const ChatPage = () => {
                         <>
                             <ModalHeader className="flex flex-col gap-1">New Chat</ModalHeader>
                             <ModalBody>
-                                <p className="text-xs text-gray-400 uppercase font-bold tracking-wider mb-2">Available Users</p>
+                                <Input
+                                    autoFocus
+                                    placeholder="Search user by name..."
+                                    value={searchQuery}
+                                    onValueChange={setSearchQuery}
+                                    startContent={
+                                        <Icon icon="mdi:magnify" className="text-gray-400 text-lg" />
+                                    }
+                                    variant="bordered"
+                                    radius="lg"
+                                    classNames={{
+                                        inputWrapper: "bg-white shadow-none border-gray-200"
+                                    }}
+                                />
+                                <p className="text-xs text-gray-400 uppercase font-bold tracking-wider mb-2 mt-4">Available Users</p>
                                 {loadingUsers ? (
                                     <div className="flex justify-center py-4"><Spinner /></div>
                                 ) : (

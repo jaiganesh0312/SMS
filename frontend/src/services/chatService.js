@@ -49,9 +49,11 @@ const markRead = async (messageId) => {
     }
 };
 
-const getChatUsers = async () => {
+const getChatUsers = async (search = '') => {
     try {
-        const response = await api.get('/chat/users');
+        const response = await api.get('/chat/users', {
+            params: { search }
+        });
         return response.data;
     } catch (error) {
         throw error;
