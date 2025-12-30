@@ -211,7 +211,7 @@ const ChatPage = () => {
                     <ChatWindow
                         conversation={selectedConversation}
                         currentUser={currentUser}
-                        onBack={() => setView('list')}
+                        onBack={() => { setView('list'); setSelectedConversation(null); }}
                     />
                 ) : (
                     <div className="flex-1 flex flex-col items-center justify-center text-gray-400 bg-gray-50/50">
