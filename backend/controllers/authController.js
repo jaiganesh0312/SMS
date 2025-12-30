@@ -36,17 +36,7 @@ exports.registerSchool = async (req, res) => {
       isActive: true
     });
 
-    // 3. Create Staff Profile
-    await StaffProfile.create({
-      schoolId: newSchool.id,
-      userId: newAdmin.id,
-      employeeCode: `ADMIN-${newSchool.id.split('-')[0]}`,
-      designation: "Principal/Admin",
-      department: "Administration",
-      joiningDate: new Date()
-    });
-
-    // 4. Send Registration Email (Assumption: No logo for new school yet, or use generic)
+    // 3. Send Registration Email (Assumption: No logo for new school yet, or use generic)
     // For now, pass null or specific system logo if available
     await sendSchoolRegistrationEmail(newSchool.name, adminEmail, adminPassword, null);
 
