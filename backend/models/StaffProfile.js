@@ -43,7 +43,7 @@ const StaffProfile = sequelize.define(
       allowNull: false,
     },
     workingAs: {
-      type: DataTypes.ENUM("TEACHER", "STAFF", "LIBRARIAN"),
+      type: DataTypes.ENUM("TEACHER", "STAFF", "LIBRARIAN", "BUS_DRIVER"),
       allowNull: false,
       defaultValue: "TEACHER"
     },

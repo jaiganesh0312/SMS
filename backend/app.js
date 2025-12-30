@@ -63,7 +63,7 @@ app.use("/api/teacher", require("./routes/teacherRoutes"));
 app.use("/api/school", require("./routes/schoolRoutes"));
 app.use("/api/library", require("./routes/libraryRoutes"));
 app.use("/api/chat", chatRoutes); // Use chat routes
-
+app.use("/api/transport", require("./routes/transportRoutes")); // Transport/Bus tracking routes
 
 
 // 404

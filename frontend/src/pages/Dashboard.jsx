@@ -8,6 +8,8 @@ import TeacherDashboard from "./dashboard/TeacherDashboard";
 import OfficeStaffDashboard from "./dashboard/OfficeStaffDashboard";
 import ParentDashboard from './dashboard/ParentDashboard';
 import LibrarianDashboard from '@/pages/Librarian/LibrarianDashboard';
+import DriverDashboard from './dashboard/DriverDashboard';
+
 
 export default function Dashboard() {
     const { user } = useAuth();
@@ -36,6 +38,11 @@ export default function Dashboard() {
     if (user?.role === 'LIBRARIAN') {
         return <LibrarianDashboard />;
     }
+
+    if (user?.role === 'BUS_DRIVER') {
+        return <DriverDashboard />;
+    }
+
 
     // Default dashboard for other roles (Teachers, Students, etc.)
     // For now, we keep the original generic generic view for them or fallback

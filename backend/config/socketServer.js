@@ -212,7 +212,112 @@ const initSocketServer = (httpServer) => {
         socket.on("disconnect", () => {
             console.log(`User disconnected: ${socket.user.id}`);
         });
+
+        // =====================
+        // BUS TRACKING EVENTS
+        // =====================
+
+        // Subscribe to bus location updates
+        socket.on("bus:subscribe", async (data) => {
+            try {
+                const { busId } = data;
+                if (!busId) return;
+
+                // TODO: Add validation that user can track this bus
+                // For now, allow school members to subscribe
+
+                socket.join(`bus:${busId}`);
+                console.log(`User ${socket.user.id} subscribed to bus:${busId}`);
+            } catch (e) {
+                console.error("bus:subscribe error:", e);
+            }
+        });
+
+        // Unsubscribe from bus updates
+        socket.on("bus:unsubscribe", (data) => {
+            const { busId } = data;
+            if (busId) {
+                socket.leave(`bus:${busId}`);
+                console.log(`User ${socket.user.id} unsubscribed from bus:${busId}`);
+            }
+        });
+
+        // Subscribe to school-wide transport updates (admin only)
+        socket.on("transport:subscribe", () => {
+            if (["SCHOOL_ADMIN", "SUPER_ADMIN", "STAFF"].includes(socket.user.role)) {
+                socket.join(`school:${socket.user.schoolId}:transport`);
+                console.log(`User ${socket.user.id} subscribed to school transport`);
+            }
+        });
+
+        // Driver sending location update via socket
+        socket.on("bus:location:update", async (data) => {
+            try {
+                const { busId, lat, lng, speed, heading, accuracy } = data;
+
+                // Validate that user can send updates for this bus
+                // For now, allow staff to send updates
+                if (!["STAFF", "SCHOOL_ADMIN"].includes(socket.user.role)) {
+                    return;
+                }
+
+                // Import models dynamically to avoid circular dependency
+                const { Bus, BusLocation, BusTrip } = require("../models");
+
+                // Validate bus belongs to user's school
+                const bus = await Bus.findOne({
+                    where: { id: busId, schoolId: socket.user.schoolId }
+                });
+
+                if (!bus) return;
+
+                // Get active trip
+                const activeTrip = await BusTrip.findOne({
+                    where: { busId, status: "IN_PROGRESS" }
+                });
+
+                // Check deduplication
+                const lastLocation = await BusLocation.findOne({
+                    where: { busId },
+                    order: [["timestamp", "DESC"]]
+                });
+
+                if (lastLocation) {
+                    const diff = Date.now() - new Date(lastLocation.timestamp).getTime();
+                    if (diff < 5000) return; // Skip if within 5 seconds
+                }
+
+                // Save location
+                const location = await BusLocation.create({
+                    busId,
+                    tripId: activeTrip?.id || null,
+                    lat,
+                    lng,
+                    speed: speed || null,
+                    heading: heading || null,
+                    accuracy: accuracy || null,
+                    timestamp: new Date()
+                });
+
+                // Broadcast to subscribers
+                const locationData = {
+                    busId,
+                    lat: parseFloat(lat),
+                    lng: parseFloat(lng),
+                    speed,
+                    heading,
+                    timestamp: location.timestamp
+                };
+
+                io.to(`bus:${busId}`).emit("bus:location:receive", locationData);
+                io.to(`school:${socket.user.schoolId}:transport`).emit("bus:location:receive", locationData);
+
+            } catch (e) {
+                console.error("bus:location:update error:", e);
+            }
+        });
     });
+
 
     return io;
 };

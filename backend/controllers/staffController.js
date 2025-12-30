@@ -6,14 +6,15 @@ const { sendStaffCreationEmail } = require("../services/emailService");
 exports.getAllStaff = async (req, res) => {
   try {
     let schoolId = req.user.schoolId;
-    const { schoolId: querySchoolId } = req.query;
+    const { schoolId: querySchoolId, role } = req.query;
 
     if (req.user.role === 'SUPER_ADMIN' && querySchoolId) {
       schoolId = querySchoolId;
     }
 
     const where = {
-      role: ["TEACHER", "STAFF", "LIBRARIAN"],
+      role: role ? role : ["TEACHER", "STAFF", "LIBRARIAN", "BUS_DRIVER"],
+
       isActive: true
     };
 
@@ -78,8 +79,10 @@ exports.updateStaff = async (req, res) => {
     if (workingAs) {
       if (workingAs === "TEACHER") user.role = "TEACHER";
       else if (workingAs === "LIBRARIAN") user.role = "LIBRARIAN";
+      else if (workingAs === "BUS_DRIVER") user.role = "BUS_DRIVER";
       else user.role = "STAFF";
     }
+
 
     await user.save();
 
@@ -153,6 +156,8 @@ exports.createStaff = async (req, res) => {
     let role = "STAFF";
     if (workingAs === "TEACHER") role = "TEACHER";
     if (workingAs === "LIBRARIAN") role = "LIBRARIAN";
+    if (workingAs === "BUS_DRIVER") role = "BUS_DRIVER";
+
     const newUser = await User.create({
       name,
       schoolId,

@@ -86,6 +86,16 @@ import RenewBook from '@/pages/Librarian/RenewBook';
 import SectionBooks from '@/pages/Librarian/SectionBooks';
 import BookDetails from '@/pages/Librarian/BookDetails';
 
+// Transport Pages
+import {
+  BusTracking,
+  ManageBuses,
+  ManageRoutes,
+  BusAssignments,
+  DriverPanel,
+  TripHistory,
+} from '@/pages/transport';
+
 
 function App() {
   return (
@@ -180,6 +190,14 @@ function App() {
               <Route path="library/renew" element={<ProtectedRoute><RenewBook /></ProtectedRoute>} />
               <Route path="library/section/:sectionId/books" element={<ProtectedRoute><SectionBooks /></ProtectedRoute>} />
               <Route path="library/book/:id" element={<ProtectedRoute><BookDetails /></ProtectedRoute>} />
+
+              {/* Transport / Bus Tracking */}
+              <Route path="transport/tracking" element={<ProtectedRoute><BusTracking /></ProtectedRoute>} />
+              <Route path="transport/buses" element={<ProtectedRoute><ManageBuses /></ProtectedRoute>} />
+              <Route path="transport/routes" element={<ProtectedRoute><ManageRoutes /></ProtectedRoute>} />
+              <Route path="transport/assignments" element={<ProtectedRoute><BusAssignments /></ProtectedRoute>} />
+              <Route path="transport/driver-panel" element={<ProtectedRoute><DriverPanel /></ProtectedRoute>} />
+              <Route path="transport/trip-history" element={<ProtectedRoute><TripHistory /></ProtectedRoute>} />
 
 
               <Route path="*" element={<Navigate to="/dashboard" replace />} />

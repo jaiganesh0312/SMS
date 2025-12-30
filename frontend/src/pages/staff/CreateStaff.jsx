@@ -19,7 +19,8 @@ import { motion } from "framer-motion";
 const STAFF_ROLES = [
     { value: "TEACHER", label: "Teacher" },
     { value: "STAFF", label: "Staff" },
-    { value: "LIBRARIAN", label: "Librarian" }
+    { value: "LIBRARIAN", label: "Librarian" },
+    { value: "BUS_DRIVER", label: "Bus Driver" }
 ];
 
 const STEPS = [

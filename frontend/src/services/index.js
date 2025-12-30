@@ -18,7 +18,8 @@ import complaintService from './complaintService';
 import galleryService from './galleryService';
 import teacherService from './teacherService';
 import libraryService from './libraryService';
-
+import chatService from './chatService';
+import transportService from './transportService';
 export {
     authService,
     studentService,
@@ -39,5 +40,8 @@ export {
     complaintService,
     galleryService,
     teacherService,
-    libraryService
+    libraryService,
+    chatService,
+    transportService
+
 };

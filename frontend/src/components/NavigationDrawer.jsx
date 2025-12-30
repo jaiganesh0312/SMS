@@ -75,6 +75,17 @@ export default function NavigationDrawer({ isOpen, onClose }) {
                         { name: 'Leave Management', path: '/leave-management', icon: 'mdi:calendar-check-outline' },
                     ],
                 },
+                {
+                    title: 'Transport',
+                    items: [
+                        { name: 'Bus Tracking', path: '/transport/tracking', icon: 'mdi:bus-marker' },
+                        { name: 'Manage Buses', path: '/transport/buses', icon: 'mdi:bus' },
+                        { name: 'Manage Routes', path: '/transport/routes', icon: 'mdi:map-marker-path' },
+                        { name: 'Bus Assignments', path: '/transport/assignments', icon: 'mdi:seat-passenger' },
+                        { name: 'Driver Panel', path: '/transport/driver-panel', icon: 'mdi:steering' },
+                        { name: 'Trip History', path: '/transport/trip-history', icon: 'mdi:history' },
+                    ],
+                },
             ],
             TEACHER: [
                 {
@@ -93,27 +104,23 @@ export default function NavigationDrawer({ isOpen, onClose }) {
                     title: 'My Workspace',
                     items: [
                         { name: 'My Leaves', path: '/my-leaves', icon: 'mdi:calendar-account' },
+                        { name: 'Driver Panel', path: '/transport/driver-panel', icon: 'mdi:steering' },
                         { name: 'My Profile', path: '/profile', icon: 'mdi:account' },
                     ],
                 }
             ],
+
             PARENT: [
                 {
                     title: 'My Children',
                     items: [
                         { name: 'Fee Payment', path: '/parent/fees', icon: 'mdi:cash-multiple' },
+                        { name: 'Bus Tracking', path: '/transport/tracking', icon: 'mdi:bus-marker' },
                         { name: 'Complaints', path: '/complaints', icon: 'mdi:message-alert' },
                     ],
                 },
-                // {
-                //     title: 'Academic',
-                //     items: [
-                //         { name: 'Attendance', path: '/parent/attendance', icon: 'mdi:calendar-check' },
-                //         { name: 'Exam Results', path: '/parent/results', icon: 'mdi:chart-bar' },
-                //         { name: 'Timetable', path: '/parent/timetable', icon: 'mdi:calendar-clock' },
-                //     ],
-                // },
             ],
+
             LIBRARIAN: [
                 {
                     title: 'Library Management',
@@ -123,6 +130,16 @@ export default function NavigationDrawer({ isOpen, onClose }) {
                         { name: 'Issue Book', path: '/library/issue', icon: 'mdi:book-arrow-right' },
                         { name: 'Return Book', path: '/library/return', icon: 'mdi:book-arrow-left' },
                         { name: 'Renew Book', path: '/library/renew', icon: 'mdi:book-refresh' },
+                    ],
+                }
+            ],
+            BUS_DRIVER: [
+                {
+                    title: 'Transport',
+                    items: [
+                        { name: 'Driver Panel', path: '/transport/driver-panel', icon: 'mdi:steering' },
+                        { name: 'Trip History', path: '/transport/trip-history', icon: 'mdi:history' },
+                        { name: 'My Profile', path: '/profile', icon: 'mdi:account' },
                     ],
                 }
             ],

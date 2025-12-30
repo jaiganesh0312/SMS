@@ -29,6 +29,13 @@ const LibraryTransaction = require("./LibraryTransaction");
 const Conversation = require("./Conversation");
 const Message = require("./Message");
 
+// Transport Models
+const Bus = require("./Bus");
+const BusRoute = require("./BusRoute");
+const BusTrip = require("./BusTrip");
+const BusLocation = require("./BusLocation");
+const StudentBusAssignment = require("./StudentBusAssignment");
+
 // School Associations
 School.hasMany(User, { foreignKey: "schoolId" });
 User.belongsTo(School, { foreignKey: "schoolId" });
@@ -209,6 +216,47 @@ Message.belongsTo(User, { foreignKey: "senderId", as: "sender" });
 User.hasMany(Message, { foreignKey: "receiverId", as: "receivedMessages" });
 Message.belongsTo(User, { foreignKey: "receiverId", as: "receiver" });
 
+// Transport Associations
+School.hasMany(Bus, { foreignKey: "schoolId" });
+Bus.belongsTo(School, { foreignKey: "schoolId" });
+
+User.hasMany(Bus, { foreignKey: "driverId", as: "assignedBuses" });
+Bus.belongsTo(User, { foreignKey: "driverId", as: "driver" });
+
+Bus.hasMany(BusRoute, { foreignKey: "busId" });
+BusRoute.belongsTo(Bus, { foreignKey: "busId" });
+
+School.hasMany(BusRoute, { foreignKey: "schoolId" });
+BusRoute.belongsTo(School, { foreignKey: "schoolId" });
+
+Bus.hasMany(BusTrip, { foreignKey: "busId" });
+BusTrip.belongsTo(Bus, { foreignKey: "busId" });
+
+BusRoute.hasMany(BusTrip, { foreignKey: "routeId" });
+BusTrip.belongsTo(BusRoute, { foreignKey: "routeId" });
+
+School.hasMany(BusTrip, { foreignKey: "schoolId" });
+BusTrip.belongsTo(School, { foreignKey: "schoolId" });
+
+Bus.hasMany(BusLocation, { foreignKey: "busId" });
+BusLocation.belongsTo(Bus, { foreignKey: "busId" });
+
+BusTrip.hasMany(BusLocation, { foreignKey: "tripId" });
+BusLocation.belongsTo(BusTrip, { foreignKey: "tripId" });
+
+Student.hasOne(StudentBusAssignment, { foreignKey: "studentId" });
+StudentBusAssignment.belongsTo(Student, { foreignKey: "studentId" });
+
+Bus.hasMany(StudentBusAssignment, { foreignKey: "busId" });
+StudentBusAssignment.belongsTo(Bus, { foreignKey: "busId" });
+
+BusRoute.hasMany(StudentBusAssignment, { foreignKey: "routeId" });
+StudentBusAssignment.belongsTo(BusRoute, { foreignKey: "routeId" });
+
+School.hasMany(StudentBusAssignment, { foreignKey: "schoolId" });
+StudentBusAssignment.belongsTo(School, { foreignKey: "schoolId" });
+
+
 module.exports = {
   sequelize,
   Sequelize,
@@ -229,7 +277,6 @@ module.exports = {
   FeePayment,
   Payroll,
   Notification,
-  Notification,
   Announcement,
   StaffAttendance,
   SalaryStructure,
@@ -237,9 +284,14 @@ module.exports = {
   Gallery,
   GalleryImage,
   Book,
-  Book,
   LibrarySection,
   LibraryTransaction,
   Conversation,
   Message,
+  // Transport
+  Bus,
+  BusRoute,
+  BusTrip,
+  BusLocation,
+  StudentBusAssignment,
 };
