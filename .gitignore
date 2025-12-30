@@ -1,0 +1,45 @@
+# Ignore node_modules
+node_modules
+
+# Ignore build output
+build
+
+# Ignore editor settings
+.idea
+.vscode
+
+# Ignore environment variables
+.env
+
+# Ignore temporary files
+*.log
+*.tmp
+
+# Ignore IDE specific files
+Thumbs.db
+.DS_Store
+
+# Ignore package-lock.json
+package-lock.json
+
+# Ignore yarn.lock
+yarn.lock
+
+# Ignore npm-debug.log
+npm-debug.log
+
+# Ignore yarn-error.log
+yarn-error.log
+
+# Ignore yarnrc
+.yarnrc
+
+#ignore zip files
+*.zip
+
+#ignore uploads folder
+uploads
+
+#ignore design.md
+design.md
+

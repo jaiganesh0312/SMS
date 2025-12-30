@@ -1,0 +1,62 @@
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import io from 'socket.io-client';
+import { useAuth } from './AuthContext';
+
+const SocketContext = createContext(null);
+
+export const SocketProvider = ({ children }) => {
+    const { isAuthenticated } = useAuth(); // Monitor auth state
+    const [socket, setSocket] = useState(null);
+    const [isConnected, setIsConnected] = useState(false);
+
+    useEffect(() => {
+        // Only connect if authenticated
+        let newSocket;
+        const token = localStorage.getItem('token');
+
+        if (isAuthenticated && token) {
+            const SOCKET_URL = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000';
+
+            newSocket = io(SOCKET_URL, {
+                auth: { token },
+                withCredentials: true,
+                reconnection: true,
+                reconnectionAttempts: 5,
+                reconnectionDelay: 1000,
+            });
+
+            newSocket.on('connect', () => {
+                console.log('Socket connected');
+                setIsConnected(true);
+            });
+
+            newSocket.on('disconnect', () => {
+                console.log('Socket disconnected');
+                setIsConnected(false);
+            });
+
+            newSocket.on('connect_error', (err) => {
+                console.error('Socket connection error:', err);
+                setIsConnected(false);
+            });
+
+            setSocket(newSocket);
+        }
+
+        return () => {
+            if (newSocket) {
+                newSocket.disconnect();
+            }
+        };
+    }, [isAuthenticated]); // Re-run if auth state changes
+
+    return (
+        <SocketContext.Provider value={{ socket, isConnected }}>
+            {children}
+        </SocketContext.Provider>
+    );
+};
+
+export const useSocket = () => {
+    return useContext(SocketContext);
+};
