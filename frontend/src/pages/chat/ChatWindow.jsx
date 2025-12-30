@@ -11,12 +11,18 @@ const ChatWindow = ({ conversation, currentUser, onBack }) => {
     const [loading, setLoading] = useState(true);
     const [sending, setSending] = useState(false);
     const [newMessage, setNewMessage] = useState("");
-    const messagesEndRef = useRef(null);
+    const messagesContainerRef = useRef(null);
     const { socket, isConnected } = useSocket();
     const { user } = useAuth(); // Ensures we have current user context
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (messagesContainerRef.current) {
+            const { scrollHeight, clientHeight } = messagesContainerRef.current;
+            messagesContainerRef.current.scrollTo({
+                top: scrollHeight - clientHeight,
+                behavior: 'smooth'
+            });
+        }
     };
 
     useEffect(() => {
@@ -32,7 +38,12 @@ const ChatWindow = ({ conversation, currentUser, onBack }) => {
                 console.error("Failed to load messages", error);
             } finally {
                 setLoading(false);
-                scrollToBottom();
+                // use setTimeout to ensure render cycle complete
+                setTimeout(() => {
+                    if (messagesContainerRef.current) {
+                        messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+                    }
+                }, 0);
             }
         };
 
@@ -178,7 +189,7 @@ const ChatWindow = ({ conversation, currentUser, onBack }) => {
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
                 {loading ? (
                     <div className="flex justify-center py-10"><Spinner /></div>
                 ) : messages.length === 0 ? (
@@ -192,7 +203,6 @@ const ChatWindow = ({ conversation, currentUser, onBack }) => {
                         />
                     ))
                 )}
-                <div ref={messagesEndRef} />
             </div>
 
             {/* Input Area */}

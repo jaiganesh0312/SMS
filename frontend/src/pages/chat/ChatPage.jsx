@@ -39,6 +39,7 @@ const ChatPage = () => {
                     updatedConversations.unshift({
                         ...conversation,
                         lastMessage: message,
+                        unreadCount: (conversation.unreadCount || 0) + 1,
                         updatedAt: message.createdAt
                     });
                     return updatedConversations;
@@ -74,6 +75,8 @@ const ChatPage = () => {
     };
 
     const handleSelectConversation = (conv) => {
+        // Reset unread count locally
+        setConversations(prev => prev.map(c => c.id === conv.id ? { ...c, unreadCount: 0 } : c));
         setSelectedConversation(conv);
         setView('chat');
     };
@@ -170,7 +173,14 @@ const ChatPage = () => {
                             >
                                 <div className="flex justify-between items-start mb-1">
                                     <h4 className="font-semibold text-gray-800 text-sm">{conv.otherUser.name}</h4>
-                                    <span className="text-[10px] text-gray-400">{formatDate(conv.lastMessage?.createdAt || conv.updatedAt)}</span>
+                                    <div className="flex flex-col items-end gap-1">
+                                        <span className="text-[10px] text-gray-400">{formatDate(conv.lastMessage?.createdAt || conv.updatedAt)}</span>
+                                        {conv.unreadCount > 0 && (
+                                            <div className="bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[1.25rem] text-center">
+                                                {conv.unreadCount}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                                 <p className="text-xs text-gray-500 truncate h-5">
                                     {conv.lastMessage ? (

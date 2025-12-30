@@ -35,16 +35,27 @@ exports.getConversations = async (req, res) => {
         });
 
         // Format for frontend
-        const formattedConversations = conversations.map((conv) => {
+        const formattedConversations = await Promise.all(conversations.map(async (conv) => {
             const otherUser = conv.userAId === userId ? conv.userB : conv.userA;
             const lastMessage = conv.Messages[0];
+
+            // Count unread messages
+            const unreadCount = await Message.count({
+                where: {
+                    conversationId: conv.id,
+                    receiverId: userId,
+                    status: { [Op.ne]: 'READ' }
+                }
+            });
+
             return {
                 id: conv.id,
                 otherUser,
                 lastMessage,
+                unreadCount,
                 updatedAt: conv.updatedAt,
             };
-        });
+        }));
 
         res.status(200).json({
             success: true,
