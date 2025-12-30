@@ -172,7 +172,12 @@ const ChatPage = () => {
                             `}
                             >
                                 <div className="flex justify-between items-start mb-1">
-                                    <h4 className="font-semibold text-gray-800 text-sm">{conv.otherUser.name}</h4>
+                                    <div className="flex items-center gap-1.5 overflow-hidden">
+                                        <h4 className="font-semibold text-gray-800 text-sm truncate">{conv.otherUser.name}</h4>
+                                        <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded border border-gray-200 uppercase font-medium tracking-wide whitespace-nowrap">
+                                            {conv.otherUser.role}
+                                        </span>
+                                    </div>
                                     <div className="flex flex-col items-end gap-1">
                                         <span className="text-[10px] text-gray-400">{formatDate(conv.lastMessage?.createdAt || conv.updatedAt)}</span>
                                         {conv.unreadCount > 0 && (

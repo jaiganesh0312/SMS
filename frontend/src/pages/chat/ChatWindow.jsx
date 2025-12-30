@@ -168,7 +168,12 @@ const ChatWindow = ({ conversation, currentUser, onBack }) => {
                         </button>
                     )}
                     <div>
-                        <h3 className="font-semibold text-gray-800">{conversation.otherUser?.name || "User"}</h3>
+                        <div className="flex items-center gap-2">
+                            <h3 className="font-semibold text-gray-800">{conversation.otherUser?.name || "User"}</h3>
+                            <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full uppercase font-bold tracking-wide">
+                                {conversation.otherUser?.role}
+                            </span>
+                        </div>
                         <p className="text-xs text-gray-500">{conversation.otherUser?.email}</p>
                     </div>
                 </div>
