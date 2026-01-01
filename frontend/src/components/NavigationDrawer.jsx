@@ -19,6 +19,8 @@ export default function NavigationDrawer({ isOpen, onClose }) {
                     ...(user?.role !== 'STUDENT' ? [{ name: 'Chat', path: '/chat', icon: 'mdi:chat-processing' }] : []),
                     { name: 'Announcements', path: '/announcements', icon: 'mdi:bullhorn' },
                     { name: 'Gallery', path: '/gallery', icon: 'mdi:image-multiple' },
+                    { name: 'Study Materials', path: '/study-materials', icon: 'mdi:book-open-variant' },
+
                 ],
             },
         ];

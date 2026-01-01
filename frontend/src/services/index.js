@@ -20,6 +20,8 @@ import teacherService from './teacherService';
 import libraryService from './libraryService';
 import chatService from './chatService';
 import transportService from './transportService';
+import studyMaterialService from './studyMaterialService';
+
 export {
     authService,
     studentService,
@@ -42,6 +44,8 @@ export {
     teacherService,
     libraryService,
     chatService,
-    transportService
+    transportService,
+    studyMaterialService
+
 
 };

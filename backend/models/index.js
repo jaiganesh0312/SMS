@@ -29,6 +29,10 @@ const LibraryTransaction = require("./LibraryTransaction");
 const Conversation = require("./Conversation");
 const Message = require("./Message");
 
+// Study Material Models
+const StudyMaterialSection = require("./StudyMaterialSection");
+const StudyMaterial = require("./StudyMaterial");
+
 // Transport Models
 const Bus = require("./Bus");
 const BusRoute = require("./BusRoute");
@@ -256,6 +260,28 @@ StudentBusAssignment.belongsTo(BusRoute, { foreignKey: "routeId" });
 School.hasMany(StudentBusAssignment, { foreignKey: "schoolId" });
 StudentBusAssignment.belongsTo(School, { foreignKey: "schoolId" });
 
+// Study Material Associations
+School.hasMany(StudyMaterialSection, { foreignKey: "schoolId" });
+StudyMaterialSection.belongsTo(School, { foreignKey: "schoolId" });
+
+Class.hasMany(StudyMaterialSection, { foreignKey: "classId" });
+StudyMaterialSection.belongsTo(Class, { foreignKey: "classId" });
+
+Subject.hasMany(StudyMaterialSection, { foreignKey: "subjectId" });
+StudyMaterialSection.belongsTo(Subject, { foreignKey: "subjectId" });
+
+User.hasMany(StudyMaterialSection, { foreignKey: "createdBy", as: "createdSections" });
+StudyMaterialSection.belongsTo(User, { foreignKey: "createdBy", as: "creator" });
+
+StudyMaterialSection.hasMany(StudyMaterial, { foreignKey: "studyMaterialSectionId", as: "materials" });
+StudyMaterial.belongsTo(StudyMaterialSection, { foreignKey: "studyMaterialSectionId", as: "section" });
+
+School.hasMany(StudyMaterial, { foreignKey: "schoolId" });
+StudyMaterial.belongsTo(School, { foreignKey: "schoolId" });
+
+User.hasMany(StudyMaterial, { foreignKey: "uploadedBy", as: "uploadedMaterials" });
+StudyMaterial.belongsTo(User, { foreignKey: "uploadedBy", as: "uploader" });
+
 
 module.exports = {
   sequelize,
@@ -288,6 +314,9 @@ module.exports = {
   LibraryTransaction,
   Conversation,
   Message,
+  // Study Materials
+  StudyMaterialSection,
+  StudyMaterial,
   // Transport
   Bus,
   BusRoute,

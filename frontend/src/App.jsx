@@ -33,6 +33,7 @@ import SchoolSettings from '@/pages/admin/SchoolSettings';
 import Classes from '@/pages/academic/Classes';
 import Subjects from '@/pages/academic/Subjects';
 import Timetable from '@/pages/academic/Timetable';
+import CreateDailyTimetable from '@/pages/academic/CreateDailyTimetable';
 
 // Attendance Pages
 import MarkAttendance from '@/pages/attendance/MarkAttendance';
@@ -96,6 +97,12 @@ import {
   TripHistory,
 } from '@/pages/transport';
 
+// Study Material Pages
+import StudyMaterials from '@/pages/study/StudyMaterials';
+import SectionDetails from '@/pages/study/SectionDetails';
+import VideoPlayer from '@/pages/study/VideoPlayer';
+
+
 
 function App() {
   return (
@@ -124,6 +131,7 @@ function App() {
               <Route path="academic/classes" element={<ProtectedRoute><Classes /></ProtectedRoute>} />
               <Route path="academic/subjects" element={<ProtectedRoute><Subjects /></ProtectedRoute>} />
               <Route path="academic/timetable" element={<ProtectedRoute><Timetable /></ProtectedRoute>} />
+              <Route path="academic/timetable/create-daily" element={<ProtectedRoute><CreateDailyTimetable /></ProtectedRoute>} />
 
               {/* Student & Parent Management (Admin) */}
               <Route path="students" element={<ProtectedRoute><StudentList /></ProtectedRoute>} />
@@ -198,6 +206,12 @@ function App() {
               <Route path="transport/assignments" element={<ProtectedRoute><BusAssignments /></ProtectedRoute>} />
               <Route path="transport/driver-panel" element={<ProtectedRoute><DriverPanel /></ProtectedRoute>} />
               <Route path="transport/trip-history" element={<ProtectedRoute><TripHistory /></ProtectedRoute>} />
+
+              {/* Study Materials Routes */}
+              <Route path="study-materials" element={<ProtectedRoute><StudyMaterials /></ProtectedRoute>} />
+              <Route path="study-materials/sections/:id" element={<ProtectedRoute><SectionDetails /></ProtectedRoute>} />
+              <Route path="study-materials/video/:id" element={<ProtectedRoute><VideoPlayer /></ProtectedRoute>} />
+
 
 
               <Route path="*" element={<Navigate to="/dashboard" replace />} />

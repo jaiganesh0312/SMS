@@ -299,7 +299,81 @@ exports.createDailyTimetable = async (req, res) => {
     // Normalize dayOfWeek to Title Case (e.g., "THURSDAY" -> "Thursday")
     const formattedDay = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1).toLowerCase();
 
-    // 1. Delete existing entries for this class and day
+    // --- Conflict Detection ---
+
+    // 1. Check for Internal Conflicts (within the payload itself)
+    for (let i = 0; i < periods.length; i++) {
+      for (let j = i + 1; j < periods.length; j++) {
+        const p1 = periods[i];
+        const p2 = periods[j];
+        if (p1.teacherId === p2.teacherId && p1.teacherId) {
+          // Check Overlap
+          // Overlap if (StartA < EndB) and (EndA > StartB)
+          if (p1.startTime < p2.endTime && p1.endTime > p2.startTime) {
+            await transaction.rollback();
+            return res.status(409).json({ // 409 Conflict
+              success: false,
+              message: `Internal Conflict: Teacher is assigned to multiple overlapping periods in this request (Times: ${p1.startTime}-${p1.endTime} and ${p2.startTime}-${p2.endTime}).`
+            });
+          }
+        }
+      }
+    }
+
+    // 2. Database Conflict Check (Against other classes)
+    // Gather all teacher IDs involved
+    const teacherIds = periods.map(p => p.teacherId).filter(id => id);
+
+    if (teacherIds.length > 0) {
+      const existingSchedules = await Timetable.findAll({
+        where: {
+          schoolId,
+          dayOfWeek: formattedDay,
+          teacherId: { [Op.in]: teacherIds },
+          classId: { [Op.ne]: classId } // Exclude the current class (since we are replacing its schedule anyway)
+        },
+        include: [
+          { model: Class, attributes: ['name', 'section'] },
+          { model: require('../models').User, attributes: ['name'] } // To get Teacher Name
+        ],
+        transaction
+      });
+
+      for (const newPeriod of periods) {
+        if (!newPeriod.teacherId) continue;
+
+        // Find bookings for this teacher
+        const teacherBookings = existingSchedules.filter(s => s.teacherId === newPeriod.teacherId);
+
+        for (const booking of teacherBookings) {
+          // Check overlap
+          // booking.startTime and booking.endTime are "HH:mm:ss" strings (TIME type)
+          // newPeriod.startTime/endTime are likely "HH:mm" strings
+          // String comparison works for ISO time format "HH:mm" vs "HH:mm:ss" as long as we align them or just rely on lex sort if format matches
+          // StartTime usually comes as "09:00:00" from DB. Input "09:00".
+          // Let's standardise to full string comparison or simple string if formats align.
+          // Safest is to treat as strings. "09:00" < "09:30:00" is true.
+
+          const newStart = newPeriod.startTime.length === 5 ? newPeriod.startTime + ":00" : newPeriod.startTime;
+          const newEnd = newPeriod.endTime.length === 5 ? newPeriod.endTime + ":00" : newPeriod.endTime;
+          const bookStart = booking.startTime.length === 5 ? booking.startTime + ":00" : booking.startTime;
+          const bookEnd = booking.endTime.length === 5 ? booking.endTime + ":00" : booking.endTime;
+
+          if (newStart < bookEnd && newEnd > bookStart) {
+            await transaction.rollback();
+            const teacherName = booking.User ? booking.User.name : "Teacher";
+            const className = booking.Class ? `${booking.Class.name}-${booking.Class.section}` : "another class";
+            return res.status(409).json({
+              success: false,
+              message: `Conflict: ${teacherName} is already assigned to ${className} from ${booking.startTime.slice(0, 5)} to ${booking.endTime.slice(0, 5)}.`
+            });
+          }
+        }
+      }
+    }
+
+
+    // 1. Delete existing entries for this class and day (After conflict check passes!)
     await Timetable.destroy({
       where: {
         schoolId,

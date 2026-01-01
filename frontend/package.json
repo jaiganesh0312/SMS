@@ -20,6 +20,7 @@
     "axios": "^1.10.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.19.1",
+    "hls.js": "^1.6.15",
     "leaflet": "^1.9.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

@@ -64,6 +64,8 @@ app.use("/api/school", require("./routes/schoolRoutes"));
 app.use("/api/library", require("./routes/libraryRoutes"));
 app.use("/api/chat", chatRoutes); // Use chat routes
 app.use("/api/transport", require("./routes/transportRoutes")); // Transport/Bus tracking routes
+app.use("/api/study-materials", require("./routes/studyMaterialRoutes")); // Study materials with HLS streaming
+
 
 
 // 404
