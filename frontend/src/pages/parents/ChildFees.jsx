@@ -58,7 +58,6 @@ export default function ChildFees() {
                 }
             }
         } catch (error) {
-            console.error('Error fetching children:', error);
             addToast({
                 title: 'Error',
                 description: 'Failed to load children',
@@ -76,7 +75,6 @@ export default function ChildFees() {
                 setFeeDetails(response.data.data);
             }
         } catch (error) {
-            console.error('Error fetching fee details:', error);
         }
     };
 

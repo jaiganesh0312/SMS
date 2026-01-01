@@ -27,11 +27,9 @@ export default function LibrarianDashboard() {
                     setStats(response.data.data);
                 }
                 else {
-                    console.error("Failed to fetch stats", response.data.message);
                     setError(response.data.message);
                 }
             } catch (error) {
-                console.error("Failed to fetch stats", error);
                 setError(error);
             } finally {
                 setLoading(false);

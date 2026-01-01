@@ -24,7 +24,6 @@ export default function VideoPlayer() {
                     initializePlayer(streamUrl);
                 }
             } catch (err) {
-                console.error("Error fetching video:", err);
                 setError(err.message || "Could not load video");
                 setLoading(false);
             }

@@ -52,7 +52,6 @@ export default function Subjects() {
                 setSubjects(response.data.data?.subjects || []);
             }
         } catch (error) {
-            console.error('Error fetching subjects:', error);
         } finally {
             setIsLoading(false);
         }
@@ -71,7 +70,6 @@ export default function Subjects() {
                 reset();
             }
         } catch (error) {
-            console.error('Error creating subject:', error);
         }
     };
 

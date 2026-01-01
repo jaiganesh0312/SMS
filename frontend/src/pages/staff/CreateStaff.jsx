@@ -125,7 +125,6 @@ const CreateStaff = () => {
                 addToast({ title: "Error", description: response?.data?.message || "Registration failed", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "An unexpected error occurred", color: "danger" });
         } finally {
             setLoadingAction(false);

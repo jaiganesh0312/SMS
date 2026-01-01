@@ -46,7 +46,6 @@ export default function ManageSections() {
                 addToast({ title: "Error", description: "Failed to load sections", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "An error occurred while fetching sections", color: "danger" });
         } finally {
             setIsLoading(false);

@@ -64,7 +64,6 @@ const CreateDailyTimetable = () => {
                 setTeachers(teachersList);
             }
         } catch (error) {
-            console.error("Error fetching data:", error);
             setError("Failed to load initial data. Please try refreshing the page.");
         } finally {
             setLoading(false);
@@ -141,7 +140,6 @@ const CreateDailyTimetable = () => {
                 setError(response?.data?.message || "Failed to create daily timetable");
             }
         } catch (error) {
-            console.error("Error creating daily timetable:", error);
             const errorMsg = error.response?.data?.message || "An error occurred while creating the timetable";
             setError(errorMsg);
         } finally {

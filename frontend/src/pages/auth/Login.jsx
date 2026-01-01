@@ -53,7 +53,6 @@ export default function Login() {
                 setError(response.data?.message || 'Login failed. Please check your credentials.');
             }
         } catch (err) {
-            console.error('Login error:', err);
             setError(err.response?.data?.message || 'An error occurred during login.');
         } finally {
             setIsLoading(false);

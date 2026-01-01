@@ -37,7 +37,6 @@ const OfferLetterAcceptance = () => {
                 setError("Failed to load Offer Letter.");
             }
         } catch (err) {
-            console.error(err);
             setError("Error loading document.");
         } finally {
             setLoading(false);

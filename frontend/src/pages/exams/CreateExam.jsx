@@ -50,12 +50,10 @@ export default function CreateExam() {
             const classRes = await academicService.getAllClasses();
             if (classRes.data?.success) setClasses(classRes.data.data.classes);
         } catch (error) {
-            console.error('Error fetching options:', error);
         }
     };
 
     const onSubmit = async (data) => {
-        console.log(data);
         setIsLoading(true);
         try {
             const response = await examService.createExam(data);
@@ -63,7 +61,6 @@ export default function CreateExam() {
                 navigate('/exams');
             }
         } catch (error) {
-            console.error('Error creating exam:', error);
             // Handle error notification here if needed
             alert(error.response?.data?.message || "Error creating exam");
         } finally {
@@ -111,15 +108,15 @@ export default function CreateExam() {
                     <CardBody className="p-6">
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                             <div className="grid gap-3">
-                            <Input
-                                {...register('name')}
-                                label="Exam Name"
-                                placeholder="e.g. Midterm 2024"
-                                variant="bordered"
-                                isInvalid={!!errors.name}
-                                errorMessage={errors.name?.message}
-                                startContent={<Icon icon="mdi:format-title" className="text-default-400" />}
-                            />
+                                <Input
+                                    {...register('name')}
+                                    label="Exam Name"
+                                    placeholder="e.g. Midterm 2024"
+                                    variant="bordered"
+                                    isInvalid={!!errors.name}
+                                    errorMessage={errors.name?.message}
+                                    startContent={<Icon icon="mdi:format-title" className="text-default-400" />}
+                                />
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

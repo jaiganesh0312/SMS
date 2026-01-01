@@ -43,7 +43,6 @@ const TripHistory = () => {
                 setTrips(response.data.data);
             }
         } catch (err) {
-            console.error('Failed to load trips:', err);
         } finally {
             setLoading(false);
         }
@@ -56,7 +55,6 @@ const TripHistory = () => {
                 setBuses(response.data.data);
             }
         } catch (err) {
-            console.error('Failed to load buses:', err);
         }
     };
 

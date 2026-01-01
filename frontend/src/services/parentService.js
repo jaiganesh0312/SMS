@@ -6,7 +6,6 @@ const registerParent = async (data) => {
         const response = await api.post('/parents/register', data);
         return response;
     } catch (error) {
-        console.error('Register parent error:', error);
         return error.response;
     }
 };
@@ -16,7 +15,6 @@ const getAllParents = async () => {
         const response = await api.get('/parents');
         return response;
     } catch (error) {
-        console.error('Get all parents error:', error);
         return error.response;
     }
 };
@@ -27,7 +25,6 @@ const getMyChildren = async () => {
         const response = await api.get('/parents/children');
         return response;
     } catch (error) {
-        console.error('Get my children error:', error);
         return error.response;
     }
 };
@@ -37,7 +34,6 @@ const getChildDashboard = async (studentId) => {
         const response = await api.get(`/parents/child/${studentId}/dashboard`);
         return response;
     } catch (error) {
-        console.error('Get child dashboard error:', error);
         return error.response;
     }
 };

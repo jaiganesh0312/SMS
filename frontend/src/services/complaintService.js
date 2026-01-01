@@ -6,7 +6,6 @@ const getAllComplaints = async (params) => {
         const response = await api.get('/complaints', { params });
         return response;
     } catch (error) {
-        console.error('Get all complaints error:', error);
         return error.response;
     }
 };
@@ -17,7 +16,6 @@ const getMyComplaints = async () => {
         const response = await api.get('/complaints/my-complaints');
         return response;
     } catch (error) {
-        console.error('Get my complaints error:', error);
         return error.response;
     }
 };
@@ -28,7 +26,6 @@ const createComplaint = async (data) => {
         const response = await api.post('/complaints/request', data);
         return response;
     } catch (error) {
-        console.error('Create complaint error:', error);
         return error.response;
     }
 };
@@ -44,7 +41,6 @@ const updateComplaintStatus = async (id, status) => {
         const response = await api.patch(`/complaints/${id}/status`, { status });
         return response;
     } catch (error) {
-        console.error('Update complaint status error:', error);
         return error.response;
     }
 };
@@ -54,7 +50,6 @@ const getComplaintStats = async () => {
         const response = await api.get('/complaints/stats');
         return response;
     } catch (error) {
-        console.error('Get complaint stats error:', error);
         return error.response;
     }
 };

@@ -12,7 +12,6 @@ const uploadFile = async (url, file) => {
         });
         return response;
     } catch (error) {
-        console.error(`Upload error for ${url}:`, error);
         return error.response;
     }
 };

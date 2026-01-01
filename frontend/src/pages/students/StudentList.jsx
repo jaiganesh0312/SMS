@@ -113,7 +113,6 @@ export default function StudentList() {
                 setStudents(data);
             }
         } catch (error) {
-            console.error("Error fetching students:", error);
             addToast({ title: "Error", description: "Failed to fetch students", color: "danger" });
         } finally {
             setLoading(false);
@@ -127,7 +126,6 @@ export default function StudentList() {
                 setStandards(response.data.data || []);
             }
         } catch (error) {
-            console.error("Error fetching standards:", error);
         }
     };
 
@@ -138,7 +136,6 @@ export default function StudentList() {
                 setAllClasses(response.data.data?.classes || []);
             }
         } catch (error) {
-            console.error("Error fetching all classes:", error);
         }
     };
 
@@ -155,7 +152,6 @@ export default function StudentList() {
                 setDivisions(response.data.data || []);
             }
         } catch (error) {
-            console.error("Error fetching divisions:", error);
             addToast({ title: "Error", description: "Failed to fetch divisions", color: "danger" });
         } finally {
             setIsDivisionsLoading(false);
@@ -174,7 +170,6 @@ export default function StudentList() {
                 setDivisions([]);
             }
         } catch (error) {
-            console.error("Error creating student:", error);
             addToast({ title: "Error", description: "Failed to create student", color: "danger" });
         }
     };
@@ -208,7 +203,6 @@ export default function StudentList() {
                 onUpdateOpenChange(false);
             }
         } catch (error) {
-            console.error("Error updating students:", error);
             addToast({ title: "Error", description: "Failed to update students", color: "danger" });
         }
     };
@@ -263,7 +257,6 @@ export default function StudentList() {
                 addToast({ title: "Error", description: "Failed to upload profile picture", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Error uploading profile picture", color: "danger" });
         } finally {
             setUploadingPhoto(false);
@@ -280,7 +273,6 @@ export default function StudentList() {
                 addToast({ title: "Error", description: "Failed to generate ID Card", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Error generating ID Card", color: "danger" });
         } finally {
             setGeneratingIdCardFor(null);

@@ -66,7 +66,6 @@ const BusTracking = () => {
                     setBuses(response.data.data);
                 }
             } catch (err) {
-                console.error('Failed to fetch buses:', err);
                 setError('Failed to load buses');
             } finally {
                 setLoading(false);
@@ -101,7 +100,6 @@ const BusTracking = () => {
                 }
             }
         } catch (err) {
-            console.error('Failed to fetch live location:', err);
         }
     }, []);
 

@@ -12,7 +12,6 @@ const createClass = async (data) => {
     const response = await api.post('/academics/classes', data);
     return response;
   } catch (error) {
-    console.error('Create class error:', error);
     return error.response;
   }
 };
@@ -27,7 +26,6 @@ const getAllClasses = async (params) => {
     const response = await api.get('/academics/classes', { params });
     return response;
   } catch (error) {
-    console.error('Get classes error:', error);
     return error.response;
   }
 };
@@ -44,7 +42,6 @@ const createSubject = async (data) => {
     const response = await api.post('/academics/subjects', data);
     return response;
   } catch (error) {
-    console.error('Create subject error:', error);
     return error.response;
   }
 };
@@ -58,7 +55,6 @@ const getAllSubjects = async (params) => {
     const response = await api.get('/academics/subjects', { params });
     return response;
   } catch (error) {
-    console.error('Get subjects error:', error);
     return error.response;
   }
 };
@@ -73,7 +69,6 @@ const createTimetableEntry = async (data) => {
     const response = await api.post('/academics/timetable', data);
     return response;
   } catch (error) {
-    console.error('Create timetable error:', error);
     return error.response;
   }
 };
@@ -101,7 +96,6 @@ const getTimetable = async (params) => {
     const response = await api.get('/academics/timetable', { params });
     return response;
   } catch (error) {
-    console.error('Get timetable error:', error);
     return error.response;
   }
 };
@@ -116,7 +110,6 @@ const getStandards = async () => {
     const response = await api.get('/academics/classes/standards');
     return response;
   } catch (error) {
-    console.error('Get standards error:', error);
     return error.response;
   }
 };
@@ -131,7 +124,6 @@ const getDivisions = async (standard) => {
     const response = await api.get(`/academics/classes/standards/${standard}/divisions`);
     return response;
   } catch (error) {
-    console.error('Get divisions error:', error);
     return error.response;
   }
 };
@@ -145,7 +137,6 @@ const getTeachers = async () => {
     const response = await api.get('/academics/teachers');
     return response;
   } catch (error) {
-    console.error('Get teachers error:', error);
     return error.response;
   }
 };
@@ -161,7 +152,6 @@ const assignClassTeacher = async (classId, teacherId) => {
     const response = await api.patch(`/academics/classes/${classId}/teacher`, { teacherId });
     return response;
   } catch (error) {
-    console.error('Assign class teacher error:', error);
     return error.response;
   }
 };

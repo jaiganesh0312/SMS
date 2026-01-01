@@ -37,13 +37,11 @@ const initSocketServer = (httpServer) => {
             socket.user = user;
             next();
         } catch (err) {
-            console.error("Socket Auth Error:", err.message);
             next(new Error("Authentication error"));
         }
     });
 
     io.on("connection", (socket) => {
-        console.log(`User connected: ${socket.user.name} (${socket.user.id})`);
 
         // Join user-specific room
         socket.join(`user:${socket.user.id}`);
@@ -79,7 +77,6 @@ const initSocketServer = (httpServer) => {
                     });
                 }
             } catch (err) {
-                console.error("Error updating status on connect:", err);
             }
         })();
 
@@ -123,7 +120,6 @@ const initSocketServer = (httpServer) => {
                 if (callback) callback({ success: true, data: message });
 
             } catch (error) {
-                console.error("Socket chat:send error:", error);
                 if (callback) callback({ success: false, error: error.message });
             }
         });
@@ -159,7 +155,6 @@ const initSocketServer = (httpServer) => {
                 });
 
             } catch (e) {
-                console.error("mark_delivered error:", e);
             }
         });
 
@@ -189,7 +184,6 @@ const initSocketServer = (httpServer) => {
                 }
 
             } catch (e) {
-                console.error("mark_conversation_read error:", e);
             }
         });
 
@@ -205,12 +199,10 @@ const initSocketServer = (httpServer) => {
                     io.to(`user:${message.senderId}`).emit("chat:read_receipt", { messageId, conversationId: message.conversationId, status: 'READ' });
                 }
             } catch (e) {
-                console.error(e);
             }
         });
 
         socket.on("disconnect", () => {
-            console.log(`User disconnected: ${socket.user.id}`);
         });
 
         // =====================
@@ -227,9 +219,7 @@ const initSocketServer = (httpServer) => {
                 // For now, allow school members to subscribe
 
                 socket.join(`bus:${busId}`);
-                console.log(`User ${socket.user.id} subscribed to bus:${busId}`);
             } catch (e) {
-                console.error("bus:subscribe error:", e);
             }
         });
 
@@ -238,7 +228,6 @@ const initSocketServer = (httpServer) => {
             const { busId } = data;
             if (busId) {
                 socket.leave(`bus:${busId}`);
-                console.log(`User ${socket.user.id} unsubscribed from bus:${busId}`);
             }
         });
 
@@ -246,7 +235,6 @@ const initSocketServer = (httpServer) => {
         socket.on("transport:subscribe", () => {
             if (["SCHOOL_ADMIN", "SUPER_ADMIN", "STAFF"].includes(socket.user.role)) {
                 socket.join(`school:${socket.user.schoolId}:transport`);
-                console.log(`User ${socket.user.id} subscribed to school transport`);
             }
         });
 
@@ -313,7 +301,6 @@ const initSocketServer = (httpServer) => {
                 io.to(`school:${socket.user.schoolId}:transport`).emit("bus:location:receive", locationData);
 
             } catch (e) {
-                console.error("bus:location:update error:", e);
             }
         });
     });

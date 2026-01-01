@@ -64,7 +64,6 @@ const BusAssignments = () => {
             }
         } catch (err) {
             setError('Failed to load data');
-            console.error(err);
         } finally {
             setLoading(false);
         }
@@ -81,7 +80,6 @@ const BusAssignments = () => {
                 setRoutes(res.data.data);
             }
         } catch (err) {
-            console.error(err);
         }
     };
 

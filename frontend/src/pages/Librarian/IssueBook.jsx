@@ -22,7 +22,6 @@ export default function IssueBook() {
                     const res = await libraryService.getBooks({ search: searchBook });
                     if (res.data?.success) setFoundBooks(res.data.data);
                     else {
-                        console.error("Failed to fetch books", res.data.message);
                         addToast({ title: "Error", description: res.data.message, color: "danger" });
                     }
                 } catch (error) {
@@ -90,7 +89,7 @@ export default function IssueBook() {
                         setResults(response.data.data.staff || response.data.data);
                     }
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) { }
         }
 
         return (

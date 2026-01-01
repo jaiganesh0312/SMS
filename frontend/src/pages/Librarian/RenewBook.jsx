@@ -12,7 +12,7 @@ export default function RenewBook() {
         try {
             const res = await libraryService.getTransactions({ status: 'ISSUED' });
             if (res.data?.success) setTransactions(res.data.data);
-        } catch (error) { console.error(error); }
+        } catch (error) { }
     };
 
     React.useEffect(() => {

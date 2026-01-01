@@ -22,7 +22,6 @@ export default function MyClassTimetable() {
                     setError(response.data?.message || "Failed to fetch timetable");
                 }
             } catch (err) {
-                console.error("Error fetching class timetable:", err);
                 setError("An error occurred while fetching timetable");
             } finally {
                 setLoading(false);

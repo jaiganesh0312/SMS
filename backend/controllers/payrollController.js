@@ -29,7 +29,6 @@ exports.upsertSalaryStructure = async (req, res) => {
 
         res.status(200).json({ success: true, message: "Salary structure saved", data: structure });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -51,7 +50,6 @@ exports.generatePayroll = async (req, res) => {
         const { month, year, staffIds } = req.body;
         const schoolId = req.user.schoolId;
 
-        console.log(`Generating payroll for School: ${schoolId}, Month: ${month}, Year: ${year}`);
 
         // Helper to parse month
         let monthIndex; // 0-11
@@ -83,11 +81,9 @@ exports.generatePayroll = async (req, res) => {
         const endDate = new Date(year, monthIndex + 1, 0);
         const daysInMonth = endDate.getDate();
 
-        console.log(`Payroll Period: ${startDate.toDateString()} to ${endDate.toDateString()} (${daysInMonth} days)`);
 
         for (const staff of staffList) {
             if (!staff.SalaryStructure) {
-                console.log(`Skipping staff ${staff.employeeCode} - No Salary Structure`);
                 continue;
             }
 
@@ -100,7 +96,6 @@ exports.generatePayroll = async (req, res) => {
             // Per-day pay is based on GROSS salary, not net
             const perDayPay = grossSalary / daysInMonth;
 
-            console.log(`Processing ${staff.employeeCode}: Gross=${grossSalary}, PerDay=${perDayPay.toFixed(2)}`);
 
             // --- 2. Calculate Effective Days ---
             const joiningDate = new Date(staff.joiningDate);
@@ -229,14 +224,12 @@ exports.generatePayroll = async (req, res) => {
                 const schoolLogoUrl = schoolInfo.logo ? `${req.protocol}://${req.get('host')}/api/${schoolInfo.logo}` : null;
                 await sendPayslipEmail(staff.User.email, String(month), String(year), pdfBuffer, schoolInfo.name, schoolLogoUrl);
             } catch (emailError) {
-                console.error(`Failed to send email to ${staff.User.email}:`, emailError);
                 // Continue with other staff even if email fails
             }
         }
 
         res.status(200).json({ success: true, message: `Generated/Updated ${generatedPayrolls.length} records` });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -264,7 +257,6 @@ exports.getPayrolls = async (req, res) => {
 
         res.status(200).json({ success: true, data: payrolls });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -304,7 +296,6 @@ exports.getPayslip = async (req, res) => {
         res.send(pdfBuffer);
 
     } catch (error) {
-        console.error(error);
         res.status(500).json({ success: false, message: error.message });
     }
 };

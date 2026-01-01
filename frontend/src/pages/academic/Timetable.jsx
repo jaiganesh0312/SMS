@@ -74,7 +74,6 @@ const Timetable = () => {
                 setTeachers(teachersList);
             }
         } catch (error) {
-            console.error("Error fetching data:", error);
         } finally {
             setLoading(false);
         }
@@ -111,7 +110,6 @@ const Timetable = () => {
                 addToast({ title: "Error", description: response?.data?.message || 'Failed to create entry', color: "danger" });
             }
         } catch (error) {
-            console.error("Error creating timetable entry:", error);
             addToast({ title: "Error", description: 'An error occurred', color: "danger" });
         } finally {
             setSaving(false);

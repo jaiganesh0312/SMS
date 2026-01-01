@@ -5,7 +5,6 @@ const createStudent = async (data) => {
         const response = await api.post('/students', data);
         return response;
     } catch (error) {
-        console.error('Create student error:', error);
         return error.response;
     }
 };
@@ -15,7 +14,6 @@ const getAllStudents = async (params) => {
         const response = await api.get('/students', { params });
         return response;
     } catch (error) {
-        console.error('Get all students error:', error);
         return error.response;
     }
 };
@@ -25,7 +23,6 @@ const updateStudent = async (id, data) => {
         const response = await api.patch(`/students/${id}`, data);
         return response;
     } catch (error) {
-        console.error('Update student error:', error);
         return error.response;
     }
 };
@@ -35,7 +32,6 @@ const bulkUpdateStudents = async (data) => {
         const response = await api.post('/students/bulk-update', data);
         return response;
     } catch (error) {
-        console.error('Bulk update error:', error);
         return error.response;
     }
 };
@@ -47,7 +43,6 @@ const uploadProfilePicture = async (id, formData) => {
         });
         return response;
     } catch (error) {
-        console.error('Upload profile picture error:', error);
         return error.response;
     }
 };
@@ -69,7 +64,6 @@ const getIDCard = async (id, studentName) => {
 
         return { success: true };
     } catch (error) {
-        console.error('Get ID Card error:', error);
         return { success: false, message: error.message };
     }
 };

@@ -62,7 +62,6 @@ exports.getConversations = async (req, res) => {
             data: formattedConversations,
         });
     } catch (error) {
-        console.error("Get conversations error:", error);
         res.status(500).json({
             success: false,
             message: "Error fetching conversations",
@@ -162,7 +161,6 @@ exports.getOrCreateConversation = async (req, res) => {
             },
         });
     } catch (error) {
-        console.error("Create conversation error:", error);
         res.status(500).json({
             success: false,
             message: "Error creating conversation",
@@ -210,7 +208,6 @@ exports.getMessages = async (req, res) => {
             nextCursor: messages.length > 0 ? messages[0].createdAt : null, // Cursor for next page (older messages)
         });
     } catch (error) {
-        console.error("Get messages error:", error);
         res.status(500).json({
             success: false,
             message: "Error fetching messages",
@@ -264,7 +261,6 @@ exports.sendMessage = async (req, res) => {
                 io.to(`user:${senderId}`).emit("chat:sent_confirmation", message);
             }
         } catch (socketError) {
-            console.error("Socket emit error:", socketError);
         }
 
         res.status(201).json({
@@ -273,7 +269,6 @@ exports.sendMessage = async (req, res) => {
         });
     } catch (error) {
         await t.rollback();
-        console.error("Send message error:", error);
         res.status(500).json({
             success: false,
             message: "Error sending message",
@@ -306,7 +301,6 @@ exports.markRead = async (req, res) => {
                     io.to(`user:${message.senderId}`).emit("chat:read_receipt", { messageId: message.id, conversationId: message.conversationId });
                 }
             } catch (socketError) {
-                console.error("Socket emit error:", socketError);
             }
         }
 
@@ -344,7 +338,6 @@ exports.getChatUsers = async (req, res) => {
             data: users,
         });
     } catch (error) {
-        console.error("Get chat users error:", error);
         res.status(500).json({
             success: false,
             message: "Error fetching users",

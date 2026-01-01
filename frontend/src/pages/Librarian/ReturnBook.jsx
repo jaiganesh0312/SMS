@@ -27,7 +27,7 @@ export default function ReturnBook() {
                 //   ));
                 setTransactions(res.data.data);
             }
-        } catch (error) { console.error(error); }
+        } catch (error) { }
     };
 
     const calculateFine = (dueDate) => {

@@ -61,7 +61,6 @@ export default function UpdatePassword() {
                 });
             }
         } catch (err) {
-            console.error('Password update error:', err);
             addToast({
                 title: 'Error',
                 description: err.response?.data?.message || 'An error occurred while updating password.',

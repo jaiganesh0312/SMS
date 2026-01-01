@@ -67,7 +67,6 @@ export default function ManageBooks() {
                 addToast({ title: "Error", description: "Failed to load sections", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "An error occurred while fetching data", color: "danger" });
         } finally {
             setIsLoading(false);
@@ -92,7 +91,6 @@ export default function ManageBooks() {
                 addToast({ title: "Error", description: response.message || "Error saving book", color: "danger" });
             }
         } catch (error) {
-            console.error("Error saving book:", error);
             addToast({ title: "Error", description: "An unexpected error occurred", color: "danger" });
         } finally {
             setIsLoading(false);
@@ -124,7 +122,6 @@ export default function ManageBooks() {
                     addToast({ title: "Error", description: response.message || "Cannot delete book", color: "danger" });
                 }
             } catch (error) {
-                console.error("Delete error:", error);
                 addToast({ title: "Error", description: "An error occurred while deleting", color: "danger" });
             } finally {
                 setIsLoading(false);

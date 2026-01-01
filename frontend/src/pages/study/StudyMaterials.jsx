@@ -77,7 +77,6 @@ export default function StudyMaterials() {
             if (classesRes.data?.success) setClasses(classesRes.data.data?.classes || []);
             if (subjectsRes.data?.success) setSubjects(subjectsRes.data.data?.subjects || []);
         } catch (error) {
-            console.error("Error fetching initial data:", error);
         }
     };
 
@@ -93,7 +92,6 @@ export default function StudyMaterials() {
                 setSections(response.data.sections);
             }
         } catch (error) {
-            console.error("Error fetching sections:", error);
         } finally {
             setLoading(false);
         }
@@ -114,7 +112,6 @@ export default function StudyMaterials() {
                 reset();
             }
         } catch (error) {
-            console.error("Error creating section:", error);
         }
     };
 

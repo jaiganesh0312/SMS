@@ -58,7 +58,6 @@ export default function LinkStudentToParent() {
                 setParent(found);
             }
         } catch (error) {
-            console.error("Error fetching parent:", error);
         }
     };
 
@@ -70,7 +69,6 @@ export default function LinkStudentToParent() {
                 setStudents(response.data.data.students);
             }
         } catch (error) {
-            console.error("Error fetching students:", error);
         } finally {
             setLoading(false);
         }
@@ -83,7 +81,6 @@ export default function LinkStudentToParent() {
                 setClasses(response.data.data.classes);
             }
         } catch (error) {
-            console.error("Error fetching classes:", error);
         }
     };
 
@@ -125,7 +122,6 @@ export default function LinkStudentToParent() {
                 navigate('/parents');
             }
         } catch (error) {
-            console.error("Error linking students:", error);
         }
     };
 

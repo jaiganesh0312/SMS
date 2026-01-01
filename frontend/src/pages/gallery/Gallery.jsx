@@ -31,7 +31,6 @@ const Gallery = () => {
                 setGalleries(response.data.data.galleries || []);
             }
         } catch (error) {
-            console.error("Failed to fetch galleries", error);
         } finally {
             setLoading(false);
         }

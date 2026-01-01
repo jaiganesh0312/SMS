@@ -5,17 +5,14 @@ const { sequelize } = require('../config/database');
 async function seedGrades() {
     try {
         await sequelize.authenticate();
-        console.log('Database connected.');
 
         // Get the first school (or specific one if needed)
         const school = await School.findOne();
         if (!school) {
-            console.error('No school found to seed grades for.');
             process.exit(1);
         }
 
         const schoolId = school.id;
-        console.log(`Seeding grades for School: ${school.name} (${schoolId})`);
 
         const rules = [
             { grade: 'A+', minPercentage: 95, maxPercentage: 100, description: 'Outstanding' },
@@ -39,11 +36,9 @@ async function seedGrades() {
             });
         }
 
-        console.log('Grade rules seeded successfully.');
         process.exit(0);
 
     } catch (error) {
-        console.error('Error seeding grades:', error);
         process.exit(1);
     }
 }

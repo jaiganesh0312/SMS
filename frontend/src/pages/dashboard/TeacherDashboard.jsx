@@ -41,7 +41,6 @@ export default function TeacherDashboard() {
                 setMyClass(response.data.data);
             }
         } catch (error) {
-            console.error("Error fetching class:", error);
         }
     };
 
@@ -60,7 +59,6 @@ export default function TeacherDashboard() {
                 // Optionally show success toast
             }
         } catch (error) {
-            console.error("Error creating announcement:", error);
         }
     };
 

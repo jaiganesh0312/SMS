@@ -54,7 +54,6 @@ const DriverPanel = () => {
                         setRoutes(response.data.data);
                     }
                 } catch (err) {
-                    console.error('Failed to load routes:', err);
                 }
             } else {
                 setRoutes([]);
@@ -75,7 +74,6 @@ const DriverPanel = () => {
                         startLocationTracking();
                     }
                 } catch (err) {
-                    console.error('Failed to check active trip:', err);
                 }
             }
         };
@@ -111,7 +109,6 @@ const DriverPanel = () => {
                 }
             },
             (err) => {
-                console.error('Geolocation error:', err);
                 setError('Failed to get location: ' + err.message);
             },
             {

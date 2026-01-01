@@ -10,7 +10,6 @@ const createExam = async (data) => {
     const response = await api.post('/exams', data); // Assuming path is /exams based on route file
     return response;
   } catch (error) {
-    console.error('Create exam error:', error);
     return error.response;
   }
 };
@@ -24,7 +23,6 @@ const getExams = async (params) => {
     const response = await api.get('/exams', { params });
     return response;
   } catch (error) {
-    console.error('Get exams error:', error);
     return error.response;
   }
 };
@@ -39,7 +37,6 @@ const addExamResult = async (data) => {
     const response = await api.post('/exams/results', data);
     return response;
   } catch (error) {
-    console.error('Add exam result error:', error);
     return error.response;
   }
 };
@@ -54,7 +51,6 @@ const getExamResults = async (params) => {
     const response = await api.get('/exams/results', { params });
     return response;
   } catch (error) {
-    console.error('Get exam results error:', error);
     return error.response;
   }
 };
@@ -69,7 +65,6 @@ const getStudentReportCard = async (params) => {
     const response = await api.get('/exams/report', { params });
     return response;
   } catch (error) {
-    console.error('Get report card error:', error);
     return error.response;
   }
 };
@@ -85,7 +80,6 @@ const updateExamResult = async (id, data) => {
     const response = await api.put(`/exams/results/${id}`, data);
     return response;
   } catch (error) {
-    console.error('Update exam result error:', error);
     return error.response;
   }
 };
@@ -102,7 +96,6 @@ const examService = {
       const response = await api.get('/exams/student-results', { params });
       return response;
     } catch (error) {
-      console.error('Get student exam results error:', error);
       return error.response;
     }
   },
@@ -114,7 +107,6 @@ const examService = {
       });
       return response;
     } catch (error) {
-      console.error('Download report error:', error);
       return error.response;
     }
   },

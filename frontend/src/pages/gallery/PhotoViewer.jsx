@@ -24,7 +24,6 @@ const PhotoViewer = ({ isOpen, onClose, imageUrl, title }) => {
             a.click();
             document.body.removeChild(a);
         } catch (error) {
-            console.error("Download failed", error);
         }
     };
 

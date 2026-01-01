@@ -14,12 +14,12 @@ api.interceptors.request.use(
   (config) => {
     // Get token from localStorage
     const token = localStorage.getItem('token');
-    
+
     // If token exists, attach to Authorization header
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
+
     return config;
   },
   (error) => {
@@ -45,27 +45,22 @@ api.interceptors.response.use(
           break;
         case 403:
           // Forbidden - user doesn't have permission
-          console.error('Access forbidden:', error.response.data.message);
           break;
         case 404:
           // Not found
-          console.error('Resource not found:', error.response.data.message);
           break;
         case 500:
           // Server error
-          console.error('Server error:', error.response.data.message);
           break;
         default:
-          console.error('API error:', error.response.data.message);
+          break;
       }
     } else if (error.request) {
       // Request was made but no response received
-      console.error('No response from server. Please check your connection.');
     } else {
       // Something happened in setting up the request
-      console.error('Error setting up request:', error.message);
     }
-    
+
     return Promise.reject(error);
   }
 );

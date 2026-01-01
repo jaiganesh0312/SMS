@@ -144,7 +144,6 @@ const PayrollManagement = () => {
                 setPayrollHistory([]);
             }
         } catch (error) {
-            console.error(error);
             setPayrollHistory([]);
         } finally {
             setLoadingHistory(false);
@@ -166,7 +165,6 @@ const PayrollManagement = () => {
                 addToast({ title: "Error", description: response.message || "Failed to generate payroll", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "An error occurred while generating payroll", color: "danger" });
         }
     };
@@ -208,7 +206,6 @@ const PayrollManagement = () => {
                 // If no structure, maybe pre-fill basics? Nah, leave empty/default
             }
         } catch (error) {
-            console.error("Failed to fetch structure", error);
         }
     };
 

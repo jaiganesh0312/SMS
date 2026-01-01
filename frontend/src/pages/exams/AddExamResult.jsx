@@ -58,7 +58,6 @@ export default function AddExamResult() {
                 setSubjects(subjectRes.data.data.subjects || []);
             }
         } catch (error) {
-            console.error('Error fetching initial data:', error);
             addToast({
                 title: "Error!",
                 description: "Failed to load exams or subjects",
@@ -99,7 +98,6 @@ export default function AddExamResult() {
                 });
             }
         } catch (error) {
-            console.error('Error fetching students:', error);
             addToast({
                 title: "Failed to fetch students",
                 description: "Please try again later",
@@ -153,7 +151,6 @@ export default function AddExamResult() {
                 setMarksData(newMarksData);
             }
         } catch (error) {
-            console.error("Error fetching existing marks:", error);
             // Don't show toast to avoid spamming if just no results yet
         }
     };
@@ -208,7 +205,6 @@ export default function AddExamResult() {
                 });
             }
         } catch (error) {
-            console.error("Update error:", error);
             addToast({
                 title: "Error",
                 description: "Failed to update result",
@@ -285,7 +281,6 @@ export default function AddExamResult() {
                 });
             }
         } catch (error) {
-            console.error('Error submitting results:', error);
             addToast({
                 title: "Error!",
                 description: "An error occurred while saving results",

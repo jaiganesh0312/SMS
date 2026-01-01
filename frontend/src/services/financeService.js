@@ -10,7 +10,6 @@ const createFeeStructure = async (data) => {
     const response = await api.post('/finance/fees', data);
     return response;
   } catch (error) {
-    console.error('Create fee structure error:', error);
     return error.response;
   }
 };
@@ -24,7 +23,6 @@ const getFeeStructures = async () => {
     const response = await api.get('/finance/fees');
     return response;
   } catch (error) {
-    console.error('Get fee structures error:', error);
     return error.response;
   }
 };
@@ -39,7 +37,6 @@ const collectFee = async (data) => {
     const response = await api.post('/finance/fees/collect', data);
     return response;
   } catch (error) {
-    console.error('Collect fee error:', error);
     return error.response;
   }
 };
@@ -54,7 +51,6 @@ const createPayrollRecord = async (data) => {
     const response = await api.post('/finance/payroll', data);
     return response;
   } catch (error) {
-    console.error('Create payroll error:', error);
     return error.response;
   }
 };
@@ -68,7 +64,6 @@ const getFeeStatistics = async () => {
     const response = await api.get('/finance/statistics');
     return response;
   } catch (error) {
-    console.error('Get fee statistics error:', error);
     return error.response;
   }
 };
@@ -83,7 +78,6 @@ const getClassFeeStatus = async (classId) => {
     const response = await api.get(`/finance/class/${classId}/students`);
     return response;
   } catch (error) {
-    console.error('Get class fee status error:', error);
     return error.response;
   }
 };
@@ -98,7 +92,6 @@ const getStudentFeeDetails = async (studentId) => {
     const response = await api.get(`/finance/student/${studentId}/fees`);
     return response;
   } catch (error) {
-    console.error('Get student fee details error:', error);
     return error.response;
   }
 };
@@ -113,7 +106,6 @@ const processPayment = async (data) => {
     const response = await api.post('/finance/payment', data);
     return response;
   } catch (error) {
-    console.error('Process payment error:', error);
     return error.response;
   }
 };
@@ -132,7 +124,6 @@ const financeService = {
       const response = await api.get('/finance/receipts');
       return response;
     } catch (error) {
-      console.error('Get receipts error:', error);
       return error.response;
     }
   },
@@ -149,7 +140,6 @@ const financeService = {
       });
       return response;
     } catch (error) {
-      console.error('Download receipt error:', error);
       return error.response;
     }
   },

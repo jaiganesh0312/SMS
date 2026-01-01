@@ -19,7 +19,6 @@ export default function Notifications() {
                 setNotifications(response.data.data);
             }
         } catch (error) {
-            console.error('Error fetching notifications:', error);
         } finally {
             setIsLoading(false);
         }
@@ -30,7 +29,6 @@ export default function Notifications() {
             await notificationService.markAsRead(id);
             fetchNotifications(); // Refresh list
         } catch (error) {
-            console.error('Error marking as read:', error);
         }
     };
 

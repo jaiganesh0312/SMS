@@ -50,7 +50,6 @@ const ManageBuses = () => {
             }
         } catch (err) {
             setError('Failed to load buses');
-            console.error(err);
         } finally {
             setLoading(false);
         }
@@ -63,7 +62,6 @@ const ManageBuses = () => {
                 setStaff(response.data.data.staff);
             }
         } catch (err) {
-            console.error('Failed to load staff:', err);
         }
     };
 

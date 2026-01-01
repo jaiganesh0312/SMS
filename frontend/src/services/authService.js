@@ -17,7 +17,6 @@ const register = async (data) => {
     const response = await api.post('/auth/register', data);
     return response;
   } catch (error) {
-    console.error('Registration error:', error);
     return error.response;
   }
 };
@@ -39,7 +38,6 @@ const verifyOtp = async (data) => {
     const response = await api.post('/auth/verify-otp', data);
     return response;
   } catch (error) {
-    console.error('OTP verification error:', error);
     return error.response;
   }
 };
@@ -62,7 +60,6 @@ const login = async (data) => {
     const response = await api.post('/auth/login', data);
     return response;
   } catch (error) {
-    console.error('Login error:', error);
     return error.response;
   }
 };
@@ -84,7 +81,6 @@ const registerSchool = async (data) => {
     const response = await api.post('/auth/register-school', data);
     return response;
   } catch (error) {
-    console.error('School registration error:', error);
     return error.response;
   }
 };
@@ -104,7 +100,6 @@ const registerStaff = async (data) => {
     const response = await api.post('/auth/register-staff', data);
     return response;
   } catch (error) {
-    console.error('Staff registration error:', error);
     return error.response;
   }
 };
@@ -121,7 +116,6 @@ const updatePassword = async (data) => {
     const response = await api.put('/auth/update-password', data);
     return response;
   } catch (error) {
-    console.error('Password update error:', error);
     return error.response;
   }
 };

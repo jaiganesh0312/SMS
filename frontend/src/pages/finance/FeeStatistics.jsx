@@ -43,7 +43,6 @@ export default function FeeStatistics() {
                 });
             }
         } catch (error) {
-            console.error('Error fetching statistics:', error);
             addToast({
                 title: 'Error',
                 description: 'Failed to load statistics',

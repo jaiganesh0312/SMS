@@ -58,7 +58,6 @@ export default function FeeStructure() {
             if (feeRes.data?.success) setFees(feeRes.data.data?.fees || []);
             if (classRes.data?.success) setClasses(classRes.data.data?.classes || []);
         } catch (error) {
-            console.error('Error fetching data:', error);
             addToast({
                 title: 'Error',
                 description: 'Failed to load fee structures',
@@ -93,7 +92,6 @@ export default function FeeStructure() {
                 });
             }
         } catch (error) {
-            console.error('Error creating fee structure:', error);
             addToast({
                 title: 'Error',
                 description: 'Failed to create fee structure',
@@ -230,29 +228,29 @@ export default function FeeStructure() {
                             <ModalBody>
                                 <div className="space-y-4">
                                     <div className='grid gap-3'>
-                                    <Input
-                                        {...register('name')}
-                                        label="Fee Name"
-                                        placeholder="e.g. Tuition Fee"
-                                        isInvalid={!!errors.name}
-                                        errorMessage={errors.name?.message}
-                                        startContent={<Icon icon="mdi:text" />}
-                                    />
+                                        <Input
+                                            {...register('name')}
+                                            label="Fee Name"
+                                            placeholder="e.g. Tuition Fee"
+                                            isInvalid={!!errors.name}
+                                            errorMessage={errors.name?.message}
+                                            startContent={<Icon icon="mdi:text" />}
+                                        />
 
-                                    <Select
-                                        label="Class"
-                                        {...register('classId')}
-                                        isInvalid={!!errors.classId}
-                                        errorMessage={errors.classId?.message}
-                                        placeholder="Select a class"
-                                        startContent={<Icon icon="mdi:google-classroom" />}
-                                    >
-                                        {classes.map((cls) => (
-                                            <SelectItem key={cls.id} value={cls.id}>
-                                                {cls.name} - {cls.section}
-                                            </SelectItem>
-                                        ))}
-                                    </Select>
+                                        <Select
+                                            label="Class"
+                                            {...register('classId')}
+                                            isInvalid={!!errors.classId}
+                                            errorMessage={errors.classId?.message}
+                                            placeholder="Select a class"
+                                            startContent={<Icon icon="mdi:google-classroom" />}
+                                        >
+                                            {classes.map((cls) => (
+                                                <SelectItem key={cls.id} value={cls.id}>
+                                                    {cls.name} - {cls.section}
+                                                </SelectItem>
+                                            ))}
+                                        </Select>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4">
@@ -280,14 +278,14 @@ export default function FeeStructure() {
                                     </div>
 
                                     <div className='grid gap-3'>
-                                    <Input
-                                        {...register('dueDate')}
-                                        type="date"
-                                        label="Due Date"
-                                        isInvalid={!!errors.dueDate}
-                                        errorMessage={errors.dueDate?.message}
-                                        startContent={<Icon icon="mdi:calendar" />}
-                                    />
+                                        <Input
+                                            {...register('dueDate')}
+                                            type="date"
+                                            label="Due Date"
+                                            isInvalid={!!errors.dueDate}
+                                            errorMessage={errors.dueDate?.message}
+                                            startContent={<Icon icon="mdi:calendar" />}
+                                        />
                                     </div>
                                 </div>
                             </ModalBody>

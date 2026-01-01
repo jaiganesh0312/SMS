@@ -51,7 +51,6 @@ const Schools = () => {
                 });
             }
         } catch (error) {
-            console.error("Fetch schools error:", error);
             addToast({
                 title: "Error",
                 description: "An unexpected error occurred",

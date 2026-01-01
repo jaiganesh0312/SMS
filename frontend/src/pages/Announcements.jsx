@@ -33,7 +33,6 @@ const Announcements = () => {
                 addToast({ title: "Error", description: "Failed to load announcements", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Unexpected error loading announcements", color: "danger" });
         } finally {
             setLoading(false);

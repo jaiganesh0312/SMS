@@ -23,7 +23,6 @@ export default function SystemAdminDashboard() {
                     setStats(response.data.data);
                 }
             } catch (error) {
-                console.error("Error fetching system stats:", error);
             } finally {
                 setLoading(false);
             }

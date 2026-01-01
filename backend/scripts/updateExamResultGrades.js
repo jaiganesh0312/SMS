@@ -4,7 +4,6 @@ const { ExamResult, GradeRule } = require('../models');
 async function updateExamResultGrades() {
     try {
         await sequelize.authenticate();
-        console.log('Database connected.');
 
         // Fetch all exam results where grade is missing
         const results = await ExamResult.findAll({
@@ -13,13 +12,11 @@ async function updateExamResultGrades() {
             }
         });
 
-        console.log(`Found ${results.length} exam results without grades.`);
 
         // Fetch all grade rules
         const gradeRules = await GradeRule.findAll();
 
         if (gradeRules.length === 0) {
-            console.error('No grade rules found. Please seed grade rules first.');
             process.exit(1);
         }
 
@@ -39,7 +36,6 @@ async function updateExamResultGrades() {
             const schoolRules = rulesBySchool[result.schoolId];
 
             if (!schoolRules) {
-                console.warn(`No grade rules found for school ID: ${result.schoolId}, skipping result ID: ${result.id}`);
                 continue;
             }
 
@@ -54,15 +50,12 @@ async function updateExamResultGrades() {
                 await result.save();
                 updatedCount++;
             } else {
-                console.warn(`No matching grade rule for percentage: ${percentage} (School: ${result.schoolId}), skipping result ID: ${result.id}`);
             }
         }
 
-        console.log(`Updated ${updatedCount} exam results with grades and remarks.`);
         process.exit(0);
 
     } catch (error) {
-        console.error('Error updating exam result grades:', error);
         process.exit(1);
     }
 }

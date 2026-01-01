@@ -36,7 +36,6 @@ export default function ExamList() {
                 setExams(response.data.data?.exams || []);
             }
         } catch (error) {
-            console.error('Error fetching exams:', error);
         } finally {
             setIsLoading(false);
         }

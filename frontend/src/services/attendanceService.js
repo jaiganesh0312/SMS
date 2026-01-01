@@ -10,7 +10,6 @@ const markAttendance = async (data) => {
     const response = await api.post('/attendance/mark', data);
     return response;
   } catch (error) {
-    console.error('Mark attendance error:', error);
     return error.response;
   }
 };
@@ -25,7 +24,6 @@ const getAttendanceReport = async (params) => {
     const response = await api.get('/attendance/report', { params });
     return response;
   } catch (error) {
-    console.error('Get attendance report error:', error);
     return error.response;
   }
 };

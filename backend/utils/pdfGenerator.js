@@ -31,7 +31,6 @@ exports.generatePDF = async (htmlContent, options = {}) => {
 
         return pdfBuffer;
     } catch (error) {
-        console.error("Error generating PDF:", error);
         throw error;
     } finally {
         if (browser) {

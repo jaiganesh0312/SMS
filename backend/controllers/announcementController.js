@@ -127,7 +127,6 @@ exports.createAnnouncement = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Create announcement error:", error);
     return res.status(500).json({
       success: false,
       message: "Error creating announcement",
@@ -208,7 +207,6 @@ exports.getAnnouncements = async (req, res) => {
       data: announcements,
     });
   } catch (error) {
-    console.error("Get announcements error:", error);
     return res.status(500).json({
       success: false,
       message: "Error fetching announcements",
@@ -318,7 +316,6 @@ exports.updateAnnouncement = async (req, res) => {
       data: updatedAnnouncement,
     });
   } catch (error) {
-    console.error("Update announcement error:", error);
     return res.status(500).json({
       success: false,
       message: "Error updating announcement",
@@ -359,7 +356,6 @@ exports.deleteAnnouncement = async (req, res) => {
       message: "Announcement deleted successfully",
     });
   } catch (error) {
-    console.error("Delete announcement error:", error);
     return res.status(500).json({
       success: false,
       message: "Error deleting announcement",

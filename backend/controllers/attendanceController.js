@@ -90,7 +90,6 @@ exports.getAttendance = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -114,7 +113,6 @@ exports.updateAttendance = async (req, res) => {
 
         res.status(200).json({ success: true, message: "Attendance updated successfully", data: attendance });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ success: false, message: error.message });
     }
 };

@@ -35,7 +35,6 @@ const GalleryDetails = () => {
                 navigate('/gallery');
             }
         } catch (error) {
-            console.error(error);
             navigate('/gallery');
         } finally {
             setLoading(false);

@@ -37,7 +37,6 @@ export default function ReportCard() {
             if (classRes.data?.success) setClasses(classRes.data.data.classes || []);
             if (examRes.data?.success) setExams(examRes.data.data.exams || []);
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Failed to load options", color: "danger" });
         }
     };
@@ -49,7 +48,6 @@ export default function ReportCard() {
                 setStudents(res.data.data.students || []);
             }
         } catch (error) {
-            console.error(error);
         }
     };
 
@@ -80,7 +78,6 @@ export default function ReportCard() {
                 addToast({ title: "Error", description: "Failed to generate report", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Failed to download", color: "danger" });
         } finally {
             setLoading(false);

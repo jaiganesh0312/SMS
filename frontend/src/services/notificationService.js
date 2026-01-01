@@ -9,7 +9,6 @@ const getMyNotifications = async () => {
     const response = await api.get('/notifications');
     return response;
   } catch (error) {
-    console.error('Get notifications error:', error);
     return error.response;
   }
 };
@@ -24,7 +23,6 @@ const markAsRead = async (id) => {
     const response = await api.patch(`/notifications/${id}/read`);
     return response;
   } catch (error) {
-    console.error('Mark as read error:', error);
     return error.response;
   }
 };

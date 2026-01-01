@@ -23,7 +23,6 @@ export default function BookDetails() {
                 addToast({ title: "Error", description: "Failed to load book details", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "An error occurred fetching book details", color: "danger" });
         } finally {
             setIsLoading(false);

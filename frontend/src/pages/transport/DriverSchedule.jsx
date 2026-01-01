@@ -18,7 +18,6 @@ const DriverSchedule = () => {
                 setError(response.data?.message || 'Failed to load schedule');
             }
         } catch (err) {
-            console.error(err);
             setError(err.response?.data?.message || 'Failed to load schedule');
         } finally {
             setLoading(false);

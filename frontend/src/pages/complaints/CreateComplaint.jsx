@@ -52,7 +52,6 @@ const CreateComplaint = ({ onSuccess }) => {
                 addToast({ title: "Error", description: response?.data?.message || "Failed to submit complaint", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "An error occurred", color: "danger" });
         } finally {
             setLoading(false);

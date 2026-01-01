@@ -60,7 +60,6 @@ export default function SectionDetails() {
                 setSection(response.data.section);
             }
         } catch (error) {
-            console.error("Error fetching section:", error);
             // navigate('/study-materials'); // Redirect if not found
         } finally {
             setLoading(false);
@@ -91,7 +90,6 @@ export default function SectionDetails() {
                 setUploadProgress(0);
             }
         } catch (error) {
-            console.error("Error uploading material:", error);
             alert("Upload failed: " + (error.message || "Unknown error"));
         } finally {
             setIsUploading(false);
@@ -114,7 +112,6 @@ export default function SectionDetails() {
             await studyMaterialService.deleteMaterial(materialId);
             fetchSection();
         } catch (error) {
-            console.error("Error deleting material:", error);
         }
     };
 
@@ -123,7 +120,6 @@ export default function SectionDetails() {
             await studyMaterialService.toggleMaterialPublish(materialId);
             fetchSection();
         } catch (error) {
-            console.error("Error toggling publish:", error);
         }
     };
 

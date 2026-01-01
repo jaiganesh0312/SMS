@@ -51,7 +51,6 @@ exports.createSection = async (req, res) => {
             data: { section }
         });
     } catch (error) {
-        console.error("Create section error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -115,7 +114,6 @@ exports.getAllSections = async (req, res) => {
             data: { sections }
         });
     } catch (error) {
-        console.error("Get sections error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -155,7 +153,6 @@ exports.getSectionById = async (req, res) => {
             data: { section }
         });
     } catch (error) {
-        console.error("Get section error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -193,7 +190,6 @@ exports.updateSection = async (req, res) => {
             data: { section }
         });
     } catch (error) {
-        console.error("Update section error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -231,7 +227,6 @@ exports.deleteSection = async (req, res) => {
             message: "Section and all materials deleted successfully"
         });
     } catch (error) {
-        console.error("Delete section error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -255,7 +250,6 @@ exports.toggleSectionPublish = async (req, res) => {
             data: { section }
         });
     } catch (error) {
-        console.error("Toggle publish error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -313,7 +307,6 @@ exports.uploadMaterial = async (req, res) => {
                     fs.unlinkSync(req.file.path);
                 }
             } catch (conversionError) {
-                console.error("HLS conversion error:", conversionError);
                 // Clean up
                 if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
                 if (fs.existsSync(materialDir)) fs.rmSync(materialDir, { recursive: true });
@@ -353,7 +346,6 @@ exports.uploadMaterial = async (req, res) => {
             data: { material }
         });
     } catch (error) {
-        console.error("Upload material error:", error);
         // Clean up temp file on error
         if (req.file && fs.existsSync(req.file.path)) {
             fs.unlinkSync(req.file.path);
@@ -397,7 +389,6 @@ exports.getMaterialById = async (req, res) => {
             data: { material }
         });
     } catch (error) {
-        console.error("Get material error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -432,7 +423,6 @@ exports.updateMaterial = async (req, res) => {
             data: { material }
         });
     } catch (error) {
-        console.error("Update material error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -464,7 +454,6 @@ exports.deleteMaterial = async (req, res) => {
             message: "Material deleted successfully"
         });
     } catch (error) {
-        console.error("Delete material error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -488,7 +477,6 @@ exports.toggleMaterialPublish = async (req, res) => {
             data: { material }
         });
     } catch (error) {
-        console.error("Toggle publish error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -554,7 +542,6 @@ exports.getStreamToken = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error("Get stream token error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -607,7 +594,6 @@ exports.streamHLS = async (req, res) => {
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         fs.createReadStream(filePath).pipe(res);
     } catch (error) {
-        console.error("Stream HLS error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -650,7 +636,6 @@ exports.downloadDocument = async (req, res) => {
 
         fs.createReadStream(material.filePath).pipe(res);
     } catch (error) {
-        console.error("Download document error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -696,7 +681,6 @@ async function convertToHLS(inputPath, outputDir, materialId) {
             const info = JSON.parse(stdout);
             duration = Math.round(parseFloat(info.format.duration));
         } catch (e) {
-            console.log("Could not get video duration:", e.message);
         }
     }
 
@@ -724,7 +708,6 @@ async function deleteMaterialFiles(material) {
             }
         }
     } catch (e) {
-        console.error("Error deleting material files:", e);
     }
 }
 

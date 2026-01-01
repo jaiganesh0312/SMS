@@ -65,21 +65,18 @@ export default function MyStudents() {
                 setStudents(response.data.data || []);
             }
         } catch (error) {
-            console.error("Error fetching my students:", error);
         } finally {
             setLoading(false);
         }
     };
 
     const openPhotoModal = (student) => {
-        console.log("preview", student.profilePicture);
         setPhotoStudent(student);
         setPhotoFile(null);
         setPhotoPreview(student.profilePicture ? `${import.meta.env.VITE_API_URL}/${student.profilePicture}` : '');
         onPhotoOpen();
     };
 
-    console.log(photoPreview);
 
     const handlePhotoFileChange = (e) => {
         const file = e.target.files[0];
@@ -113,7 +110,6 @@ export default function MyStudents() {
                 addToast({ title: "Error", description: "Failed to upload profile picture", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Error uploading profile picture", color: "danger" });
         } finally {
             setUploadingPhoto(false);
@@ -130,7 +126,6 @@ export default function MyStudents() {
                 addToast({ title: "Error", description: "Failed to generate ID Card", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Error generating ID Card", color: "danger" });
         } finally {
             setDownloading((prev) => ({ ...prev, [student.id]: false }));

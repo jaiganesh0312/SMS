@@ -31,7 +31,6 @@ const SchoolSettings = () => {
                 setSchool(data.data);
             }
         } catch (error) {
-            console.error('Error fetching school details:', error);
             addToast({
                 title: "Error",
                 description: "Failed to load school details",
@@ -83,7 +82,6 @@ const SchoolSettings = () => {
                 });
             }
         } catch (error) {
-            console.error('Upload logo error:', error);
             addToast({
                 title: "Error",
                 description: error.message || "An error occurred during upload",

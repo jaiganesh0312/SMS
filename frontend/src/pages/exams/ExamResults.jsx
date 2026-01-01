@@ -50,7 +50,6 @@ export default function ExamResults() {
             if (examRes.data?.success) setExams(examRes.data.data.exams || []);
             if (subjectRes.data?.success) setSubjects(subjectRes.data.data.subjects || []);
         } catch (error) {
-            console.error('Error fetching data:', error);
             addToast({
                 title: "Error",
                 description: "Failed to load options",
@@ -70,7 +69,6 @@ export default function ExamResults() {
                 setResults(response.data.data.results || []);
             }
         } catch (error) {
-            console.error('Error fetching results:', error);
             addToast({
                 title: "Error",
                 description: "Failed to load results",

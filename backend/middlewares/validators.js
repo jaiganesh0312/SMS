@@ -4,8 +4,6 @@ const { body, validationResult } = require("express-validator");
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log("Validation Error:", errors.array());
-    console.log("Request Body:", req.body);
     const errorMessages = errors.array().map((err) => err.msg).join(". ");
     return res.status(400).json({
       success: false,

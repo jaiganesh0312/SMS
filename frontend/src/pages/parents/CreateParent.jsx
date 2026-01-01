@@ -51,7 +51,6 @@ export default function CreateParent() {
                 setStudents(response.data.data.students);
             }
         } catch (error) {
-            console.error("Error fetching students:", error);
         }
     };
 
@@ -63,7 +62,6 @@ export default function CreateParent() {
                 navigate('/students'); // Redirect back to student list or parent list
             }
         } catch (error) {
-            console.error("Error creating parent:", error);
         } finally {
             setIsLoading(false);
         }

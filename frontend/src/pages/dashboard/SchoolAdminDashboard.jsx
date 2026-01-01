@@ -25,7 +25,6 @@ export default function SchoolAdminDashboard() {
                     setStats(response.data.data);
                 }
             } catch (error) {
-                console.error("Error fetching dashboard stats:", error);
             } finally {
                 setLoading(false);
             }

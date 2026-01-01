@@ -87,7 +87,6 @@ const StaffList = () => {
                 addToast({ title: "Error", description: "Failed to generate letter", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "An error occurred", color: "danger" });
         } finally {
             setLoadingAction(false);

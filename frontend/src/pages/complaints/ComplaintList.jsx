@@ -44,7 +44,6 @@ const ComplaintList = ({ refreshTrigger }) => {
                 setComplaints(response.data.data.complaints || []);
             }
         } catch (error) {
-            console.error("Failed to fetch complaints", error);
         } finally {
             setLoading(false);
         }

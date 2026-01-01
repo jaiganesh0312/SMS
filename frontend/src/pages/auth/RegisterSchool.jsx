@@ -49,7 +49,6 @@ export default function RegisterSchool() {
                 setError(response.data?.message || 'Registration failed. Please try again.');
             }
         } catch (err) {
-            console.error('Registration error:', err);
             setError('An error occurred during registration.');
         } finally {
             setIsLoading(false);
@@ -133,16 +132,16 @@ export default function RegisterSchool() {
                             <div className="space-y-4">
                                 <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">School Admin Details</h3>
                                 <div className="grid grid-cols-1 gap-4">
-                                <Input
-                                    {...register('adminName')}
-                                    label="Admin Name"
-                                    placeholder='Enter Admin Name'
-                                    variant="bordered"
-                                    isInvalid={!!errors.adminName}
-                                    errorMessage={errors.adminName?.message}
-                                    startContent={<Icon icon="mdi:account" className="text-default-400" />}
+                                    <Input
+                                        {...register('adminName')}
+                                        label="Admin Name"
+                                        placeholder='Enter Admin Name'
+                                        variant="bordered"
+                                        isInvalid={!!errors.adminName}
+                                        errorMessage={errors.adminName?.message}
+                                        startContent={<Icon icon="mdi:account" className="text-default-400" />}
 
-                                />
+                                    />
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">

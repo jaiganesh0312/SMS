@@ -250,8 +250,6 @@ exports.generateIDCard = async (req, res) => {
     const page = await browser.newPage();
 
     // Generate HTML
-    console.log("Generating ID Card for:", student.name);
-    console.log("Parent Data:", JSON.stringify(student.Parent, null, 2));
 
     const htmlContent = generateIDCardTemplate(student, student.School, req.protocol, req.get('host'));
 
@@ -272,7 +270,6 @@ exports.generateIDCard = async (req, res) => {
     res.send(pdfBuffer);
 
   } catch (error) {
-    console.error('ID Card Gen Error:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

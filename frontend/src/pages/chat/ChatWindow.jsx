@@ -35,7 +35,6 @@ const ChatWindow = ({ conversation, currentUser, onBack }) => {
                     setMessages(res.data);
                 }
             } catch (error) {
-                console.error("Failed to load messages", error);
             } finally {
                 setLoading(false);
                 // use setTimeout to ensure render cycle complete
@@ -126,7 +125,6 @@ const ChatWindow = ({ conversation, currentUser, onBack }) => {
                     setMessages((prev) => [...prev, res.data]);
                 }
             } catch (error) {
-                console.error("Failed to send via API", error);
                 setNewMessage(tempContent); // Restore on final failure
             } finally {
                 setSending(false);
@@ -140,7 +138,6 @@ const ChatWindow = ({ conversation, currentUser, onBack }) => {
                 // For now, let's assume if callback isn't called, it might be stuck.
                 // But generally safe to rely on callback or disconnect.
                 // Implementing a simple fallback if no response in 3s
-                console.warn("Socket timeout, falling back to API");
                 sendMessageViaApi();
             }, 3000);
 
@@ -154,7 +151,6 @@ const ChatWindow = ({ conversation, currentUser, onBack }) => {
                     setMessages((prev) => [...prev, response.data]);
                     setSending(false);
                 } else {
-                    console.error("Socket error response:", response.error);
                     sendMessageViaApi(); // Fallback on server error
                 }
             });

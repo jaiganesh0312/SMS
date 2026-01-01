@@ -112,7 +112,6 @@ export default function BulkUploadPage() {
                 });
             }
         } catch (error) {
-            console.error("Upload error:", error);
             setResult({ error: "An unexpected error occurred." });
         } finally {
             setLoading(false);

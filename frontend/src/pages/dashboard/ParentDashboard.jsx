@@ -44,7 +44,6 @@ export default function ParentDashboard() {
                 }
             }
         } catch (error) {
-            console.error("Error fetching children:", error);
             addToast({
                 title: 'Error',
                 description: 'Failed to load children',
@@ -65,7 +64,6 @@ export default function ParentDashboard() {
                 addToast({ title: "Error", description: "Failed to generate ID Card", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Error generating ID Card", color: "danger" });
         } finally {
             setDownloading((prev) => ({ ...prev, [student.id]: false }));

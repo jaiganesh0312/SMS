@@ -44,7 +44,6 @@ export default function ChildDashboard() {
                 setData(response.data.data);
             }
         } catch (error) {
-            console.error("Error fetching child dashboard:", error);
             addToast({
                 title: 'Error',
                 description: 'Failed to load dashboard',
@@ -62,7 +61,6 @@ export default function ChildDashboard() {
                 setExamResults(response.data.data.examResults || []);
             }
         } catch (error) {
-            console.error("Error fetching exam results:", error);
         } finally {
             setLoadingExams(false);
         }
@@ -90,7 +88,6 @@ export default function ChildDashboard() {
                 color: 'success',
             });
         } catch (error) {
-            console.error('Error downloading report card:', error);
             addToast({
                 title: 'Error',
                 description: 'Failed to download report card',

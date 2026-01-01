@@ -48,7 +48,6 @@ export default function ClassFeeDetails() {
                 });
             }
         } catch (error) {
-            console.error('Error fetching class fee status:', error);
             addToast({
                 title: 'Error',
                 description: 'Failed to load fee details',

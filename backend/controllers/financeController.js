@@ -580,7 +580,6 @@ exports.generateFeeReceipt = async (req, res) => {
         res.send(pdfBuffer);
 
     } catch (error) {
-        console.error('Error generating receipt:', error);
         if (!res.headersSent) {
             res.status(500).json({
                 success: false,

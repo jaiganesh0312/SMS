@@ -5,7 +5,6 @@ const getSchoolStats = async () => {
         const response = await api.get('/dashboard/stats');
         return response;
     } catch (error) {
-        console.error('Get school stats error:', error);
         return error.response;
     }
 };
@@ -15,7 +14,6 @@ const getSystemStats = async () => {
         const response = await api.get('/dashboard/system-stats');
         return response;
     } catch (error) {
-        console.error('Get system stats error:', error);
         return error.response;
     }
 };
@@ -25,7 +23,6 @@ const getAllSchools = async () => {
         const response = await api.get('/dashboard/schools');
         return response;
     } catch (error) {
-        console.error('Get all schools error:', error);
         return error.response;
     }
 };

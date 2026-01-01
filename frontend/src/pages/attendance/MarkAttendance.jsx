@@ -78,7 +78,6 @@ export default function MarkAttendance() {
                 setClasses(response.data.data?.classes || []);
             }
         } catch (error) {
-            console.error('Error fetching classes:', error);
         }
     };
 
@@ -101,7 +100,6 @@ export default function MarkAttendance() {
                 setPendingAttendance(initialStatus);
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Failed to load data", color: "danger" });
         } finally {
             setLoading(false);

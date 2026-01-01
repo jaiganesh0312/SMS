@@ -59,7 +59,6 @@ export default function CollectFees() {
             const res = await academicService.getAllClasses();
             if (res.data?.success) setClasses(res.data.data.classes || []);
         } catch (error) {
-            console.error(error);
         }
     };
 
@@ -79,7 +78,6 @@ export default function CollectFees() {
                     studentsData = res.data.data.students || [];
                 }
             } catch (finError) {
-                console.warn("Finance service access failed", finError);
             }
 
             if (studentsData.length === 0) {
@@ -90,7 +88,6 @@ export default function CollectFees() {
                         source = 'academic';
                     }
                 } catch (acadError) {
-                    console.error("Academic service also failed", acadError);
                 }
             }
 
@@ -130,7 +127,6 @@ export default function CollectFees() {
                 setPendingFees(res.data.data.feeBreakdown || []);
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Could not fetch fee details", color: "danger" });
         } finally {
             setLoadingFees(false);

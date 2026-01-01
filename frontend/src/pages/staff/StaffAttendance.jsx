@@ -108,7 +108,6 @@ const StaffAttendance = () => {
                 setPendingRemarks(initialRemarks);
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Failed to load data", color: "danger" });
         } finally {
             setLoading(false);

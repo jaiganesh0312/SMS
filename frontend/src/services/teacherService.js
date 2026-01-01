@@ -5,7 +5,6 @@ const getMyClass = async () => {
         const response = await api.get('/teacher/my-class');
         return response;
     } catch (error) {
-        console.error('Get my class error:', error);
         return error.response;
     }
 };
@@ -15,7 +14,6 @@ const getMyStudents = async () => {
         const response = await api.get('/teacher/my-students');
         return response;
     } catch (error) {
-        console.error('Get my students error:', error);
         return error.response;
     }
 };
@@ -25,7 +23,6 @@ const getIDCardData = async (studentId) => {
         const response = await api.get(`/teacher/student/${studentId}/id-card`);
         return response;
     } catch (error) {
-        console.error('Get ID card data error:', error);
         return error.response;
     }
 };
@@ -35,7 +32,6 @@ const getMyPeriods = async () => {
         const response = await api.get('/teacher/my-periods');
         return response;
     } catch (error) {
-        console.error('Get my periods error:', error);
         return error.response;
     }
 };
@@ -45,7 +41,6 @@ const getMyClassTimetable = async () => {
         const response = await api.get('/teacher/my-class-timetable');
         return response;
     } catch (error) {
-        console.error('Get my class timetable error:', error);
         return error.response;
     }
 };

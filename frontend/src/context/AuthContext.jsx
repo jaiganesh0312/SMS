@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }) => {
                     setUser(parsedUser);
                     setIsAuthenticated(true);
                 } catch (error) {
-                    console.error('Error parsing stored auth data:', error);
                     logout();
                 }
             }

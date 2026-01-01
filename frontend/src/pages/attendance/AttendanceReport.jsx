@@ -31,7 +31,6 @@ export default function AttendanceReport() {
                 setClasses(response.data.data?.classes || []);
             }
         } catch (error) {
-            console.error('Error fetching classes:', error);
         }
     };
 
@@ -65,7 +64,6 @@ export default function AttendanceReport() {
                 setStats({ present: 0, absent: 0, late: 0, halfDay: 0, total: 0 });
             }
         } catch (error) {
-            console.error('Error fetching report:', error);
             setReportData([]);
         } finally {
             setLoading(false);

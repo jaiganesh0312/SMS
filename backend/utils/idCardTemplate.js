@@ -5,7 +5,6 @@ const generateIDCardTemplate = (student, school, protocol, host) => {
     // Use proper template literals
     const logoSrc = school.logo ? `${protocol}://${host}/api/${school.logo}` : '';
     const photoSrc = student.profilePicture ? `${protocol}://${host}/api/${student.profilePicture}` : '';
-    console.log(photoSrc, logoSrc);
 
     return `
 <!DOCTYPE html>

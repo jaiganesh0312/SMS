@@ -36,7 +36,6 @@ export default function ParentList() {
                 setParents(response.data.data.parents);
             }
         } catch (error) {
-            console.error("Error fetching parents:", error);
         } finally {
             setLoading(false);
         }

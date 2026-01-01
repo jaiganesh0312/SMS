@@ -21,7 +21,6 @@ export default function MyPeriods() {
                     setError(response.data?.message || "Failed to fetch periods");
                 }
             } catch (err) {
-                console.error("Error fetching periods:", err);
                 setError("An error occurred while fetching periods");
             } finally {
                 setLoading(false);

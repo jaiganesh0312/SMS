@@ -6,7 +6,6 @@ const getAllGalleries = async () => {
         const response = await api.get('/gallery');
         return response;
     } catch (error) {
-        console.error('Get all galleries error:', error);
         return error.response;
     }
 };
@@ -17,7 +16,6 @@ const getGalleryById = async (id) => {
         const response = await api.get(`/gallery/${id}`);
         return response;
     } catch (error) {
-        console.error('Get gallery error:', error);
         return error.response;
     }
 };
@@ -28,7 +26,6 @@ const createGallery = async (data) => {
         const response = await api.post('/gallery', data);
         return response;
     } catch (error) {
-        console.error('Create gallery error:', error);
         return error.response;
     }
 };
@@ -43,7 +40,6 @@ const addImages = async (id, formData) => {
         });
         return response;
     } catch (error) {
-        console.error('Upload images error:', error);
         return error.response;
     }
 };
@@ -54,7 +50,6 @@ const deleteGallery = async (id) => {
         const response = await api.delete(`/gallery/${id}`);
         return response;
     } catch (error) {
-        console.error('Delete gallery error:', error);
         return error.response;
     }
 };

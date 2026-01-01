@@ -54,7 +54,6 @@ export default function FeeReceipts() {
                 setReceipts([]);
             }
         } catch (error) {
-            console.error("Failed to load receipts", error);
         } finally {
             setLoading(false);
         }
@@ -65,7 +64,6 @@ export default function FeeReceipts() {
             const res = await academicService.getAllClasses();
             if (res.data?.success) setClasses(res.data.data.classes || []);
         } catch (error) {
-            console.error("Failed to load classes", error);
         }
     };
 
@@ -91,7 +89,6 @@ export default function FeeReceipts() {
                 setClassStudents(res.data.data.students || []);
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Failed to load students", color: "danger" });
         } finally {
             setLoadingStudents(false);
@@ -117,7 +114,6 @@ export default function FeeReceipts() {
                 addToast({ title: "Error", description: "Failed to download receipt", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Error downloading receipt", color: "danger" });
         } finally {
             setDownloadingId(null);

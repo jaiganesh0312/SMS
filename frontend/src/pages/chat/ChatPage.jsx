@@ -69,7 +69,6 @@ const ChatPage = () => {
                 setConversations(res.data);
             }
         } catch (error) {
-            console.error(error);
         } finally {
             setLoading(false);
         }
@@ -94,7 +93,6 @@ const ChatPage = () => {
                     setUsers(res.data);
                 }
             } catch (error) {
-                console.error(error);
             } finally {
                 setLoadingUsers(false);
             }
@@ -125,7 +123,6 @@ const ChatPage = () => {
                 onClose();
             }
         } catch (error) {
-            console.error("Failed to start chat", error);
         }
     };
 

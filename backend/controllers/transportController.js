@@ -49,7 +49,6 @@ const createBus = async (req, res) => {
             data: bus,
         });
     } catch (error) {
-        console.error("createBus error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to create bus",
@@ -85,7 +84,6 @@ const getAllBuses = async (req, res) => {
             data: buses,
         });
     } catch (error) {
-        console.error("getAllBuses error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to fetch buses",
@@ -126,7 +124,6 @@ const getBusById = async (req, res) => {
             data: bus,
         });
     } catch (error) {
-        console.error("getBusById error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to fetch bus",
@@ -178,7 +175,6 @@ const updateBus = async (req, res) => {
             data: bus,
         });
     } catch (error) {
-        console.error("updateBus error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to update bus",
@@ -208,7 +204,6 @@ const deleteBus = async (req, res) => {
             message: "Bus deleted successfully",
         });
     } catch (error) {
-        console.error("deleteBus error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to delete bus",
@@ -249,7 +244,6 @@ const createRoute = async (req, res) => {
             data: route,
         });
     } catch (error) {
-        console.error("createRoute error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to create route",
@@ -284,7 +278,6 @@ const getRoutes = async (req, res) => {
             data: routes,
         });
     } catch (error) {
-        console.error("getRoutes error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to fetch routes",
@@ -321,7 +314,6 @@ const updateRoute = async (req, res) => {
             data: route,
         });
     } catch (error) {
-        console.error("updateRoute error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to update route",
@@ -351,7 +343,6 @@ const deleteRoute = async (req, res) => {
             message: "Route deleted successfully",
         });
     } catch (error) {
-        console.error("deleteRoute error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to delete route",
@@ -407,7 +398,6 @@ const startTrip = async (req, res) => {
             io.to(`bus:${busId}`).emit("bus:trip:start", { tripId: trip.id, busId });
             io.to(`school:${schoolId}:transport`).emit("bus:trip:start", { tripId: trip.id, busId });
         } catch (socketError) {
-            console.log("Socket emit skipped:", socketError.message);
         }
 
         res.status(201).json({
@@ -416,7 +406,6 @@ const startTrip = async (req, res) => {
             data: trip,
         });
     } catch (error) {
-        console.error("startTrip error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to start trip",
@@ -459,7 +448,6 @@ const endTrip = async (req, res) => {
             io.to(`bus:${trip.busId}`).emit("bus:trip:end", { tripId, busId: trip.busId });
             io.to(`school:${schoolId}:transport`).emit("bus:trip:end", { tripId, busId: trip.busId });
         } catch (socketError) {
-            console.log("Socket emit skipped:", socketError.message);
         }
 
         res.json({
@@ -468,7 +456,6 @@ const endTrip = async (req, res) => {
             data: trip,
         });
     } catch (error) {
-        console.error("endTrip error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to end trip",
@@ -524,7 +511,6 @@ const getTripHistory = async (req, res) => {
             data: trips,
         });
     } catch (error) {
-        console.error("getTripHistory error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to fetch trip history",
@@ -601,7 +587,6 @@ const updateLocation = async (req, res) => {
             io.to(`bus:${busId}`).emit("bus:location:receive", locationData);
             io.to(`school:${schoolId}:transport`).emit("bus:location:receive", locationData);
         } catch (socketError) {
-            console.log("Socket emit skipped:", socketError.message);
         }
 
         res.json({
@@ -610,7 +595,6 @@ const updateLocation = async (req, res) => {
             data: location,
         });
     } catch (error) {
-        console.error("updateLocation error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to update location",
@@ -677,7 +661,6 @@ const getLiveLocation = async (req, res) => {
             },
         });
     } catch (error) {
-        console.error("getLiveLocation error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to fetch live location",
@@ -709,7 +692,6 @@ const getLocationHistory = async (req, res) => {
             data: locations,
         });
     } catch (error) {
-        console.error("getLocationHistory error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to fetch location history",
@@ -793,7 +775,6 @@ const assignStudentToBus = async (req, res) => {
 
         });
     } catch (error) {
-        console.error("assignStudentToBus error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to assign student to bus",
@@ -848,7 +829,6 @@ const getAssignedBus = async (req, res) => {
             data: busAssignments,
         });
     } catch (error) {
-        console.error("getAssignedBus error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to fetch assigned bus",
@@ -886,7 +866,6 @@ const getDriverBus = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("getDriverBus error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to fetch driver bus",
@@ -929,7 +908,6 @@ const getBusAssignments = async (req, res) => {
             data: assignments,
         });
     } catch (error) {
-        console.error("getBusAssignments error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to fetch bus assignments",
@@ -961,7 +939,6 @@ const removeStudentFromBus = async (req, res) => {
             message: "Student removed from bus",
         });
     } catch (error) {
-        console.error("removeStudentFromBus error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to remove student from bus",

@@ -57,7 +57,6 @@ const LeaveManagement = () => {
                 addToast({ title: "Error", description: "Failed to load leaves", color: "danger" });
             }
         } catch (error) {
-            console.error(error);
             addToast({ title: "Error", description: "Unexpected error", color: "danger" });
         } finally {
             setLoading(false);

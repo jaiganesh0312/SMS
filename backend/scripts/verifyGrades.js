@@ -9,10 +9,8 @@ async function verifyUpdates() {
                 grade: null
             }
         });
-        console.log(`Remaining exam results without grades: ${count}`);
         process.exit(0);
     } catch (error) {
-        console.error(error);
         process.exit(1);
     }
 }

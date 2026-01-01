@@ -6,7 +6,6 @@ const getAllStaff = async (params) => {
         const response = await api.get('/staff', { params });
         return response;
     } catch (error) {
-        console.error('Get all staff error:', error);
         return error.response;
     }
 };
@@ -16,7 +15,6 @@ const getStaffById = async (id) => {
         const response = await api.get(`/staff/${id}`);
         return response;
     } catch (error) {
-        console.error('Get staff by id error:', error);
         return error.response;
     }
 };
@@ -26,7 +24,6 @@ const updateStaff = async (id, data) => {
         const response = await api.patch(`/staff/${id}`, data);
         return response;
     } catch (error) {
-        console.error('Update staff error:', error);
         return error.response;
     }
 };
@@ -36,7 +33,6 @@ const deleteStaff = async (id) => {
         const response = await api.delete(`/staff/${id}`);
         return response;
     } catch (error) {
-        console.error('Delete staff error:', error);
         return error.response;
     }
 };
@@ -48,7 +44,6 @@ const generateOfferLetter = async (id) => {
         });
         return response;
     } catch (error) {
-        console.error('Generate Offer Letter error:', error);
         return error.response;
     }
 };
@@ -60,7 +55,6 @@ const generateJoiningLetter = async (id) => {
         });
         return response;
     } catch (error) {
-        console.error('Generate Joining Letter error:', error);
         return error.response;
     }
 };
@@ -71,7 +65,6 @@ const createStaff = async (data) => {
         const response = await api.post('/staff', data);
         return response;
     } catch (error) {
-        console.error('Create staff error:', error);
         return error.response;
     }
 };
@@ -81,7 +74,6 @@ const acceptOffer = async () => {
         const response = await api.post('/staff/accept-offer');
         return response;
     } catch (error) {
-        console.error('Accept Offer error:', error);
         return error.response;
     }
 };

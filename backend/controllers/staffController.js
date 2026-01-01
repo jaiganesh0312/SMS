@@ -491,7 +491,6 @@ exports.generateOfferLetter = async (req, res) => {
     });
     res.send(pdfBuffer);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -731,7 +730,6 @@ exports.generateJoiningLetter = async (req, res) => {
     });
     res.send(pdfBuffer);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

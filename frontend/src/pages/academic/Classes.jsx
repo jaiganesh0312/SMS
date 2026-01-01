@@ -83,7 +83,6 @@ export default function Classes() {
                 setStandards(response.data.data || []);
             }
         } catch (error) {
-            console.error('Error fetching standards:', error);
         } finally {
             setIsLoading(false);
         }
@@ -96,7 +95,6 @@ export default function Classes() {
                 setTeachers(response.data.data || []);
             }
         } catch (error) {
-            console.error('Error fetching teachers:', error);
         }
     };
 
@@ -108,7 +106,6 @@ export default function Classes() {
                 setDivisions(prev => ({ ...prev, [standard]: response.data.data }));
             }
         } catch (error) {
-            console.error(`Error fetching divisions for ${standard}:`, error);
         }
     };
 
@@ -122,7 +119,6 @@ export default function Classes() {
                 resetStd();
             }
         } catch (error) {
-            console.error('Error creating standard:', error);
         }
     };
 
@@ -144,7 +140,6 @@ export default function Classes() {
                 resetDiv();
             }
         } catch (error) {
-            console.error('Error creating division:', error);
         }
     };
 
@@ -159,7 +154,6 @@ export default function Classes() {
                 }
             }
         } catch (error) {
-            console.error('Error assigning teacher:', error);
         }
     };
 

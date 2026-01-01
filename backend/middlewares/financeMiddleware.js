@@ -41,7 +41,6 @@ exports.restrictToFeeCollection = async (req, res, next) => {
         });
 
     } catch (error) {
-        console.error("Finance Middleware Error:", error);
         return res.status(500).json({
             success: false,
             message: "Internal server error during authorization",

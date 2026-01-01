@@ -63,7 +63,7 @@ const AnnouncementModal = ({ isOpen, onClose, onSubmit, editingAnnouncement, use
                 setSchools(response.data.data);
             }
         } catch (error) {
-            console.error("Error fetching schools:", error);
+
         } finally {
             setLoadingSchools(false);
         }
