@@ -42,6 +42,11 @@ const StudyMaterial = sequelize.define(
             allowNull: false,
             comment: "For PDF/PPT: direct path; For VIDEO: HLS folder path",
         },
+        status: {
+            type: DataTypes.ENUM("PROCESSING", "COMPLETED", "FAILED"),
+            defaultValue: "COMPLETED",
+            allowNull: false
+        },
         hlsPath: {
             type: DataTypes.STRING,
             allowNull: true,

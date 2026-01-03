@@ -18,12 +18,9 @@ const studyMaterialService = {
     // Get all sections with filters
     getAllSections: async (filters = {}) => {
         try {
-            const params = new URLSearchParams();
-            if (filters.classId) params.append('classId', filters.classId);
-            if (filters.subjectId) params.append('subjectId', filters.subjectId);
-            if (filters.sectionId) params.append('sectionId', filters.sectionId);
-
-            const response = await api.get(`/study-materials/sections?${params.toString()}`);
+            const response = await api.get(`/study-materials/sections`, {
+                params: filters,
+            });
             return response.data;
         } catch (error) {
             throw error.response?.data || error.message;

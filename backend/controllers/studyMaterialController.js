@@ -81,7 +81,7 @@ exports.getAllSections = async (req, res) => {
             // For parents, get their children's classes
             const students = await Student.findAll({ where: { parentId: req.user.id } });
             const classIds = students.map(s => s.classId);
-            where.classId = { [Op.in]: classIds };
+            // where.classId = { [Op.in]: classIds };
             where.isPublished = true;
         } else {
             // For teachers/admins, apply filters if provided
@@ -266,6 +266,9 @@ exports.uploadMaterial = async (req, res) => {
         const schoolId = req.user.schoolId;
         const uploadedBy = req.user.id;
 
+        // Increase timeout for this request if possible, though we return early now
+        req.setTimeout(0);
+
         if (!req.file) {
             return res.status(400).json({ success: false, message: "No file uploaded" });
         }
@@ -295,26 +298,9 @@ exports.uploadMaterial = async (req, res) => {
         let filePath, hlsPath = null, duration = null;
 
         if (fileType === 'VIDEO') {
-            // Convert to HLS
-            try {
-                const result = await convertToHLS(req.file.path, materialDir, materialId);
-                hlsPath = result.hlsPath;
-                duration = result.duration;
-                filePath = materialDir;
-
-                // Delete original temp file
-                if (fs.existsSync(req.file.path)) {
-                    fs.unlinkSync(req.file.path);
-                }
-            } catch (conversionError) {
-                // Clean up
-                if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
-                if (fs.existsSync(materialDir)) fs.rmSync(materialDir, { recursive: true });
-                return res.status(500).json({
-                    success: false,
-                    message: "Video conversion failed: " + conversionError.message
-                });
-            }
+            // For Video, we just return early and process in background
+            // We need to keep the temp file for processing
+            filePath = materialDir; // Placeholder until processing done
         } else {
             // For PDF/PPT, just move the file
             const ext = path.extname(req.file.originalname);
@@ -338,7 +324,15 @@ exports.uploadMaterial = async (req, res) => {
             duration,
             uploadedBy,
             isPublished: isPublished === 'true' || isPublished === true,
+            status: fileType === 'VIDEO' ? 'PROCESSING' : 'COMPLETED'
         });
+
+        // If Video, start background processing
+        if (fileType === 'VIDEO') {
+            processVideo(materialId, req.file.path, materialDir, schoolId).catch(err => {
+                console.error("Background processing error:", err);
+            });
+        }
 
         res.status(201).json({
             success: true,
@@ -346,9 +340,14 @@ exports.uploadMaterial = async (req, res) => {
             data: { material }
         });
     } catch (error) {
-        // Clean up temp file on error
+        // Clean up temp file on error ONLY if not processing video
         if (req.file && fs.existsSync(req.file.path)) {
-            fs.unlinkSync(req.file.path);
+            try {
+                // If it's a video and we are here, it means we failed BEFORE starting background process
+                // If status is PROCESSING, the background process handles cleanup
+                // But here we are in the main try/catch of the request
+                fs.unlinkSync(req.file.path);
+            } catch (e) { }
         }
         res.status(500).json({ success: false, message: error.message });
     }
@@ -532,7 +531,7 @@ exports.getStreamToken = async (req, res) => {
             success: true,
             data: {
                 streamToken,
-                streamUrl: `/api/study-materials/hls/${streamToken}/master.m3u8`,
+                streamUrl: `${req.protocol}://${req.get('host')}/api/study-materials/hls/${streamToken}/master.m3u8`,
                 material: {
                     id: material.id,
                     title: material.title,
@@ -639,6 +638,53 @@ exports.downloadDocument = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+
+// Background video processor
+async function processVideo(materialId, inputPath, outputDir, schoolId) {
+    try {
+        const result = await convertToHLS(inputPath, outputDir, materialId);
+
+        // Update material with HLS path and duration
+        const material = await StudyMaterial.findByPk(materialId);
+        if (material) {
+            await material.update({
+                hlsPath: result.hlsPath,
+                duration: result.duration,
+                status: 'COMPLETED'
+            });
+        }
+
+        // Cleanup input file
+        if (fs.existsSync(inputPath)) {
+            fs.unlinkSync(inputPath);
+        }
+        console.log('Video processing completed successfully for material', material.title);
+
+    } catch (error) {
+        console.error(`Video processing failed for material ${materialId}:`, error);
+
+        // Update status to FAILED
+        try {
+            const material = await StudyMaterial.findByPk(materialId);
+            if (material) {
+                await material.update({ status: 'FAILED' });
+            }
+        } catch (dbError) {
+            console.error("Error updating material status to FAILED:", dbError);
+        }
+
+        // Cleanup input file
+        if (fs.existsSync(inputPath)) {
+            try { fs.unlinkSync(inputPath); } catch (e) { }
+        }
+
+        // Cleanup output dir
+        if (fs.existsSync(outputDir)) {
+            try { fs.rmSync(outputDir, { recursive: true }); } catch (e) { }
+        }
+    }
+}
 
 // =====================
 // HELPER FUNCTIONS

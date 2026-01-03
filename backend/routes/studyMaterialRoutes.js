@@ -6,7 +6,14 @@ const studyMaterialController = require("../controllers/studyMaterialController"
 
 const upload = createStudyMaterialUpload();
 
-// All routes require authentication
+// =====================
+// STREAMING ROUTES (Unprotected by middleware, handles its own token auth)
+// =====================
+
+// Stream HLS files (token-based auth, no JWT header needed)
+router.get("/hls/:token/:filename", studyMaterialController.streamHLS);
+
+// All routes below require authentication
 router.use(protect);
 
 // =====================
@@ -90,9 +97,7 @@ router.patch(
 // Get stream token for video (requires auth)
 router.get("/materials/:id/stream", studyMaterialController.getStreamToken);
 
-// Stream HLS files (token-based auth, no JWT header needed)
-// This route is outside the protect middleware chain
-router.get("/hls/:token/:filename", studyMaterialController.streamHLS);
+
 
 // Download document (PDF/PPT)
 router.get("/materials/:id/download", studyMaterialController.downloadDocument);

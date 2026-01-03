@@ -29,7 +29,7 @@ export default function SectionDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useAuth();
-    const isTeacherOrAdmin = ['TEACHER', 'ADMIN', 'SUPER_ADMIN'].includes(user?.role);
+    const isTeacherOrAdmin = ['TEACHER', 'SCHOOL_ADMIN', 'SUPER_ADMIN'].includes(user?.role);
 
     const [section, setSection] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -134,7 +134,10 @@ export default function SectionDetails() {
     };
 
     // Helper to get color based on type
-    const getFileColor = (type) => {
+    // Helper to get color based on type
+    const getFileColor = (type, status = 'COMPLETED') => {
+        if (status === 'PROCESSING') return "text-yellow-500";
+        if (status === 'FAILED') return "text-red-500";
         switch (type) {
             case 'VIDEO': return "text-red-500";
             case 'PDF': return "text-red-600";
@@ -196,6 +199,11 @@ export default function SectionDetails() {
                     <div className="text-center py-16 bg-gray-50 rounded-xl border border-dashed">
                         <Icon icon="mdi:folder-open-outline" className="text-5xl text-gray-300 mx-auto mb-3" />
                         <p className="text-gray-500">No materials in this section yet.</p>
+                        {isTeacherOrAdmin && (
+                            <Button color="primary" variant="flat" className="mt-4" onPress={onOpen}>
+                                Add Material
+                            </Button>
+                        )}
                     </div>
                 ) : (
                     section.materials.map((material) => (
@@ -207,8 +215,12 @@ export default function SectionDetails() {
                         >
                             {/* Icon / Thumbnail Box */}
                             <div
-                                className={`w-14 h-14 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-zinc-800 cursor-pointer ${getFileColor(material.type)}`}
-                                onClick={() => handleMaterialClick(material)}
+                                className={`w-14 h-14 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-zinc-800 cursor-pointer ${getFileColor(material.type, material.status)}`}
+                                onClick={() => {
+                                    if (material.status !== 'PROCESSING' && material.status !== 'FAILED') {
+                                        handleMaterialClick(material);
+                                    }
+                                }}
                             >
                                 <Icon icon={getFileIcon(material.type)} className="text-3xl" />
                             </div>
@@ -249,9 +261,24 @@ export default function SectionDetails() {
                                     color={material.type === 'VIDEO' ? "primary" : "secondary"}
                                     startContent={<Icon icon={material.type === 'VIDEO' ? "mdi:play" : "mdi:download"} />}
                                     onPress={() => handleMaterialClick(material)}
+                                    isDisabled={material.status === 'PROCESSING' || material.status === 'FAILED'}
                                 >
                                     {material.type === 'VIDEO' ? "Watch" : "Download"}
                                 </Button>
+
+
+                                {material.status === 'PROCESSING' && (
+                                    <div className="flex items-center gap-2 bg-yellow-50 text-yellow-700 px-3 py-1 rounded-lg text-sm">
+                                        Processing...
+                                    </div>
+                                )}
+
+                                {material.status === 'FAILED' && (
+                                    <div className="flex items-center gap-2 bg-red-50 text-red-600 px-3 py-1 rounded-lg text-sm">
+                                        <Icon icon="mdi:alert" />
+                                        Failed
+                                    </div>
+                                )}
 
                                 {isTeacherOrAdmin && (
                                     <Dropdown>
@@ -302,8 +329,8 @@ export default function SectionDetails() {
                                         <div className="flex justify-center mb-4">
                                             <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary"></div>
                                         </div>
-                                        <h3 className="text-xl font-semibold">Uploading & Processing...</h3>
-                                        <p className="text-gray-500">Please wait while we process your file. <br /> For videos, this may take a few minutes for optimization.</p>
+                                        <h3 className="text-xl font-semibold">Uploading...</h3>
+                                        <p className="text-gray-500">Please wait while your file is being uploaded.</p>
                                         <Progress
                                             value={uploadProgress}
                                             showValueLabel={true}

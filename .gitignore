@@ -43,3 +43,6 @@ uploads
 #ignore design.md
 design.md
 
+#ignore .exe files
+*.exe
+

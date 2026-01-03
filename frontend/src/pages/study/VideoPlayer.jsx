@@ -66,7 +66,8 @@ export default function VideoPlayer() {
             });
             hls.on(Hls.Events.ERROR, function (event, data) {
                 if (data.fatal) {
-                    setError("Video playback error has occurred.");
+                    console.error("HLS Error:", data);
+                    setError(`Video playback error: ${data.type} - ${data.details}`);
                     setLoading(false);
                 }
             });

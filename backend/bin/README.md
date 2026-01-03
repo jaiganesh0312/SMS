@@ -4,8 +4,7 @@ This directory should contain the static FFmpeg binary for video processing.
 
 ## Setup Instructions
 
-1. Download FFmpeg static build from: https://www.gyan.dev/ffmpeg/builds/
-   - Choose "ffmpeg-release-essentials.zip" for Windows
+1. Download FFmpeg static build from: https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
 
 2. Extract and copy these files to this directory:
    - `ffmpeg.exe`
