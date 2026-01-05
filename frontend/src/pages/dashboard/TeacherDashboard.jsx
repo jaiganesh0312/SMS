@@ -11,9 +11,9 @@ import {
     ModalFooter,
     Input,
     Textarea,
-    Select,
     SelectItem,
-    useDisclosure
+    useDisclosure,
+    Chip
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { useAuth } from '@/context/AuthContext';
@@ -82,43 +82,44 @@ export default function TeacherDashboard() {
             initial="hidden"
             animate="visible"
         >
-            <motion.div variants={itemVariants} className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                        Teacher Dashboard
-                    </h1>
-                    <p className="text-gray-500">Welcome back, {user?.name}</p>
-                </div>
+            <motion.div variants={itemVariants} className="flex flex-col gap-2">
+                <h1 className="text-3xl font-bold text-foreground">
+                    Teacher Dashboard
+                </h1>
+                <p className="text-default-800">Welcome back, {user?.name}</p>
             </motion.div>
 
             {/* Class Teacher Widget */}
             {myClass && (
-                <motion.div variants={itemVariants}>
-                    <Card className="shadow-sm bg-gradient-to-r from-blue-50 to-indigo-50 border-none">
-                        <CardBody className="p-6">
-                            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                                <div className="flex items-center gap-4">
-                                    <div className="p-3 bg-white rounded-full shadow-sm">
-                                        <Icon icon="mdi:google-classroom" className="text-3xl text-primary" />
+                <motion.div className='p-2'>
+                    <Card className="shadow-md border-none bg-gradient-to-r from-primary-800 to-primary-600 text-white ">
+                        <CardBody className="p-6 relative">
+                            {/* Decorative background element */}
+
+                            <div className="flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+                                <div className="flex items-center gap-6">
+                                    <div className="p-4 bg-white/20 backdrop-blur-md rounded-full shadow-inner border border-white/30">
+                                        <Icon icon="mdi:google-classroom" className="text-2xl text-white" />
                                     </div>
                                     <div>
-                                        <h2 className="text-xl font-bold text-gray-800">Class Teacher: {myClass.name} - {myClass.section}</h2>
-                                        <p className="text-gray-600">{myClass.Students ? myClass.Students.length : 0} Students Assigned</p>
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <Chip size="sm" variant="solid" color='secondary'>CLASS TEACHER</Chip>
+                                        </div>
+                                        <h2 className="text-xl font-bold text-white tracking-tight">{myClass.name} - {myClass.section}</h2>
+                                        <p className="text-white/80 mt-1 font-medium">{myClass.Students ? myClass.Students.length : 0} Students Assigned</p>
                                     </div>
                                 </div>
-                                <div className="flex gap-3">
+                                <div className="flex gap-4">
                                     <Button
-                                        color="primary"
-                                        className="shadow-md"
-                                        startContent={<Icon icon="mdi:account-school" />}
+                                        className="bg-white text-primary-900 border-none font-semibold shadow-lg"
+                                        startContent={<Icon icon="mdi:account-school" className="text-xl" />}
                                         onPress={() => navigate('/teacher/my-students')}
                                     >
                                         My Students
                                     </Button>
                                     <Button
-                                        color="secondary"
-                                        className="shadow-md"
-                                        startContent={<Icon icon="mdi:bullhorn" />}
+                                        className="bg-secondary text-secondary-900 border-none font-semibold shadow-lg"
+                                        startContent={<Icon icon="mdi:bullhorn" className="text-xl" />}
                                         onPress={onOpen}
                                     >
                                         Make Announcement
@@ -131,23 +132,24 @@ export default function TeacherDashboard() {
             )}
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm">
+                <Card className="shadow-sm bg-content1 border border-default-200 dark:border-default-100">
                     <CardHeader className="px-6 pt-6">
                         <div className="flex items-center gap-3">
-                            <Icon icon="mdi:calendar-check" className="text-primary text-2xl" />
+                            <Icon icon="mdi:calendar-check" className="text-secondary-500 text-2xl" />
                             <div>
-                                <h3 className="text-lg font-semibold">Quick Actions</h3>
+                                <h3 className="text-lg font-bold text-foreground">Quick Actions</h3>
+                                <p className="text-sm text-default-800">Manage your daily tasks</p>
                             </div>
                         </div>
                     </CardHeader>
                     <CardBody className="px-6 pb-6 pt-2">
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                             <Button
-                                className="w-full justify-start h-auto py-4 px-4 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800"
+                                className="w-full justify-start h-auto py-4 px-4 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/40 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800"
                                 onPress={() => navigate('/teacher/my-periods')}
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white dark:bg-purple-800 rounded-lg shadow-sm">
+                                    <div className="p-2 bg-white dark:bg-primary-800 rounded-lg shadow-sm">
                                         <Icon icon="mdi:clock-time-four-outline" className="text-xl" />
                                     </div>
                                     <div className="text-left">
@@ -158,11 +160,11 @@ export default function TeacherDashboard() {
                             </Button>
 
                             <Button
-                                className="w-full justify-start h-auto py-4 px-4 bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/40 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-800"
+                                className="w-full justify-start h-auto py-4 px-4 bg-warning-50 dark:bg-warning-900/20 hover:bg-warning-100 dark:hover:bg-warning-900/40 text-warning-700 dark:text-warning-300 border border-warning-200 dark:border-warning-800"
                                 onPress={() => navigate('/teacher/my-class-timetable')}
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white dark:bg-orange-800 rounded-lg shadow-sm">
+                                    <div className="p-2 bg-white dark:bg-warning-800 rounded-lg shadow-sm">
                                         <Icon icon="mdi:calendar-multiselect" className="text-xl" />
                                     </div>
                                     <div className="text-left">
@@ -172,11 +174,11 @@ export default function TeacherDashboard() {
                                 </div>
                             </Button>
                             <Button
-                                className="w-full justify-start h-auto py-4 px-4 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/40 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800"
+                                className="w-full justify-start h-auto py-4 px-4 bg-success-50 dark:bg-success-900/20 hover:bg-success-100 dark:hover:bg-success-900/40 text-success-700 dark:text-success-300 border border-success-200 dark:border-success-800"
                                 onPress={() => window.location.href = '/attendance/mark'}
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white dark:bg-green-800 rounded-lg shadow-sm">
+                                    <div className="p-2 bg-white dark:bg-success-800 rounded-lg shadow-sm">
                                         <Icon icon="mdi:calendar-edit" className="text-xl" />
                                     </div>
                                     <div className="text-left">
@@ -187,11 +189,11 @@ export default function TeacherDashboard() {
                             </Button>
 
                             <Button
-                                className="w-full justify-start h-auto py-4 px-4 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
+                                className="w-full justify-start h-auto py-4 px-4 bg-secondary-50 dark:bg-secondary-900/20 hover:bg-secondary-100 dark:hover:bg-secondary-900/40 text-secondary-700 dark:text-secondary-300 border border-secondary-200 dark:border-secondary-800"
                                 onPress={() => window.location.href = '/attendance/report'}
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white dark:bg-blue-800 rounded-lg shadow-sm">
+                                    <div className="p-2 bg-white dark:bg-secondary-800 rounded-lg shadow-sm">
                                         <Icon icon="mdi:chart-bar" className="text-xl" />
                                     </div>
                                     <div className="text-left">
@@ -202,11 +204,11 @@ export default function TeacherDashboard() {
                             </Button>
 
                             <Button
-                                className="w-full justify-start h-auto py-4 px-4 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800"
+                                className="w-full justify-start h-auto py-4 px-4 bg-default-100 dark:bg-default-100/10 hover:bg-default-200 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300 border border-default-200 dark:border-default-700"
                                 onPress={() => window.location.href = '/my-leaves'}
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white dark:bg-amber-800 rounded-lg shadow-sm">
+                                    <div className="p-2 bg-white dark:bg-default-700 rounded-lg shadow-sm">
                                         <Icon icon="mdi:calendar-account" className="text-xl" />
                                     </div>
                                     <div className="text-left">
@@ -221,40 +223,66 @@ export default function TeacherDashboard() {
             </motion.div>
 
             {/* Create Announcement Modal */}
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={onClose} backdrop="blur" classNames={{
+                base: "bg-content1 dark:bg-content1 border border-default-200",
+                header: "border-b border-default-200",
+                footer: "border-t border-default-200",
+                closeButton: "hover:bg-default-100 active:bg-default-200"
+            }}>
                 <ModalContent>
                     {(onClose) => (
                         <form onSubmit={handleSubmit(handleCreateAnnouncement)}>
-                            <ModalHeader>Class Announcement</ModalHeader>
-                            <ModalBody>
-                                <p className="text-sm text-gray-500 mb-4">
-                                    Creating announcement for <strong>{myClass?.name} - {myClass?.section}</strong>
-                                </p>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <span className="text-xl font-bold">Class Announcement</span>
+                            </ModalHeader>
+                            <ModalBody className="py-6">
+                                <div className="p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-100 dark:border-primary-800 mb-2">
+                                    <p className="text-sm text-primary-700 dark:text-primary-300">
+                                        Target Class: <strong>{myClass?.name} - {myClass?.section}</strong>
+                                    </p>
+                                </div>
                                 <div className="space-y-4">
                                     <Input
                                         {...register('title', { required: true })}
-                                        label="Title"
+                                        label="Announcement Title"
                                         placeholder="e.g. Picnic Tomorrow"
+                                        variant="bordered"
+                                        labelPlacement="outside"
+                                        classNames={{
+                                            inputWrapper: "bg-default-50 hover:bg-default-100",
+                                        }}
                                     />
                                     <Textarea
                                         {...register('message', { required: true })}
-                                        label="Message"
-                                        placeholder="Enter details..."
+                                        label="Message Details"
+                                        placeholder="Enter full details regarding the announcement..."
+                                        variant="bordered"
+                                        labelPlacement="outside"
+                                        minRows={3}
+                                        classNames={{
+                                            inputWrapper: "bg-default-50 hover:bg-default-100",
+                                        }}
                                     />
                                     <Select
                                         {...register('priority')}
-                                        label="Priority"
+                                        label="Priority Level"
                                         defaultSelectedKeys={['MEDIUM']}
+                                        variant="bordered"
+                                        labelPlacement="outside"
                                     >
-                                        <SelectItem key="LOW" value="LOW">Low</SelectItem>
-                                        <SelectItem key="MEDIUM" value="MEDIUM">Medium</SelectItem>
-                                        <SelectItem key="HIGH" value="HIGH">High</SelectItem>
+                                        <SelectItem key="LOW" value="LOW" startContent={<Icon icon="mdi:arrow-down" className="text-success" />}>Low Priority</SelectItem>
+                                        <SelectItem key="MEDIUM" value="MEDIUM" startContent={<Icon icon="mdi:minus" className="text-warning" />}>Medium Priority</SelectItem>
+                                        <SelectItem key="HIGH" value="HIGH" startContent={<Icon icon="mdi:arrow-up" className="text-danger" />}>High Priority</SelectItem>
                                     </Select>
                                 </div>
                             </ModalBody>
                             <ModalFooter>
-                                <Button color="danger" variant="light" onPress={onClose}>Cancel</Button>
-                                <Button color="primary" type="submit">Post Announcement</Button>
+                                <Button color="danger" variant="flat" onPress={onClose}>
+                                    Cancel
+                                </Button>
+                                <Button color="primary" type="submit" className="shadow-md shadow-primary/20">
+                                    Post Announcement
+                                </Button>
                             </ModalFooter>
                         </form>
                     )}

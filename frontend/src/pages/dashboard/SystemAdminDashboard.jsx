@@ -95,19 +95,19 @@ export default function SystemAdminDashboard() {
             animate="visible"
         >
             <motion.div variants={itemVariants} className="flex flex-col gap-2">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">System Overview</h1>
-                <p className="text-gray-500 dark:text-gray-400">Welcome to the Super Admin Control Panel</p>
+                <h1 className="text-3xl font-bold text-foreground">System Overview</h1>
+                <p className="text-default-500">Welcome to the Super Admin Control Panel</p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {statCards.map((stat, index) => (
                     <motion.div key={index} variants={itemVariants}>
-                        <Card className={`border-l-4 ${stat.borderColor} shadow-sm`}>
+                        <Card className={`border-l-4 ${stat.borderColor} shadow-sm bg-content1 dark:bg-content1 border-y border-r border-default-200 dark:border-default-100`}>
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">{stat.title}</p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                                        <p className="text-sm text-default-500">{stat.title}</p>
+                                        <p className="text-2xl font-bold text-foreground">{stat.value}</p>
                                     </div>
                                     <div className={`p-3 rounded-lg ${stat.bgColor}`}>
                                         <Icon icon={stat.icon} className={`text-2xl ${stat.color}`} />
@@ -120,24 +120,24 @@ export default function SystemAdminDashboard() {
             </div>
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm">
+                <Card className="shadow-sm bg-content1 border border-default-200 dark:border-default-100">
                     <CardHeader className="font-bold text-lg px-6 pt-6">
                         <div className="flex items-center gap-3">
-                            <Icon icon="mdi:cog" className="text-gray-500 text-2xl" />
+                            <Icon icon="mdi:cog" className="text-default-500 text-2xl" />
                             <div>
-                                <h3 className="text-lg font-semibold">Global Management</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">System-wide tools</p>
+                                <h3 className="text-lg font-bold text-foreground">Global Management</h3>
+                                <p className="text-sm text-default-500 font-normal">System-wide tools</p>
                             </div>
                         </div>
                     </CardHeader>
                     <CardBody className="px-6 pb-6 pt-0">
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <Button
-                                className="w-full justify-start h-auto py-3 px-4 bg-cyan-50 dark:bg-cyan-900/20 hover:bg-cyan-100 dark:hover:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800"
+                                className="w-full justify-start h-auto py-3 px-4 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/40 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800"
                                 onPress={() => window.location.href = '/attendance/report'}
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white dark:bg-cyan-800 rounded-lg shadow-sm">
+                                    <div className="p-2 bg-white dark:bg-primary-800 rounded-lg shadow-sm">
                                         <Icon icon="mdi:poll" className="text-xl" />
                                     </div>
                                     <div className="text-left">
@@ -153,13 +153,13 @@ export default function SystemAdminDashboard() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <motion.div variants={itemVariants}>
-                    <Card className="shadow-sm min-h-[300px]">
+                    <Card className="shadow-sm min-h-[300px] bg-content1 border border-default-200 dark:border-default-100">
                         <CardHeader className="font-bold text-lg px-6 pt-6 flex justify-between">
                             <div className="flex items-center gap-3">
-                                <Icon icon="mdi:school" className="text-violet-500 text-2xl" />
+                                <Icon icon="mdi:school" className="text-secondary-500 text-2xl" />
                                 <div>
-                                    <h3 className="text-lg font-semibold">Recent Registrations</h3>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                                    <h3 className="text-lg font-bold text-foreground">Recent Registrations</h3>
+                                    <p className="text-sm text-default-500 font-normal">
                                         Recently joined schools
                                     </p>
                                 </div>
@@ -167,7 +167,7 @@ export default function SystemAdminDashboard() {
                             <Chip size="sm" variant="flat" color="secondary">Schools</Chip>
                         </CardHeader>
                         <CardBody className="px-0 pb-4">
-                            <Table aria-label="Recent Schools" removeWrapper>
+                            <Table aria-label="Recent Schools" removeWrapper classNames={{ th: "bg-default-100 text-default-500", td: "border-b border-default-100" }}>
                                 <TableHeader>
                                     <TableColumn>SCHOOL NAME</TableColumn>
 
@@ -179,14 +179,14 @@ export default function SystemAdminDashboard() {
                                         <TableRow key={school.id}>
                                             <TableCell>
                                                 <div className="flex items-center gap-2">
-                                                    <div className="w-8 h-8 rounded-full bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-300 flex items-center justify-center font-bold text-xs">
+                                                    <div className="w-8 h-8 rounded-full bg-secondary-100 dark:bg-secondary-900/50 text-secondary-600 dark:text-secondary-300 flex items-center justify-center font-bold text-xs">
                                                         {school.name.substring(0, 2).toUpperCase()}
                                                     </div>
-                                                    <span className="font-medium text-small text-gray-900 dark:text-white">{school.name}</span>
+                                                    <span className="font-medium text-small text-foreground">{school.name}</span>
                                                 </div>
                                             </TableCell>
 
-                                            <TableCell className="text-tiny text-gray-500">{new Date(school.createdAt).toLocaleDateString()}</TableCell>
+                                            <TableCell className="text-tiny text-default-500">{new Date(school.createdAt).toLocaleDateString()}</TableCell>
                                             <TableCell>
                                                 <Chip size="sm" color="success" variant="flat">Active</Chip>
                                             </TableCell>
@@ -199,35 +199,35 @@ export default function SystemAdminDashboard() {
                 </motion.div>
 
                 <motion.div variants={itemVariants}>
-                    <Card className="shadow-sm h-full">
+                    <Card className="shadow-sm h-full bg-content1 border border-default-200 dark:border-default-100">
                         <CardHeader className="font-bold text-lg px-6 pt-6">
                             <div className="flex items-center gap-3">
                                 <Icon icon="mdi:server-network" className="text-cyan-500 text-2xl" />
                                 <div>
-                                    <h3 className="text-lg font-semibold">System Health</h3>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                                    <h3 className="text-lg font-bold text-foreground">System Health</h3>
+                                    <p className="text-sm text-default-500 font-normal">
                                         Real-time metrics
                                     </p>
                                 </div>
                             </div>
                         </CardHeader>
-                        <CardBody className="px-6 pb-6 flex items-center justify-center text-gray-400">
+                        <CardBody className="px-6 pb-6 flex items-center justify-center text-default-400">
                             <div className="text-center w-full">
                                 <Icon icon="mdi:heart-pulse" className="text-5xl mx-auto mb-4 text-cyan-500" />
-                                <p className="text-lg font-semibold text-gray-700 dark:text-white">All systems operational</p>
+                                <p className="text-lg font-semibold text-foreground">All systems operational</p>
                                 <p className="text-sm">Server Uptime: 99.9%</p>
                                 <div className="grid grid-cols-3 gap-4 mt-8 w-full">
-                                    <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">CPU Load</p>
-                                        <p className="text-2xl font-bold text-emerald-500">12%</p>
+                                    <div className="text-center p-4 bg-default-50 dark:bg-default-100/10 rounded-lg">
+                                        <p className="text-xs text-default-500 uppercase tracking-wider mb-1">CPU Load</p>
+                                        <p className="text-2xl font-bold text-success-500">12%</p>
                                     </div>
-                                    <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Memory</p>
-                                        <p className="text-2xl font-bold text-blue-500">45%</p>
+                                    <div className="text-center p-4 bg-default-50 dark:bg-default-100/10 rounded-lg">
+                                        <p className="text-xs text-default-500 uppercase tracking-wider mb-1">Memory</p>
+                                        <p className="text-2xl font-bold text-primary-500">45%</p>
                                     </div>
-                                    <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Storage</p>
-                                        <p className="text-2xl font-bold text-amber-500">28%</p>
+                                    <div className="text-center p-4 bg-default-50 dark:bg-default-100/10 rounded-lg">
+                                        <p className="text-xs text-default-500 uppercase tracking-wider mb-1">Storage</p>
+                                        <p className="text-2xl font-bold text-warning-500">28%</p>
                                     </div>
                                 </div>
                             </div>

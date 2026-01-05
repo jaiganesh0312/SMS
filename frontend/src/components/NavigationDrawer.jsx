@@ -176,29 +176,49 @@ export default function NavigationDrawer({ isOpen, onClose }) {
             isOpen={isOpen}
             onClose={onClose}
             placement="left"
-            size="md"
-            className="bg-white dark:bg-gray-900"
+            size="sm"
+            className="bg-content1 dark:bg-black/90 backdrop-blur-md"
+            motionProps={{
+                variants: {
+                    enter: {
+                        x: 0,
+                        opacity: 1,
+                        transition: {
+                            duration: 0.3,
+                            ease: "easeOut",
+                        },
+                    },
+                    exit: {
+                        x: -100,
+                        opacity: 0,
+                        transition: {
+                            duration: 0.2,
+                            ease: "easeIn",
+                        },
+                    },
+                },
+            }}
         >
             <DrawerContent>
                 {(onClose) => (
                     <>
-                        <DrawerHeader className="flex flex-col gap-3 p-6 border-b border-gray-200 dark:border-gray-800">
+                        <DrawerHeader className="flex flex-col gap-5 p-6 border-b border-default-200/50 dark:border-default-100/10 bg-gradient-to-r from-primary-50/50 to-transparent dark:from-primary-900/10 dark:to-transparent">
                             {/* Close Button */}
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                                        <Icon icon="mdi:check-circle-outline" className="text-2xl text-primary" />
+                                    <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/20">
+                                        <Icon icon="mdi:school" className="text-2xl text-white" />
                                     </div>
                                     <div>
-                                        <h2 className="text-lg font-bold text-gray-900 dark:text-white">School Management System</h2>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">Tagline</p>
+                                        <h2 className="text-lg font-bold text-foreground">SMS Portal</h2>
+                                        <p className="text-xs text-default-500 tracking-wide">ACADEMIC DASHBOARD</p>
                                     </div>
                                 </div>
                                 <Button
                                     isIconOnly
                                     variant="light"
                                     onPress={onClose}
-                                    className="lg:hidden"
+                                    className="lg:hidden text-default-400 hover:text-danger-500"
                                 >
                                     <Icon icon="mdi:close" className="text-2xl" />
                                 </Button>
@@ -206,7 +226,7 @@ export default function NavigationDrawer({ isOpen, onClose }) {
 
                             {/* User Info */}
                             {user && (
-                                <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                                <div className="flex items-center gap-3 p-3 bg-content-2 dark:bg-white/5 border border-default-200/50 dark:border-white/10 rounded-xl hover:border-primary-200 transition-colors cursor-default">
                                     <Avatar
                                         src={user.avatarUrl}
                                         name={user.name}
@@ -215,27 +235,29 @@ export default function NavigationDrawer({ isOpen, onClose }) {
                                         color="primary"
                                     />
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                                        <p className="text-sm font-bold text-foreground truncate">
                                             {user.name}
                                         </p>
-                                        <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
-                                            {user.email}
-                                        </p>
+                                        <div className="flex items-center gap-1">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-success-500 animate-pulse"></span>
+                                            <p className="text-xs text-default-500 truncate capitalize">
+                                                {user.role?.replace(/_/g, ' ').toLowerCase()}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             )}
-
-
                         </DrawerHeader>
 
-                        <DrawerBody className="p-0">
-                            <div className="py-4">
+                        <DrawerBody className="p-0 overflow-y-auto custom-scrollbar">
+                            <div className="py-6">
                                 {sections.map((section, sectionIndex) => (
                                     <div key={sectionIndex} className="mb-6">
-                                        <h3 className="px-6 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        <h3 className="px-6 mb-3 text-xs font-bold text-primary-400 uppercase tracking-wider flex items-center gap-2">
                                             {section.title}
+                                            <div className="h-px bg-default-200 flex-1 opacity-50"></div>
                                         </h3>
-                                        <nav className="space-y-1 px-3">
+                                        <nav className="space-y-0.5 px-3">
                                             {section.items.map((item) => {
                                                 const isActive = isActivePath(item.path);
                                                 return (
@@ -244,25 +266,28 @@ export default function NavigationDrawer({ isOpen, onClose }) {
                                                         to={item.path}
                                                         onClick={handleNavigation}
                                                     >
-                                                        <motion.div
-                                                            whileHover={{ x: 4 }}
-                                                            whileTap={{ scale: 0.98 }}
-                                                            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${isActive
-                                                                ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
-                                                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                                                                }`}
-                                                        >
-                                                            <Icon
-                                                                icon={item.icon}
-                                                                className={`text-xl ${isActive ? 'text-blue-600 dark:text-blue-400' : ''}`}
-                                                            />
-                                                            <span className={`font-medium ${isActive ? 'font-semibold' : ''}`}>
-                                                                {item.name}
-                                                            </span>
-                                                            {isActive && (
-                                                                <div className="ml-auto w-1 h-6 bg-blue-600 dark:bg-blue-400 rounded-full" />
-                                                            )}
-                                                        </motion.div>
+                                                        <div className="relative">
+                                                            <motion.div
+                                                                whileHover={{ x: 4 }}
+                                                                whileTap={{ scale: 0.98 }}
+                                                                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 relative z-10 ${isActive
+                                                                    ? 'bg-primary-50 dark:bg-primary-500/20 text-primary-700 dark:text-primary-300 shadow-sm'
+                                                                    : 'text-default-900 hover:bg-default-100 dark:hover:bg-default-100/10 hover:text-foreground'
+                                                                    }`}
+                                                            >
+                                                                <Icon
+                                                                    icon={item.icon}
+                                                                    className={`text-xl transition-colors ${isActive
+                                                                        ? 'text-primary-600 dark:text-primary-400'
+                                                                        : 'text-default-800 group-hover:text-default-900'
+                                                                        }`}
+                                                                />
+                                                                <span className={`font-medium ${isActive ? 'font-semibold' : ''}`}>
+                                                                    {item.name}
+                                                                </span>
+                                                            </motion.div>
+
+                                                        </div>
                                                     </Link>
                                                 );
                                             })}
@@ -270,64 +295,47 @@ export default function NavigationDrawer({ isOpen, onClose }) {
                                     </div>
                                 ))}
 
-                                <Divider className="my-4" />
+                                <div className="px-6">
+                                    <Divider className="my-4 bg-default-200/50" />
+                                </div>
 
                                 {/* Quick Links */}
                                 <div className="px-3">
-                                    <h3 className="px-3 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    <h3 className="px-3 mb-3 text-xs font-bold text-primary-400 uppercase tracking-wider flex items-center gap-2">
                                         Quick Links
+                                        <div className="h-px bg-default-200 flex-1 opacity-50"></div>
                                     </h3>
-                                    <nav className="space-y-1">
-                                        <Link to="/profile" onClick={handleNavigation}>
-                                            <motion.div
-                                                whileHover={{ x: 4 }}
-                                                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                                            >
-                                                <Icon icon="mdi:account" className="text-xl" />
-                                                <span className="font-medium">My Profile</span>
-                                            </motion.div>
-                                        </Link>
-                                        <Link to="/settings" onClick={handleNavigation}>
-                                            <motion.div
-                                                whileHover={{ x: 4 }}
-                                                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                                            >
-                                                <Icon icon="mdi:cog" className="text-xl" />
-                                                <span className="font-medium">Settings</span>
-                                            </motion.div>
-                                        </Link>
-                                        <Link to="/settings/update-password" onClick={handleNavigation}>
-                                            <motion.div
-                                                whileHover={{ x: 4 }}
-                                                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                                            >
-                                                <Icon icon="mdi:lock-reset" className="text-xl" />
-                                                <span className="font-medium">Update Password</span>
-                                            </motion.div>
-                                        </Link>
-                                        <Link to="/help" onClick={handleNavigation}>
-                                            <motion.div
-                                                whileHover={{ x: 4 }}
-                                                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                                            >
-                                                <Icon icon="mdi:help-circle" className="text-xl" />
-                                                <span className="font-medium">Help & Support</span>
-                                            </motion.div>
-                                        </Link>
+                                    <nav className="space-y-0.5">
+                                        {[
+                                            { path: '/profile', name: 'My Profile', icon: 'mdi:account' },
+                                            { path: '/settings', name: 'Settings', icon: 'mdi:cog' },
+                                            { path: '/settings/update-password', name: 'Update Password', icon: 'mdi:lock-reset' },
+                                            { path: '/help', name: 'Help & Support', icon: 'mdi:help-circle' }
+                                        ].map((item) => (
+                                            <Link key={item.path} to={item.path} onClick={handleNavigation}>
+                                                <motion.div
+                                                    whileHover={{ x: 4 }}
+                                                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-default-900 hover:bg-default-100 dark:hover:bg-default-100/10 hover:text-foreground transition-all"
+                                                >
+                                                    <Icon icon={item.icon} className="text-xl text-default-800 group-hover:text-default-900" />
+                                                    <span className="font-medium">{item.name}</span>
+                                                </motion.div>
+                                            </Link>
+                                        ))}
                                     </nav>
                                 </div>
                             </div>
                         </DrawerBody>
 
-                        <DrawerFooter className="p-4 border-t border-gray-200 dark:border-gray-800">
+                        <DrawerFooter className="p-4 border-t border-default-200 dark:border-default-100/10 backdrop-blur-sm bg-background/50">
                             <Button
                                 color="danger"
                                 variant="flat"
                                 onPress={handleLogout}
-                                className="w-full"
+                                className="w-full font-semibold shadow-sm hover:shadow-md transition-shadow"
                                 startContent={<Icon icon="mdi:logout" className="text-xl" />}
                             >
-                                Logout
+                                Sign Out
                             </Button>
                         </DrawerFooter>
                     </>

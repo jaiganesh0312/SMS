@@ -119,18 +119,18 @@ export default function ParentDashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="min-h-screen bg-background">
             {/* School Header Banner */}
             {schoolInfo && (
-                <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6 mb-6">
+                <div className="bg-gradient-to-r from-primary-700 to-primary-900 text-white p-6 mb-6 shadow-md">
                     <div className="max-w-7xl mx-auto">
                         <div className="flex items-center gap-4">
-                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center">
-                                <Icon icon="mdi:school" className="text-4xl text-blue-600" />
+                            <div className="w-16 h-16 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg">
+                                <Icon icon="mdi:school" className="text-4xl text-primary-700" />
                             </div>
                             <div>
-                                <h1 className="text-2xl font-bold">{schoolInfo.name}</h1>
-                                <div className="flex gap-4 text-sm mt-1 opacity-90">
+                                <h1 className="text-2xl font-bold tracking-tight">{schoolInfo.name}</h1>
+                                <div className="flex gap-4 text-sm mt-1 opacity-90 font-medium">
                                     {schoolInfo.phone && (
                                         <span className="flex items-center gap-1">
                                             <Icon icon="mdi:phone" />
@@ -154,8 +154,8 @@ export default function ParentDashboard() {
                 {/* Page Title with Refresh */}
                 <div className="flex justify-between items-start">
                     <div>
-                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Parent Dashboard</h2>
-                        <p className="text-gray-500 dark:text-gray-400">Overview of your children's academic progress</p>
+                        <h2 className="text-3xl font-bold text-foreground">Parent Dashboard</h2>
+                        <p className="text-default-500">Overview of your children's academic progress</p>
                     </div>
                     <Button
                         color="primary"
@@ -163,6 +163,7 @@ export default function ParentDashboard() {
                         startContent={<Icon icon="mdi:refresh" />}
                         onPress={fetchChildren}
                         isLoading={loading}
+                        className="bg-primary-100 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300"
                     >
                         Refresh
                     </Button>
@@ -171,15 +172,15 @@ export default function ParentDashboard() {
                 {/* Summary Statistics with Borders */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <motion.div whileHover={{ scale: 1.02 }} className="h-full">
-                        <Card className="border-l-4 border-l-blue-500">
+                        <Card className="border-l-4 border-l-primary-500 bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Total Children</p>
-                                        <p className="text-3xl font-bold text-gray-900 dark:text-white">{children.length}</p>
+                                        <p className="text-sm text-default-500">Total Children</p>
+                                        <p className="text-3xl font-bold text-foreground">{children.length}</p>
                                     </div>
-                                    <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg">
-                                        <Icon icon="mdi:account-multiple" className="text-2xl text-blue-600 dark:text-blue-400" />
+                                    <div className="bg-primary-100 dark:bg-primary-900/30 p-3 rounded-lg">
+                                        <Icon icon="mdi:account-multiple" className="text-2xl text-primary-600 dark:text-primary-400" />
                                     </div>
                                 </div>
                             </CardBody>
@@ -187,12 +188,12 @@ export default function ParentDashboard() {
                     </motion.div>
 
                     <motion.div whileHover={{ scale: 1.02 }} className="h-full">
-                        <Card className="border-l-4 border-l-warning">
+                        <Card className="border-l-4 border-l-warning bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Pending Fees</p>
-                                        <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                                        <p className="text-sm text-default-500">Pending Fees</p>
+                                        <p className="text-3xl font-bold text-foreground">
                                             {formatCurrency(totalPendingFees)}
                                         </p>
                                     </div>
@@ -205,12 +206,12 @@ export default function ParentDashboard() {
                     </motion.div>
 
                     <motion.div whileHover={{ scale: 1.02 }} className="h-full">
-                        <Card className="border-l-4 border-l-success">
+                        <Card className="border-l-4 border-l-success bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Avg Attendance</p>
-                                        <p className="text-3xl font-bold text-gray-900 dark:text-white">{avgAttendance}%</p>
+                                        <p className="text-sm text-default-500">Avg Attendance</p>
+                                        <p className="text-3xl font-bold text-foreground">{avgAttendance}%</p>
                                     </div>
                                     <div className="bg-success-100 dark:bg-success-900/30 p-3 rounded-lg">
                                         <Icon icon="mdi:calendar-check" className="text-2xl text-success-600 dark:text-success-400" />
@@ -222,23 +223,23 @@ export default function ParentDashboard() {
                 </div>
 
                 {/* Children Cards */}
-                <Card>
-                    <CardHeader>
+                <Card className="bg-content1 dark:bg-content1 shadow-sm border border-default-200 dark:border-default-100">
+                    <CardHeader className="bg-transparent border-b border-default-100 dark:border-default-50/50">
                         <div className="flex items-center gap-3">
-                            <Icon icon="mdi:account-school" size={24} className="text-primary" />
+                            <Icon icon="mdi:account-school" size={24} className="text-primary-600 dark:text-primary-400" />
                             <div>
-                                <h3 className="text-xl font-bold">My Children</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                <h3 className="text-xl font-bold text-foreground">My Children</h3>
+                                <p className="text-sm text-default-500">
                                     {children.length} child{children.length !== 1 ? 'ren' : ''} enrolled
                                 </p>
                             </div>
                         </div>
                     </CardHeader>
-                    <CardBody>
+                    <CardBody className="p-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {loading ? (
                                 Array.from({ length: 3 }).map((_, i) => (
-                                    <Skeleton key={i} className="h-48 rounded" />
+                                    <Skeleton key={i} className="h-48 rounded-xl" />
                                 ))
                             ) : children.length > 0 ? (
                                 children.map((child) => (
@@ -247,45 +248,46 @@ export default function ParentDashboard() {
                                         whileHover={{ scale: 1.03 }}
                                         className="h-full"
                                     >
-                                        <Card className="h-full hover:shadow-lg transition-shadow">
-                                            <CardHeader className="justify-between pb-2">
+                                        <Card className="h-full hover:shadow-lg hover:shadow-primary-500/10 transition-shadow border border-default-200 dark:border-default-100">
+                                            <CardHeader className="justify-between pb-2 bg-gradient-to-r from-primary-50 to-transparent dark:from-primary-900/10">
                                                 <div className="flex gap-3">
                                                     <Avatar
                                                         isBordered
                                                         radius="full"
                                                         size="md"
                                                         src={`https://i.pravatar.cc/150?u=${child.id}`}
-                                                        color="primary"
+                                                        className="ring-2 ring-primary-500 ring-offset-2 ring-offset-background"
                                                     />
                                                     <div className="flex flex-col gap-1 items-start justify-center">
-                                                        <h4 className="text-sm font-semibold leading-none text-default-900">{child.name}</h4>
-                                                        <h5 className="text-xs tracking-tight text-default-500">{child.admissionNumber}</h5>
+                                                        <h4 className="text-sm font-bold leading-none text-foreground">{child.name}</h4>
+                                                        <h5 className="text-xs tracking-tight text-default-500 bg-default-100 px-2 py-0.5 rounded-full">{child.admissionNumber}</h5>
                                                     </div>
                                                 </div>
                                             </CardHeader>
                                             <CardBody className="px-4 py-3">
-                                                <div className="space-y-2 mb-4">
-                                                    <div className="flex justify-between items-center text-sm">
-                                                        <span className="text-gray-600 dark:text-gray-400">Class:</span>
-                                                        <Chip size="sm" color="primary" variant="flat">
+                                                <div className="space-y-3 mb-4">
+                                                    <div className="flex justify-between items-center text-sm p-2 bg-default-50 dark:bg-default-100/10 rounded-lg">
+                                                        <span className="text-default-500">Class</span>
+                                                        <Chip size="sm" color="primary" variant="flat" classNames={{ content: "font-medium" }}>
                                                             {child.Class ? `${child.Class.name} - ${child.Class.section}` : "N/A"}
                                                         </Chip>
                                                     </div>
 
-                                                    <div className="flex justify-between items-center text-sm">
-                                                        <span className="text-gray-600 dark:text-gray-400">Attendance:</span>
+                                                    <div className="flex justify-between items-center text-sm p-2 bg-default-50 dark:bg-default-100/10 rounded-lg">
+                                                        <span className="text-default-500">Attendance</span>
                                                         <Chip
                                                             size="sm"
                                                             color={parseFloat(child.attendanceRate) >= 75 ? "success" : "warning"}
                                                             variant="flat"
+                                                            classNames={{ content: "font-medium" }}
                                                         >
                                                             {child.attendanceRate}%
                                                         </Chip>
                                                     </div>
 
-                                                    <div className="flex justify-between items-center text-sm">
-                                                        <span className="text-gray-600 dark:text-gray-400">Pending Fees:</span>
-                                                        <span className={`font-medium ${child.feeSummary?.totalPending > 0 ? 'text-orange-600' : 'text-green-600'}`}>
+                                                    <div className="flex justify-between items-center text-sm p-2 bg-default-50 dark:bg-default-100/10 rounded-lg">
+                                                        <span className="text-default-500">Pending Fees</span>
+                                                        <span className={`font-bold ${child.feeSummary?.totalPending > 0 ? 'text-danger' : 'text-success'}`}>
                                                             {formatCurrency(child.feeSummary?.totalPending || 0)}
                                                         </span>
                                                     </div>
@@ -295,35 +297,29 @@ export default function ParentDashboard() {
                                                     <div className="flex gap-2">
                                                         <Button
                                                             size="sm"
-                                                            color="primary"
-                                                            variant="flat"
+                                                            className="w-full bg-primary-600 text-white shadow-md shadow-primary-500/20"
                                                             startContent={<Icon icon="mdi:eye" />}
                                                             onPress={() => navigate(`/parent/child/${child.id}`)}
-                                                            className='w-full'
                                                         >
                                                             View Details
                                                         </Button>
                                                         <Button
                                                             size="sm"
-                                                            color="secondary"
-                                                            variant="flat"
+                                                            className="w-full bg-secondary-500 text-black shadow-md shadow-secondary-500/20 font-medium"
                                                             startContent={<Icon icon="mdi:download" />}
                                                             onPress={() => handleDownloadIDCard(child)}
-                                                            className='w-full'
                                                             title="Download ID Card"
                                                             isLoading={downloading[child.id]}
                                                         >
-                                                            {downloading[child.id] ? 'Downloading...' : 'Download ID Card'}
+                                                            {downloading[child.id] ? '' : 'ID Card'}
                                                         </Button>
                                                     </div>
                                                     {child.feeSummary?.totalPending > 0 && (
                                                         <Button
                                                             size="sm"
-                                                            color="warning"
-                                                            variant="flat"
+                                                            className="w-full bg-warning-500 text-white shadow-md shadow-warning-500/20"
                                                             startContent={<Icon icon="mdi:cash" />}
                                                             onPress={() => navigate('/parent/fees')}
-                                                            className="w-full"
                                                         >
                                                             Pay Fees
                                                         </Button>
@@ -334,10 +330,10 @@ export default function ParentDashboard() {
                                     </motion.div>
                                 ))
                             ) : (
-                                <div className="col-span-full flex flex-col items-center justify-center p-12 text-gray-500">
-                                    <Icon icon="mdi:account-school" className="text-6xl mb-4 text-gray-300" />
+                                <div className="col-span-full flex flex-col items-center justify-center p-12 text-default-400">
+                                    <Icon icon="mdi:account-school" className="text-6xl mb-4 text-default-300" />
                                     <p className="text-lg font-medium">No children linked to your account</p>
-                                    <p className="text-sm text-gray-400 mt-1">Contact your school administrator for assistance</p>
+                                    <p className="text-sm mt-1">Contact your school administrator for assistance</p>
                                 </div>
                             )}
                         </div>

@@ -133,19 +133,19 @@ export default function ChildDashboard() {
     const { student, school, timetable, attendance, attendancePercentage, feeInfo } = data;
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            {/* School Header */}
+        <div className="min-h-screen bg-background">
+            {/* School Header Banner */}
             {school && (
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white p-6 mb-6">
+                <div className="bg-gradient-to-r from-primary-700 to-primary-900 text-white p-6 mb-6 shadow-md">
                     <div className="max-w-7xl mx-auto">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center">
-                                    <Icon icon="mdi:school" className="text-4xl text-indigo-600" />
+                                <div className="w-16 h-16 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg">
+                                    <Icon icon="mdi:school" className="text-4xl text-primary-700" />
                                 </div>
                                 <div>
-                                    <h1 className="text-2xl font-bold">{school.name}</h1>
-                                    <div className="flex gap-4 text-sm mt-1 opacity-90">
+                                    <h1 className="text-2xl font-bold tracking-tight">{school.name}</h1>
+                                    <div className="flex gap-4 text-sm mt-1 opacity-90 font-medium">
                                         {school.phone && (
                                             <span className="flex items-center gap-1">
                                                 <Icon icon="mdi:phone" />
@@ -163,9 +163,9 @@ export default function ChildDashboard() {
                             </div>
                             <Button
                                 variant="light"
-                                startContent={<Icon icon="mdi:arrow-left" className="text-white" />}
+                                startContent={<Icon icon="mdi:arrow-left" />}
                                 onPress={() => navigate('/parent-dashboard')}
-                                className="text-white"
+                                className="text-white/80 hover:text-white"
                             >
                                 Back to Dashboard
                             </Button>
@@ -178,10 +178,17 @@ export default function ChildDashboard() {
                 {/* Page Header */}
                 <div className="flex justify-between items-start">
                     <div>
-                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">{student.name}</h2>
-                        <p className="text-gray-500 dark:text-gray-400">
-                            Admission No: {student.admissionNumber} | Class: {student.Class?.name} - {student.Class?.section}
-                        </p>
+                        <h2 className="text-3xl font-bold text-foreground">{student.name}</h2>
+                        <div className="flex items-center gap-3 text-default-500 mt-1">
+                            <span className="bg-primary-100 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 px-2 py-0.5 rounded text-sm font-medium">
+                                {student.admissionNumber}
+                            </span>
+                            <span>|</span>
+                            <span className="flex items-center gap-1">
+                                <Icon icon="mdi:google-classroom" />
+                                Class {student.Class?.name} - {student.Class?.section}
+                            </span>
+                        </div>
                     </div>
                     <Button
                         color="primary"
@@ -191,6 +198,7 @@ export default function ChildDashboard() {
                             fetchDashboard();
                             fetchExamResults();
                         }}
+                        className="bg-primary-100 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300"
                     >
                         Refresh
                     </Button>
@@ -199,17 +207,17 @@ export default function ChildDashboard() {
                 {/* Overview Cards with Bordered Design */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <motion.div whileHover={{ scale: 1.02 }}>
-                        <Card className="border-l-4 border-l-blue-500">
+                        <Card className="border-l-4 border-l-primary-500 bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Attendance</p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                        <p className="text-sm text-default-500">Attendance</p>
+                                        <p className="text-2xl font-bold text-foreground">
                                             {attendancePercentage}%
                                         </p>
                                     </div>
-                                    <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg">
-                                        <Icon icon="mdi:calendar-check" className="text-2xl text-blue-600 dark:text-blue-400" />
+                                    <div className="bg-primary-100 dark:bg-primary-900/30 p-3 rounded-lg">
+                                        <Icon icon="mdi:calendar-check" className="text-2xl text-primary-600 dark:text-primary-400" />
                                     </div>
                                 </div>
                             </CardBody>
@@ -217,12 +225,12 @@ export default function ChildDashboard() {
                     </motion.div>
 
                     <motion.div whileHover={{ scale: 1.02 }}>
-                        <Card className="border-l-4 border-l-warning">
+                        <Card className="border-l-4 border-l-warning bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Pending Fees</p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                        <p className="text-sm text-default-500">Pending Fees</p>
+                                        <p className="text-2xl font-bold text-foreground">
                                             {formatCurrency(feeInfo.totalPending)}
                                         </p>
                                     </div>
@@ -235,12 +243,12 @@ export default function ChildDashboard() {
                     </motion.div>
 
                     <motion.div whileHover={{ scale: 1.02 }}>
-                        <Card className="border-l-4 border-l-success">
+                        <Card className="border-l-4 border-l-success bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Exam Average</p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                        <p className="text-sm text-default-500">Exam Average</p>
+                                        <p className="text-2xl font-bold text-foreground">
                                             {examResults.length > 0
                                                 ? (examResults.reduce((sum, e) => sum + parseFloat(e.overallPercentage), 0) / examResults.length).toFixed(1) + '%'
                                                 : 'N/A'
@@ -256,15 +264,15 @@ export default function ChildDashboard() {
                     </motion.div>
 
                     <motion.div whileHover={{ scale: 1.02 }}>
-                        <Card className="border-l-4 border-l-primary">
+                        <Card className="border-l-4 border-l-secondary bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Total Exams</p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{examResults.length}</p>
+                                        <p className="text-sm text-default-500">Total Exams</p>
+                                        <p className="text-2xl font-bold text-foreground">{examResults.length}</p>
                                     </div>
-                                    <div className="bg-primary-100 dark:bg-primary-900/30 p-3 rounded-lg">
-                                        <Icon icon="mdi:trophy" className="text-2xl text-primary-600 dark:text-primary-400" />
+                                    <div className="bg-secondary-100 dark:bg-secondary-900/30 p-3 rounded-lg">
+                                        <Icon icon="mdi:trophy" className="text-2xl text-secondary-600 dark:text-secondary-400" />
                                     </div>
                                 </div>
                             </CardBody>
@@ -273,9 +281,15 @@ export default function ChildDashboard() {
                 </div>
 
                 {/* Tabs for Details */}
-                <Card>
-                    <CardBody>
-                        <Tabs aria-label="Student Details" color="primary" variant="underlined" size="lg">
+                <Card className="bg-content1 dark:bg-content1 shadow-md border border-default-200 dark:border-default-100">
+                    <CardBody className="p-0">
+                        <Tabs aria-label="Student Details" color="primary" variant="underlined" size="lg" classNames={{
+                            tabList: "gap-6 w-full relative rounded-none p-0 border-b border-default-100",
+                            cursor: "w-full bg-primary-500",
+                            tab: "max-w-fit px-2 h-12",
+                            tabContent: "group-data-[selected=true]:text-primary-600 dark:group-data-[selected=true]:text-primary-400 font-medium",
+                            panel: "p-6"
+                        }}>
                             {/* Timetable Tab */}
                             <Tab
                                 key="timetable"
@@ -286,22 +300,22 @@ export default function ChildDashboard() {
                                     </div>
                                 }
                             >
-                                <div className="pt-4">
+                                <div className="pt-2">
                                     {timetable.length > 0 ? (
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                             {timetable.map((t) => (
-                                                <Card key={t.id} className="bg-gray-50 dark:bg-gray-800">
+                                                <Card key={t.id} className="bg-default-50 dark:bg-default-100/20 border border-default-200 dark:border-default-100 hover:border-primary-500 transition-colors shadow-sm">
                                                     <CardBody>
                                                         <div className="space-y-2">
                                                             <div className="flex justify-between items-start">
-                                                                <h3 className="font-bold text-lg">{t.Subject.name}</h3>
-                                                                <Chip size="sm" color="primary" variant="flat">{t.dayOfWeek}</Chip>
+                                                                <h3 className="font-bold text-lg text-foreground">{t.Subject.name}</h3>
+                                                                <Chip size="sm" color="primary" variant="flat" classNames={{ content: "font-medium" }}>{t.dayOfWeek}</Chip>
                                                             </div>
-                                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                                            <div className="flex items-center gap-2 text-sm text-default-500">
                                                                 <Icon icon="mdi:clock-outline" />
                                                                 <span>{t.startTime} - {t.endTime}</span>
                                                             </div>
-                                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                                            <div className="flex items-center gap-2 text-sm text-default-500">
                                                                 <Icon icon="mdi:account" />
                                                                 <span>{t.User?.name || "Teacher"}</span>
                                                             </div>
@@ -312,8 +326,8 @@ export default function ChildDashboard() {
                                         </div>
                                     ) : (
                                         <div className="text-center py-12">
-                                            <Icon icon="mdi:calendar-blank" className="text-6xl text-gray-300 mb-4 mx-auto" />
-                                            <p className="text-gray-500">No timetable available</p>
+                                            <Icon icon="mdi:calendar-blank" className="text-6xl text-default-300 mb-4 mx-auto" />
+                                            <p className="text-default-500">No timetable available</p>
                                         </div>
                                     )}
                                 </div>
@@ -332,21 +346,21 @@ export default function ChildDashboard() {
                                     </div>
                                 }
                             >
-                                <div className="pt-4">
-                                    <Card className="mb-4 bg-gray-50 dark:bg-gray-800">
+                                <div className="pt-2">
+                                    <Card className="mb-6 bg-default-50 dark:bg-default-100/20 border border-default-200 dark:border-default-100 shadow-sm">
                                         <CardBody>
                                             <div className="flex items-center justify-between">
                                                 <div>
-                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Overall Attendance</p>
-                                                    <p className="text-3xl font-bold text-gray-900 dark:text-white">{attendancePercentage}%</p>
+                                                    <p className="text-sm text-default-500">Overall Attendance</p>
+                                                    <p className="text-3xl font-bold text-foreground">{attendancePercentage}%</p>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Total Days</p>
-                                                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{attendance.length}</p>
+                                                    <p className="text-sm text-default-500">Total Days</p>
+                                                    <p className="text-2xl font-bold text-foreground">{attendance.length}</p>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Present</p>
-                                                    <p className="text-2xl font-bold text-green-600">
+                                                    <p className="text-sm text-default-500">Present</p>
+                                                    <p className="text-2xl font-bold text-success-600">
                                                         {attendance.filter(a => ['PRESENT', 'LATE', 'HALF_DAY'].includes(a.status?.toUpperCase())).length}
                                                     </p>
                                                 </div>
@@ -354,7 +368,7 @@ export default function ChildDashboard() {
                                         </CardBody>
                                     </Card>
 
-                                    <Table aria-label="Attendance records">
+                                    <Table aria-label="Attendance records" removeWrapper classNames={{ th: "bg-default-100 text-default-500", td: "text-foreground" }}>
                                         <TableHeader>
                                             <TableColumn>DATE</TableColumn>
                                             <TableColumn>DAY</TableColumn>
@@ -363,7 +377,7 @@ export default function ChildDashboard() {
                                         </TableHeader>
                                         <TableBody emptyContent="No attendance records">
                                             {attendance.slice(0, 30).map((att) => (
-                                                <TableRow key={att.id}>
+                                                <TableRow key={att.id} className="border-b border-default-100 last:border-0 hover:bg-default-50/50">
                                                     <TableCell>{format(new Date(att.date), 'PPP')}</TableCell>
                                                     <TableCell>{format(new Date(att.date), 'EEEE')}</TableCell>
                                                     <TableCell>
@@ -375,11 +389,12 @@ export default function ChildDashboard() {
                                                             }
                                                             variant="flat"
                                                             size="sm"
+                                                            classNames={{ content: "font-medium" }}
                                                         >
                                                             {att.status}
                                                         </Chip>
                                                     </TableCell>
-                                                    <TableCell className="text-sm text-gray-500">{att.remarks || '-'}</TableCell>
+                                                    <TableCell className="text-sm text-default-500">{att.remarks || '-'}</TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>
@@ -402,29 +417,29 @@ export default function ChildDashboard() {
                                     </div>
                                 }
                             >
-                                <div className="pt-4 space-y-4">
+                                <div className="pt-2 space-y-4">
                                     {/* Fee Summary */}
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <Card className="bg-blue-50 dark:bg-blue-900/20">
-                                            <CardBody className="text-center">
-                                                <p className="text-sm text-gray-600 dark:text-gray-400">Total Fees</p>
-                                                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                        <Card className="bg-primary-50 dark:bg-primary-900/20 border-none shadow-sm">
+                                            <CardBody className="text-center p-4">
+                                                <p className="text-sm text-primary-700 dark:text-primary-300">Total Fees</p>
+                                                <p className="text-2xl font-bold text-primary-900 dark:text-white">
                                                     {formatCurrency(feeInfo.totalFees)}
                                                 </p>
                                             </CardBody>
                                         </Card>
-                                        <Card className="bg-green-50 dark:bg-green-900/20">
-                                            <CardBody className="text-center">
-                                                <p className="text-sm text-gray-600 dark:text-gray-400">Paid</p>
-                                                <p className="text-2xl font-bold text-green-600">
+                                        <Card className="bg-success-50 dark:bg-success-900/20 border-none shadow-sm">
+                                            <CardBody className="text-center p-4">
+                                                <p className="text-sm text-success-700 dark:text-success-300">Paid</p>
+                                                <p className="text-2xl font-bold text-success-900 dark:text-white">
                                                     {formatCurrency(feeInfo.totalPaid)}
                                                 </p>
                                             </CardBody>
                                         </Card>
-                                        <Card className="bg-orange-50 dark:bg-orange-900/20">
-                                            <CardBody className="text-center">
-                                                <p className="text-sm text-gray-600 dark:text-gray-400">Pending</p>
-                                                <p className="text-2xl font-bold text-orange-600">
+                                        <Card className="bg-warning-50 dark:bg-warning-900/20 border-none shadow-sm">
+                                            <CardBody className="text-center p-4">
+                                                <p className="text-sm text-warning-700 dark:text-warning-300">Pending</p>
+                                                <p className="text-2xl font-bold text-warning-900 dark:text-white">
                                                     {formatCurrency(feeInfo.totalPending)}
                                                 </p>
                                             </CardBody>
@@ -434,17 +449,18 @@ export default function ChildDashboard() {
                                     {/* Payment History */}
                                     <div>
                                         <div className="flex justify-between items-center mb-4">
-                                            <h3 className="text-lg font-bold">Recent Payments</h3>
+                                            <h3 className="text-lg font-bold text-foreground">Recent Payments</h3>
                                             <Button
                                                 color="primary"
                                                 size="sm"
                                                 startContent={<Icon icon="mdi:cash" />}
                                                 onPress={() => navigate('/parent/fees')}
+                                                className="shadow-md shadow-primary-500/20"
                                             >
                                                 Pay Fees
                                             </Button>
                                         </div>
-                                        <Table aria-label="Recent payments">
+                                        <Table aria-label="Recent payments" removeWrapper classNames={{ th: "bg-default-100 text-default-500", td: "text-foreground" }}>
                                             <TableHeader>
                                                 <TableColumn>DATE</TableColumn>
                                                 <TableColumn>FEE NAME</TableColumn>
@@ -453,14 +469,14 @@ export default function ChildDashboard() {
                                             </TableHeader>
                                             <TableBody emptyContent="No payment history">
                                                 {feeInfo.recentPayments.map((payment) => (
-                                                    <TableRow key={payment.id}>
+                                                    <TableRow key={payment.id} className="border-b border-default-100 last:border-0 hover:bg-default-50/50">
                                                         <TableCell>{format(new Date(payment.date), 'PPP')}</TableCell>
                                                         <TableCell>{payment.feeName}</TableCell>
-                                                        <TableCell className="text-green-600 font-medium">
+                                                        <TableCell className="text-success-600 font-medium">
                                                             {formatCurrency(payment.amount)}
                                                         </TableCell>
                                                         <TableCell>
-                                                            <code className="text-xs">{payment.transactionId}</code>
+                                                            <code className="text-xs bg-default-100 px-2 py-1 rounded text-default-600">{payment.transactionId}</code>
                                                         </TableCell>
                                                     </TableRow>
                                                 ))}
@@ -480,24 +496,24 @@ export default function ChildDashboard() {
                                     </div>
                                 }
                             >
-                                <div className="pt-4 space-y-6">
+                                <div className="pt-2 space-y-6">
                                     {loadingExams ? (
                                         <div className="space-y-4">
-                                            <Skeleton className="h-32 rounded" />
-                                            <Skeleton className="h-32 rounded" />
+                                            <Skeleton className="h-32 rounded-xl" />
+                                            <Skeleton className="h-32 rounded-xl" />
                                         </div>
                                     ) : examResults.length > 0 ? (
                                         examResults.map((exam, idx) => (
-                                            <Card key={exam.examId || idx} className="mb-4">
-                                                <CardHeader className="bg-gray-50 dark:bg-gray-800">
+                                            <Card key={exam.examId || idx} className="mb-4 border border-default-200 dark:border-default-100 shadow-sm bg-content1">
+                                                <CardHeader className="bg-default-50 dark:bg-default-100/20 border-b border-default-100">
                                                     <div className="flex justify-between items-center w-full">
                                                         <div>
-                                                            <h3 className="text-lg font-bold">{exam.examName}</h3>
-                                                            <p className="text-sm text-gray-500">
+                                                            <h3 className="text-lg font-bold text-foreground">{exam.examName}</h3>
+                                                            <p className="text-sm text-default-500">
                                                                 {exam.startDate && format(new Date(exam.startDate), 'PPP')}
                                                             </p>
                                                             {exam.className && (
-                                                                <p className="text-xs text-gray-400 mt-1">
+                                                                <p className="text-xs text-default-400 mt-1">
                                                                     Class: {exam.className}
                                                                 </p>
                                                             )}
@@ -507,6 +523,7 @@ export default function ChildDashboard() {
                                                                 size="lg"
                                                                 color={parseFloat(exam.overallPercentage) >= 60 ? "success" : parseFloat(exam.overallPercentage) >= 40 ? "warning" : "danger"}
                                                                 variant="flat"
+                                                                classNames={{ content: "font-bold" }}
                                                             >
                                                                 Overall: {exam.overallPercentage}%
                                                             </Chip>
@@ -516,14 +533,15 @@ export default function ChildDashboard() {
                                                                 startContent={<Icon icon="mdi:download" />}
                                                                 onPress={() => downloadReportCard(exam.examId, exam.examName)}
                                                                 isLoading={downloadingReports[exam.examId]}
+                                                                className="shadow-sm"
                                                             >
                                                                 Generate Report
                                                             </Button>
                                                         </div>
                                                     </div>
                                                 </CardHeader>
-                                                <CardBody>
-                                                    <Table aria-label={`${exam.examName} results`}>
+                                                <CardBody className="p-0">
+                                                    <Table aria-label={`${exam.examName} results`} removeWrapper classNames={{ th: "bg-transparent text-default-500", td: "text-foreground", base: "p-4" }}>
                                                         <TableHeader>
                                                             <TableColumn>SUBJECT</TableColumn>
                                                             <TableColumn>SUBJECT CODE</TableColumn>
@@ -534,9 +552,9 @@ export default function ChildDashboard() {
                                                         </TableHeader>
                                                         <TableBody>
                                                             {exam.subjects && exam.subjects.map((subject, subIdx) => (
-                                                                <TableRow key={subject.subjectId || subIdx}>
+                                                                <TableRow key={subject.subjectId || subIdx} className="border-b border-default-50 last:border-0">
                                                                     <TableCell className="font-medium">{subject.subjectName}</TableCell>
-                                                                    <TableCell className="text-sm text-gray-500">{subject.subjectCode}</TableCell>
+                                                                    <TableCell className="text-sm text-default-500">{subject.subjectCode}</TableCell>
                                                                     <TableCell className="font-semibold">{subject.marksObtained}</TableCell>
                                                                     <TableCell>{subject.maxMarks}</TableCell>
                                                                     <TableCell>
@@ -544,6 +562,7 @@ export default function ChildDashboard() {
                                                                             size="sm"
                                                                             color={parseFloat(subject.percentage) >= 60 ? "success" : parseFloat(subject.percentage) >= 40 ? "warning" : "danger"}
                                                                             variant="flat"
+                                                                            classNames={{ content: "font-medium" }}
                                                                         >
                                                                             {subject.percentage}%
                                                                         </Chip>
@@ -564,18 +583,11 @@ export default function ChildDashboard() {
                                                             ))}
                                                         </TableBody>
                                                     </Table>
-                                                    <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                                    <div className="p-4 bg-default-50/50 dark:bg-default-100/10 border-t border-default-100">
                                                         <div className="flex justify-between items-center">
-                                                            <span className="font-medium text-sm">Total Marks:</span>
+                                                            <span className="font-medium text-sm text-default-500">Total Marks:</span>
                                                             <div className="flex items-center gap-4">
-                                                                <span className="font-bold text-lg">{exam.totalObtained} / {exam.totalMax}</span>
-                                                                <Chip
-                                                                    color={parseFloat(exam.overallPercentage) >= 60 ? "success" : parseFloat(exam.overallPercentage) >= 40 ? "warning" : "danger"}
-                                                                    variant="flat"
-                                                                    size="lg"
-                                                                >
-                                                                    {exam.overallPercentage}%
-                                                                </Chip>
+                                                                <span className="font-bold text-lg text-foreground">{exam.totalObtained} / {exam.totalMax}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -584,8 +596,8 @@ export default function ChildDashboard() {
                                         ))
                                     ) : (
                                         <div className="text-center py-12">
-                                            <Icon icon="mdi:file-document-outline" className="text-6xl text-gray-300 mb-4 mx-auto" />
-                                            <p className="text-gray-500">No exam results available</p>
+                                            <Icon icon="mdi:file-certificate-outline" className="text-6xl text-default-300 mb-4 mx-auto" />
+                                            <p className="text-default-500">No exam results available</p>
                                         </div>
                                     )}
                                 </div>

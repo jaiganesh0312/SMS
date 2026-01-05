@@ -97,21 +97,21 @@ export default function SchoolAdminDashboard() {
             animate="visible"
         >
             <motion.div variants={itemVariants} className="flex flex-col gap-2">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">School Dashboard</h1>
-                <p className="text-gray-600 dark:text-gray-400">Overview of your academic institution</p>
+                <h1 className="text-3xl font-bold text-foreground">School Dashboard</h1>
+                <p className="text-default-500">Overview of your academic institution</p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {statCards.map((stat, index) => (
                     <motion.div key={index} variants={itemVariants}>
-                        <Card className={`border-l-4 ${stat.borderColor} shadow-sm`}>
+                        <Card className={`border-l-4 ${stat.borderColor} shadow-sm hover:shadow-md transition-shadow bg-content1 dark:bg-content1`}>
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">{stat.title}</p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                                        <p className="text-sm text-default-500">{stat.title}</p>
+                                        <p className="text-2xl font-bold text-foreground">{stat.value}</p>
                                     </div>
-                                    <div className={`p-3 rounded-lg ${stat.bgColor}`}>
+                                    <div className={`p-3 rounded-xl ${stat.bgColor}`}>
                                         <Icon icon={stat.icon} className={`text-2xl ${stat.color}`} />
                                     </div>
                                 </div>
@@ -124,13 +124,15 @@ export default function SchoolAdminDashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Recent Students - Takes up 2 columns */}
                 <motion.div variants={itemVariants} className="lg:col-span-2">
-                    <Card className="shadow-sm min-h-[300px]">
-                        <CardHeader className="font-bold text-lg px-6 pt-6 flex justify-between items-center">
+                    <Card className="shadow-sm min-h-[300px] bg-content1 dark:bg-content1 border border-default-200 dark:border-default-100">
+                        <CardHeader className="font-bold text-lg px-6 pt-6 flex justify-between items-center bg-transparent">
                             <div className="flex items-center gap-3">
-                                <Icon icon="mdi:account-school" className="text-primary text-2xl" />
+                                <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
+                                    <Icon icon="mdi:account-school" className="text-primary-600 dark:text-primary-400 text-2xl" />
+                                </div>
                                 <div>
-                                    <h3 className="text-lg font-semibold">New Admissions</h3>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                                    <h3 className="text-lg font-bold text-foreground">New Admissions</h3>
+                                    <p className="text-sm text-default-500 font-normal">
                                         Latest students joining the school
                                     </p>
                                 </div>
@@ -138,34 +140,46 @@ export default function SchoolAdminDashboard() {
                             <Chip size="sm" variant="flat" color="primary">Last 5</Chip>
                         </CardHeader>
                         <CardBody className="px-0 pb-4">
-                            <Table aria-label="Recent Students" removeWrapper className='px-2'>
+                            <Table
+                                aria-label="Recent Students"
+                                removeWrapper
+                                className='px-2'
+                                classNames={{
+                                    th: "bg-default-100 dark:bg-default-50 text-default-600",
+                                    td: "border-b border-default-100 dark:border-default-50 last:border-none"
+                                }}
+                            >
                                 <TableHeader>
-                                    <TableColumn>STUDENT</TableColumn>
-                                    <TableColumn>ADMISSION NO</TableColumn>
-                                    <TableColumn>CLASS</TableColumn>
-                                    <TableColumn>JOINED</TableColumn>
+                                    <TableColumn className="uppercase text-xs font-semibold">STUDENT</TableColumn>
+                                    <TableColumn className="uppercase text-xs font-semibold">ADMISSION NO</TableColumn>
+                                    <TableColumn className="uppercase text-xs font-semibold">CLASS</TableColumn>
+                                    <TableColumn className="uppercase text-xs font-semibold">JOINED</TableColumn>
                                 </TableHeader>
                                 <TableBody emptyContent="No recent admissions">
                                     {stats.recentStudents.map((student) => (
-                                        <TableRow key={student.id}>
+                                        <TableRow key={student.id} className="hover:bg-default-50 dark:hover:bg-white/5 transition-colors cursor-default">
                                             <TableCell>
                                                 <User
                                                     name={student.name}
                                                     description={student.email}
-                                                    avatarProps={{ src: `https://i.pravatar.cc/150?u=${student.id}`, size: "sm" }}
+                                                    avatarProps={{ src: `https://i.pravatar.cc/150?u=${student.id}`, size: "sm", isBordered: true, color: "primary" }}
+                                                    classNames={{
+                                                        name: "text-foreground font-semibold",
+                                                        description: "text-default-400"
+                                                    }}
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                <span className="font-mono text-sm">{student.admissionNumber}</span>
+                                                <span className="font-mono text-sm text-default-600 bg-default-100 px-2 py-1 rounded">{student.admissionNumber}</span>
                                             </TableCell>
                                             <TableCell>
                                                 {student.Class ? (
-                                                    <Chip size="sm" variant="flat" color="secondary">
+                                                    <Chip size="sm" variant="flat" color="secondary" classNames={{ content: "font-medium" }}>
                                                         {student.Class.name}-{student.Class.section}
                                                     </Chip>
                                                 ) : '-'}
                                             </TableCell>
-                                            <TableCell className="text-gray-500 text-sm">
+                                            <TableCell className="text-default-500 text-sm">
                                                 {new Date(student.createdAt).toLocaleDateString()}
                                             </TableCell>
                                         </TableRow>
@@ -178,114 +192,48 @@ export default function SchoolAdminDashboard() {
 
                 {/* Quick Actions / Notices */}
                 <motion.div variants={itemVariants}>
-                    <Card className="shadow-sm min-h-[300px]">
+                    <Card className="shadow-sm min-h-[300px] bg-content1 dark:bg-content1 border border-default-200 dark:border-default-100">
                         <CardHeader className="px-6 pt-6">
                             <div className="flex items-center gap-3">
-                                <Icon icon="mdi:lightning-bolt" className="text-warning text-2xl" />
+                                <div className="p-2 bg-secondary-100 dark:bg-secondary-900/30 rounded-lg">
+                                    <Icon icon="mdi:lightning-bolt" className="text-secondary-600 dark:text-secondary-400 text-2xl" />
+                                </div>
                                 <div>
-                                    <h3 className="text-lg font-semibold">Quick Actions</h3>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                                    <h3 className="text-lg font-bold text-foreground">Quick Actions</h3>
+                                    <p className="text-sm text-default-500 font-normal">
                                         Common tasks
                                     </p>
                                 </div>
                             </div>
                         </CardHeader>
-                        <CardBody className="px-6 pb-6 gap-4">
-                            <Button
-                                className="w-full justify-start h-auto py-3 px-4 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
-                                as={Link}
-                                to="/students"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white dark:bg-blue-800 rounded-lg shadow-sm">
-                                        <Icon icon="mdi:account-plus" className="text-xl" />
+                        <CardBody className="px-6 pb-6 gap-3">
+                            {[
+                                { to: "/students", icon: "mdi:account-plus", title: "Add Student", subtitle: "Register new admission", colorClass: "primary" },
+                                { to: "/attendance/mark", icon: "mdi:calendar-check", title: "Mark Attendance", subtitle: "Record daily entries", colorClass: "success" },
+                                { to: "/academic/timetable", icon: "mdi:calendar-clock", title: "Manage Timetable", subtitle: "Class schedules", colorClass: "secondary" },
+                                { to: "/attendance/report", icon: "mdi:poll", title: "Attendance Report", subtitle: "View stats & trends", colorClass: "warning" },
+                                { to: "/academic/classes", icon: "mdi:google-classroom", title: "Manage Classes", subtitle: "View & edit structures", colorClass: "default" },
+                                { to: "/finance/receipts", icon: "mdi:receipt-text", title: "Fee Receipts", subtitle: "Generate & Print", colorClass: "primary" },
+                            ].map((action, idx) => (
+                                <Button
+                                    key={idx}
+                                    className="w-full justify-start h-auto py-3 px-4 bg-default-50 dark:bg-default-100/10 hover:bg-default-100 dark:hover:bg-default-100/20 text-foreground border border-default-200 dark:border-default-100/50"
+                                    as={Link}
+                                    to={action.to}
+                                    variant="flat"
+                                >
+                                    <div className="flex items-center gap-3 w-full">
+                                        <div className={`p-2 rounded-lg bg-white dark:bg-white/10 shadow-sm text-${action.colorClass}-500`}>
+                                            <Icon icon={action.icon} className="text-xl" />
+                                        </div>
+                                        <div className="text-left flex-1">
+                                            <p className="font-semibold text-sm text-foreground">{action.title}</p>
+                                            <p className="text-xs text-default-500 opacity-80">{action.subtitle}</p>
+                                        </div>
+                                        <Icon icon="mdi:chevron-right" className="text-default-300" />
                                     </div>
-                                    <div className="text-left">
-                                        <p className="font-semibold text-sm">Add Student</p>
-                                        <p className="text-xs opacity-80">Register new admission</p>
-                                    </div>
-                                </div>
-                            </Button>
-
-                            <Button
-                                className="w-full justify-start h-auto py-3 px-4 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/40 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800"
-                                as={Link}
-                                to="/attendance/mark"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white dark:bg-green-800 rounded-lg shadow-sm">
-                                        <Icon icon="mdi:calendar-check" className="text-xl" />
-                                    </div>
-                                    <div className="text-left">
-                                        <p className="font-semibold text-sm">Mark Attendance</p>
-                                        <p className="text-xs opacity-80">Record daily entries</p>
-                                    </div>
-                                </div>
-                            </Button>
-
-                            <Button
-                                className="w-full justify-start h-auto py-3 px-4 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800"
-                                as={Link}
-                                to="/academic/timetable"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white dark:bg-purple-800 rounded-lg shadow-sm">
-                                        <Icon icon="mdi:calendar-clock" className="text-xl" />
-                                    </div>
-                                    <div className="text-left">
-                                        <p className="font-semibold text-sm">Manage Timetable</p>
-                                        <p className="text-xs opacity-80">Class schedules</p>
-                                    </div>
-                                </div>
-                            </Button>
-
-                            <Button
-                                className="w-full justify-start h-auto py-3 px-4 bg-cyan-50 dark:bg-cyan-900/20 hover:bg-cyan-100 dark:hover:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800"
-                                as={Link}
-                                to="/attendance/report"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white dark:bg-cyan-800 rounded-lg shadow-sm">
-                                        <Icon icon="mdi:poll" className="text-xl" />
-                                    </div>
-                                    <div className="text-left">
-                                        <p className="font-semibold text-sm">Attendance Report</p>
-                                        <p className="text-xs opacity-80">View stats & trends</p>
-                                    </div>
-                                </div>
-                            </Button>
-
-                            <Button
-                                className="w-full justify-start h-auto py-3 px-4 bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/40 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-800"
-                                as={Link}
-                                to="/academic/classes"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white dark:bg-orange-800 rounded-lg shadow-sm">
-                                        <Icon icon="mdi:google-classroom" className="text-xl" />
-                                    </div>
-                                    <div className="text-left">
-                                        <p className="font-semibold text-sm">Manage Classes</p>
-                                        <p className="text-xs opacity-80">View & edit structures</p>
-                                    </div>
-                                </div>
-                            </Button>
-
-                            <Button
-                                className="w-full justify-start h-auto py-3 px-4 bg-teal-50 dark:bg-teal-900/20 hover:bg-teal-100 dark:hover:bg-teal-900/40 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800"
-                                as={Link}
-                                to="/finance/receipts"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white dark:bg-teal-800 rounded-lg shadow-sm">
-                                        <Icon icon="mdi:receipt-text" className="text-xl" />
-                                    </div>
-                                    <div className="text-left">
-                                        <p className="font-semibold text-sm">Fee Receipts</p>
-                                        <p className="text-xs opacity-80">Generate & Print</p>
-                                    </div>
-                                </div>
-                            </Button>
+                                </Button>
+                            ))}
                         </CardBody>
                     </Card>
                 </motion.div>

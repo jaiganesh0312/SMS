@@ -25,22 +25,34 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 mt-auto">
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+    <footer className="bg-primary-800 dark:bg-primary-900 text-white mt-auto relative overflow-hidden">
+      {/* Decorative Background */}
+      <div className="absolute inset-0 opacity-5">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="footer-pattern" width="60" height="60" patternUnits="userSpaceOnUse">
+              <circle cx="30" cy="30" r="2" fill="currentColor" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#footer-pattern)" />
+        </svg>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                <Icon icon="mdi:check-circle-outline" className="text-2xl text-white" />
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Icon icon="mdi:school" className="text-2xl text-primary-900" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold text-gray-900 dark:text-white">School Management System</span>
-                <span className="text-xs text-gray-500 dark:text-gray-400">Education Management</span>
+                <span className="text-xl font-bold text-white">School Management</span>
+                <span className="text-xs text-primary-300 tracking-wider uppercase">Education Excellence</span>
               </div>
             </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Comprehensive school management platform for streamlining administration, academics, and learning.
+            <p className="text-sm text-primary-200 mb-6 leading-relaxed">
+              Comprehensive school management platform for streamlining administration, academics, and learning outcomes.
             </p>
             <div className="flex gap-3">
               {social.map((item) => (
@@ -48,7 +60,7 @@ export default function Footer() {
                   key={item.label}
                   href={item.href}
                   aria-label={item.label}
-                  className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-900 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
+                  className="w-10 h-10 rounded-xl bg-primary-700/50 hover:bg-secondary-500 flex items-center justify-center text-primary-300 hover:text-primary-900 transition-all duration-300 hover:scale-110"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -60,15 +72,18 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Quick Links</h4>
-            <ul className="space-y-3">
+            <h4 className="font-bold text-white mb-6 flex items-center gap-2">
+              <span className="w-8 h-0.5 bg-secondary-500 rounded-full"></span>
+              Quick Links
+            </h4>
+            <ul className="space-y-4">
               {links.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.to}
-                    className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
+                    className="flex items-center gap-3 text-sm text-primary-200 hover:text-secondary-400 transition-colors group"
                   >
-                    <Icon icon={link.icon} className="text-base group-hover:scale-110 transition-transform" />
+                    <Icon icon={link.icon} className="text-base text-primary-400 group-hover:text-secondary-400 group-hover:scale-110 transition-all" />
                     {link.name}
                   </Link>
                 </li>
@@ -78,15 +93,18 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Resources</h4>
-            <ul className="space-y-3">
+            <h4 className="font-bold text-white mb-6 flex items-center gap-2">
+              <span className="w-8 h-0.5 bg-secondary-500 rounded-full"></span>
+              Resources
+            </h4>
+            <ul className="space-y-4">
               {resources.map((resource) => (
                 <li key={resource.name}>
                   <Link
                     to={resource.to}
-                    className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
+                    className="flex items-center gap-3 text-sm text-primary-200 hover:text-secondary-400 transition-colors group"
                   >
-                    <Icon icon={resource.icon} className="text-base group-hover:scale-110 transition-transform" />
+                    <Icon icon={resource.icon} className="text-base text-primary-400 group-hover:text-secondary-400 group-hover:scale-110 transition-all" />
                     {resource.name}
                   </Link>
                 </li>
@@ -96,39 +114,48 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Get in Touch</h4>
-            <div className="space-y-3">
-              <p className="text-sm text-gray-600 dark:text-gray-400 flex items-start gap-2">
-                <Icon icon="mdi:email" className="text-lg mt-0.5 flex-shrink-0" />
-                <span>support@schoolms.com</span>
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400 flex items-start gap-2">
-                <Icon icon="mdi:phone" className="text-lg mt-0.5 flex-shrink-0" />
-                <span>+1 (800) SMS-HELP</span>
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400 flex items-start gap-2">
-                <Icon icon="mdi:map-marker" className="text-lg mt-0.5 flex-shrink-0" />
-                <span>123 Learning Street, Education City</span>
-              </p>
+            <h4 className="font-bold text-white mb-6 flex items-center gap-2">
+              <span className="w-8 h-0.5 bg-secondary-500 rounded-full"></span>
+              Get in Touch
+            </h4>
+            <div className="space-y-4">
+              <a href="mailto:support@schoolms.com" className="flex items-start gap-3 text-sm text-primary-200 hover:text-secondary-400 transition-colors group">
+                <div className="w-8 h-8 bg-primary-700/50 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-secondary-500/20 transition-colors">
+                  <Icon icon="mdi:email" className="text-lg text-secondary-400" />
+                </div>
+                <span className="mt-1">support@schoolms.com</span>
+              </a>
+              <a href="tel:+18007677435" className="flex items-start gap-3 text-sm text-primary-200 hover:text-secondary-400 transition-colors group">
+                <div className="w-8 h-8 bg-primary-700/50 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-secondary-500/20 transition-colors">
+                  <Icon icon="mdi:phone" className="text-lg text-secondary-400" />
+                </div>
+                <span className="mt-1">+1 (800) SMS-HELP</span>
+              </a>
+              <div className="flex items-start gap-3 text-sm text-primary-200">
+                <div className="w-8 h-8 bg-primary-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Icon icon="mdi:map-marker" className="text-lg text-secondary-400" />
+                </div>
+                <span className="mt-1">123 Learning Street, Education City</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-gray-200 dark:border-gray-800">
+        <div className="pt-8 border-t border-primary-700">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-gray-500 dark:text-gray-400 text-center md:text-left">
+            <p className="text-sm text-primary-300 text-center md:text-left">
               &copy; {currentYear} School Management System. All rights reserved.
             </p>
-            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-              <Link to="/privacy" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            <div className="flex items-center gap-6 text-sm">
+              <Link to="/privacy" className="text-primary-300 hover:text-secondary-400 transition-colors">
                 Privacy
               </Link>
-              <span>•</span>
-              <Link to="/terms" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              <span className="text-primary-600">•</span>
+              <Link to="/terms" className="text-primary-300 hover:text-secondary-400 transition-colors">
                 Terms
               </Link>
-              <span>•</span>
-              <Link to="/cookies" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              <span className="text-primary-600">•</span>
+              <Link to="/cookies" className="text-primary-300 hover:text-secondary-400 transition-colors">
                 Cookies
               </Link>
             </div>
