@@ -166,7 +166,7 @@ export default function ManageBooks() {
             <Card className="bg-content1 border border-default-200 shadow-sm">
                 <CardBody className="p-0">
                     <Table aria-label="Books Table" shadow="none" classNames={{
-                        wrapper: "bg-content1 shadow-none",
+                        wrapper: "bg-content1 shadow-none overflow-x-auto",
                         th: "bg-default-100 text-default-500 font-medium",
                         td: "text-foreground group-hover:bg-default-50"
                     }}>

@@ -145,7 +145,7 @@ export default function FeeStructure() {
                 </CardHeader>
                 <CardBody className="p-0">
                     <Table aria-label="Fee structures table" shadow="none" classNames={{
-                        wrapper: "bg-content1 shadow-none",
+                        wrapper: "bg-content1 shadow-none overflow-x-auto",
                         th: "bg-default-100 text-default-500 font-medium",
                         td: "text-foreground group-hover:bg-default-50"
                     }}>

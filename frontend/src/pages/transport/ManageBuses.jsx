@@ -156,7 +156,7 @@ const ManageBuses = () => {
                             aria-label="Buses table"
                             shadow="none"
                             classNames={{
-                                wrapper: "shadow-none bg-content1",
+                                wrapper: "shadow-none bg-content1 overflow-x-auto",
                                 th: "bg-default-100 text-default-500 font-medium",
                                 td: "py-3"
                             }}

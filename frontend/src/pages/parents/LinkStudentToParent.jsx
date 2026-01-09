@@ -199,7 +199,7 @@ export default function LinkStudentToParent() {
                             </div>
                         </div>
                     </CardHeader>
-                    <CardBody className="px-0 pb-4">
+                    <CardBody className="px-0 pb-4 overflow-x-auto">
                         <Table
                             aria-label="Unassigned Students Table"
                             selectionMode="multiple"
@@ -212,7 +212,7 @@ export default function LinkStudentToParent() {
                                 <TableColumn className="bg-default-100 text-default-500 font-semibold">ADMISSION NO</TableColumn>
                                 <TableColumn className="bg-default-100 text-default-500 font-semibold">NAME</TableColumn>
                                 <TableColumn className="bg-default-100 text-default-500 font-semibold">CLASS</TableColumn>
-                                <TableColumn className="bg-default-100 text-default-500 font-semibold hidden sm:table-cell">GENDER</TableColumn>
+                                <TableColumn className="bg-default-100 text-default-500 font-semibold">GENDER</TableColumn>
                             </TableHeader>
                             <TableBody emptyContent={"No unassigned students found"} isLoading={loading}>
                                 {filteredStudents.map((student) => (
@@ -231,7 +231,7 @@ export default function LinkStudentToParent() {
                                                 <span className="text-default-400">-</span>
                                             )}
                                         </TableCell>
-                                        <TableCell className="hidden sm:table-cell">
+                                        <TableCell>
                                             <Chip size="sm" variant="flat" color={student.gender === 'Male' ? 'primary' : 'secondary'}>
                                                 {student.gender}
                                             </Chip>

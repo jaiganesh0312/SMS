@@ -158,7 +158,7 @@ const StaffList = () => {
 
             {/* Table */}
             <Table aria-label="Staff List" classNames={{
-                wrapper: "bg-content1 border border-default-200",
+                wrapper: "bg-content1 border border-default-200 overflow-x-auto",
                 th: "bg-default-100 text-default-500",
             }}>
                 <TableHeader>

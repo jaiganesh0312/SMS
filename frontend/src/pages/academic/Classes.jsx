@@ -229,65 +229,67 @@ export default function Classes() {
                                                 </Button>
                                             </div>
 
-                                            <Table removeWrapper aria-label={`${std} divisions table`} classNames={{
-                                                wrapper: "bg-content1 border border-default-200 shadow-sm",
-                                                th: "bg-default-100 text-default-500 font-medium"
-                                            }}>
-                                                <TableHeader>
-                                                    <TableColumn>SECTION</TableColumn>
-                                                    <TableColumn>CLASS TEACHER</TableColumn>
-                                                    <TableColumn className="hidden md:table-cell">STUDENTS</TableColumn>
-                                                    <TableColumn>ACTIONS</TableColumn>
-                                                </TableHeader>
-                                                <TableBody
-                                                    emptyContent={divisions[std] ? "No divisions found" : "Loading..."}
-                                                    items={divisions[std] || []}
-                                                >
-                                                    {(cls) => (
-                                                        <TableRow key={cls.id}>
-                                                            <TableCell>
-                                                                <Chip color="primary" variant="dot">{cls.section}</Chip>
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <Select
-                                                                    aria-label="Assign Teacher"
-                                                                    placeholder="Select Teacher"
-                                                                    size="sm"
-                                                                    className="w-full sm:max-w-xs"
-                                                                    defaultSelectedKeys={cls.classTeacherId ? [cls.classTeacherId] : []}
-                                                                    onChange={(e) => handleAssignTeacher(cls.id, std, e.target.value)}
-                                                                    variant="bordered"
-                                                                >
-                                                                    {teachers.map((t) => (
-                                                                        <SelectItem key={t.id} value={t.id}>
-                                                                            {t.name}
-                                                                        </SelectItem>
-                                                                    ))}
-                                                                </Select>
-                                                            </TableCell>
-                                                            <TableCell className="hidden md:table-cell">
-                                                                <Button
-                                                                    size="sm"
-                                                                    variant="light"
-                                                                    color="primary"
-                                                                    onPress={() => navigate(`/students?classId=${cls.id}`)}
-                                                                >
-                                                                    View Students
-                                                                </Button>
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <div className="flex gap-2">
-                                                                    <Tooltip content="Delete">
-                                                                        <Button isIconOnly size="sm" variant="light" color="danger">
-                                                                            <Icon icon="mdi:delete" className="text-lg" />
-                                                                        </Button>
-                                                                    </Tooltip>
-                                                                </div>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    )}
-                                                </TableBody>
-                                            </Table>
+                                            <div className="overflow-x-auto">
+                                                <Table removeWrapper aria-label={`${std} divisions table`} classNames={{
+                                                    wrapper: "bg-content1 border border-default-200 shadow-sm",
+                                                    th: "bg-default-100 text-default-500 font-medium"
+                                                }}>
+                                                    <TableHeader>
+                                                        <TableColumn>SECTION</TableColumn>
+                                                        <TableColumn>CLASS TEACHER</TableColumn>
+                                                        <TableColumn>STUDENTS</TableColumn>
+                                                        <TableColumn>ACTIONS</TableColumn>
+                                                    </TableHeader>
+                                                    <TableBody
+                                                        emptyContent={divisions[std] ? "No divisions found" : "Loading..."}
+                                                        items={divisions[std] || []}
+                                                    >
+                                                        {(cls) => (
+                                                            <TableRow key={cls.id}>
+                                                                <TableCell>
+                                                                    <Chip color="primary" variant="dot">{cls.section}</Chip>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Select
+                                                                        aria-label="Assign Teacher"
+                                                                        placeholder="Select Teacher"
+                                                                        size="sm"
+                                                                        className="w-full sm:max-w-xs"
+                                                                        defaultSelectedKeys={cls.classTeacherId ? [cls.classTeacherId] : []}
+                                                                        onChange={(e) => handleAssignTeacher(cls.id, std, e.target.value)}
+                                                                        variant="bordered"
+                                                                    >
+                                                                        {teachers.map((t) => (
+                                                                            <SelectItem key={t.id} value={t.id}>
+                                                                                {t.name}
+                                                                            </SelectItem>
+                                                                        ))}
+                                                                    </Select>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Button
+                                                                        size="sm"
+                                                                        variant="light"
+                                                                        color="primary"
+                                                                        onPress={() => navigate(`/students?classId=${cls.id}`)}
+                                                                    >
+                                                                        View Students
+                                                                    </Button>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <div className="flex gap-2">
+                                                                        <Tooltip content="Delete">
+                                                                            <Button isIconOnly size="sm" variant="light" color="danger">
+                                                                                <Icon icon="mdi:delete" className="text-lg" />
+                                                                            </Button>
+                                                                        </Tooltip>
+                                                                    </div>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        )}
+                                                    </TableBody>
+                                                </Table>
+                                            </div>
                                         </div>
                                     </AccordionItem>
                                 ))}

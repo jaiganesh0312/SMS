@@ -105,7 +105,7 @@ export default function ParentList() {
                             </div>
                         </div>
                     </CardHeader>
-                    <CardBody className="px-0 pb-4">
+                    <CardBody className="px-0 pb-4 overflow-x-auto">
                         <Table aria-label="Parents Table" removeWrapper className="px-2">
                             <TableHeader>
                                 <TableColumn>GUARDIAN</TableColumn>

@@ -344,7 +344,7 @@ export default function StudentList() {
                             </div>
                         </div>
                     </CardHeader>
-                    <CardBody className="px-0 pb-4">
+                    <CardBody className="px-0 pb-4 overflow-x-auto">
                         <Table
                             aria-label="Students Table"
                             selectionMode="multiple"

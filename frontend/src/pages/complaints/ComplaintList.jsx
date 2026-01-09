@@ -156,7 +156,7 @@ const ComplaintList = ({ refreshTrigger }) => {
                 </Button>
             </div>
             <Table aria-label="Complaints Table" shadow="none" classNames={{
-                wrapper: "shadow-none bg-content1 border border-default-200",
+                wrapper: "shadow-none bg-content1 border border-default-200 overflow-x-auto",
                 th: "bg-default-100 text-default-500 font-medium",
                 td: "py-3"
             }}>

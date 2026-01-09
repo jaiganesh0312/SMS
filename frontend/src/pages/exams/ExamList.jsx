@@ -91,7 +91,7 @@ export default function ExamList() {
                     aria-label="Exams table"
                     shadow="none"
                     classNames={{
-                        wrapper: "bg-content1 border border-default-200 dark:border-default-100 shadow-sm rounded-xl",
+                        wrapper: "bg-content1 border border-default-200 dark:border-default-100 shadow-sm rounded-xl overflow-x-auto",
                         th: "bg-default-50 text-default-500 font-semibold",
                         td: "text-foreground",
                         row: "hover:bg-default-50 transition-colors"
@@ -99,8 +99,8 @@ export default function ExamList() {
                 >
                     <TableHeader>
                         <TableColumn>EXAM TITLE</TableColumn>
-                        <TableColumn className="hidden md:table-cell">CLASS</TableColumn>
-                        <TableColumn className="hidden sm:table-cell">DATE</TableColumn>
+                        <TableColumn>CLASS</TableColumn>
+                        <TableColumn>DATE</TableColumn>
                         <TableColumn>STATUS</TableColumn>
                         <TableColumn>ACTIONS</TableColumn>
                     </TableHeader>
@@ -108,8 +108,8 @@ export default function ExamList() {
                         {exams.map((exam) => (
                             <TableRow key={exam.id}>
                                 <TableCell className="font-medium">{exam.name}</TableCell>
-                                <TableCell className="hidden md:table-cell">{exam.Class?.name}</TableCell>
-                                <TableCell className="hidden sm:table-cell">{format(new Date(exam.startDate), 'PPP')}</TableCell>
+                                <TableCell>{exam.Class?.name}</TableCell>
+                                <TableCell>{format(new Date(exam.startDate), 'PPP')}</TableCell>
                                 <TableCell>
                                     <Chip
                                         size="sm"
