@@ -134,25 +134,29 @@ export default function MyStudents() {
 
 
     return (
-        <div className="p-6 space-y-6">
-            <div className="flex justify-between items-center">
+        <div className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-7xl mx-auto">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">My Students</h1>
-                    <p className="text-gray-500">Manage students in your class</p>
+                    <h1 className="text-xl md:text-2xl font-bold text-foreground">My Students</h1>
+                    <p className="text-default-500">Manage students in your class</p>
                 </div>
             </div>
 
-            <Card className="shadow-sm">
+            <Card className="shadow-sm bg-content1 border border-default-200">
                 <CardBody className="px-0 pb-4">
                     <Table
                         aria-label="My Students Table"
                         removeWrapper
                         className="px-4"
+                        classNames={{
+                            th: "bg-default-100 text-default-500 font-medium",
+                            td: "text-foreground group-hover:bg-default-50",
+                        }}
                     >
                         <TableHeader>
                             <TableColumn>ADMISSION NO</TableColumn>
                             <TableColumn>NAME</TableColumn>
-                            <TableColumn>GENDER</TableColumn>
+                            <TableColumn className="hidden sm:table-cell">GENDER</TableColumn>
                             <TableColumn>ACTIONS</TableColumn>
                         </TableHeader>
                         <TableBody
@@ -161,12 +165,12 @@ export default function MyStudents() {
                             items={students}
                         >
                             {(student) => (
-                                <TableRow key={student.id}>
+                                <TableRow key={student.id} className="border-b border-default-100 last:border-none">
                                     <TableCell>{student.admissionNumber}</TableCell>
                                     <TableCell>{student.name}</TableCell>
-                                    <TableCell>{student.gender}</TableCell>
+                                    <TableCell className="hidden sm:table-cell">{student.gender}</TableCell>
                                     <TableCell>
-                                        <div className="flex gap-2">
+                                        <div className="flex flex-col sm:flex-row gap-2">
                                             <Button
                                                 size="sm"
                                                 variant="flat"
@@ -174,6 +178,7 @@ export default function MyStudents() {
                                                 onPress={() => handleDownloadIDCard(student)}
                                                 isLoading={downloading[student.id]}
                                                 startContent={<Icon icon="mdi:download" />}
+                                                className="w-full sm:w-auto"
                                             >
                                                 {downloading[student.id] ? "Downloading..." : "ID Card"}
                                             </Button>
@@ -183,6 +188,7 @@ export default function MyStudents() {
                                                 color="secondary"
                                                 onPress={() => openPhotoModal(student)}
                                                 startContent={<Icon icon="mdi:upload" />}
+                                                className="w-full sm:w-auto"
                                             >
                                                 Profile Picture
                                             </Button>
@@ -195,34 +201,39 @@ export default function MyStudents() {
                 </CardBody>
             </Card>
 
-            <Modal isOpen={isPhotoOpen} onOpenChange={onPhotoOpenChange}>
+            <Modal isOpen={isPhotoOpen} onOpenChange={onPhotoOpenChange} backdrop="blur" classNames={{
+                base: "bg-content1 border border-default-200",
+                header: "border-b border-default-200 text-foreground",
+                footer: "border-t border-default-200",
+                closeButton: "hover:bg-default-100 active:bg-default-200 text-default-500",
+            }}>
                 <ModalContent>
                     {(onClose) => (
                         <>
                             <ModalHeader>Upload Profile Picture</ModalHeader>
-                            <ModalBody>
+                            <ModalBody className="py-6">
                                 <div className="text-center">
-                                    <div className="w-32 h-32 mx-auto border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center overflow-hidden mb-4">
+                                    <div className="w-32 h-32 mx-auto border-2 border-dashed border-default-300 rounded-lg flex items-center justify-center overflow-hidden mb-4 bg-default-50">
                                         {photoPreview ? (
                                             <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
                                         ) : (
-                                            <Icon icon="mdi:account" className="text-4xl text-gray-300" />
+                                            <Icon icon="mdi:account" className="text-4xl text-default-300" />
                                         )}
                                     </div>
                                     <input
                                         type="file"
                                         accept="image/jpeg,image/png"
                                         onChange={handlePhotoFileChange}
-                                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                        className="block w-full text-sm text-default-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary-700 hover:file:bg-primary/20"
                                     />
-                                    <p className="text-xs text-gray-400 mt-2">JPG, PNG (Max 2MB)</p>
+                                    <p className="text-xs text-default-400 mt-2">JPG, PNG (Max 2MB)</p>
                                 </div>
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Cancel
                                 </Button>
-                                <Button color="primary" onPress={handleUploadPhoto} isLoading={uploadingPhoto} isDisabled={!photoFile}>
+                                <Button color="primary" onPress={handleUploadPhoto} isLoading={uploadingPhoto} isDisabled={!photoFile} className="shadow-md shadow-primary/20">
                                     Upload
                                 </Button>
                             </ModalFooter>

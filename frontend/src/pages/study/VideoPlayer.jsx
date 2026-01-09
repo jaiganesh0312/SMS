@@ -90,7 +90,7 @@ export default function VideoPlayer() {
             <div className="absolute top-4 left-4 z-10">
                 <Button
                     variant="flat"
-                    className="bg-white/10 text-white backdrop-blur-md hover:bg-white/20"
+                    className="bg-default-100/10 text-white backdrop-blur-md hover:bg-default-100/20"
                     startContent={<Icon icon="mdi:arrow-left" />}
                     onPress={() => navigate(-1)}
                 >
@@ -105,7 +105,7 @@ export default function VideoPlayer() {
                     {loading && (
                         <div className="absolute inset-0 flex items-center justify-center z-20 bg-zinc-900/80 backdrop-blur-sm">
                             <div className="text-center">
-                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
                                 <p className="text-white/70">Loading secured stream...</p>
                             </div>
                         </div>
@@ -113,7 +113,7 @@ export default function VideoPlayer() {
 
                     {error && (
                         <div className="absolute inset-0 flex items-center justify-center z-20 bg-zinc-900">
-                            <div className="text-center text-red-400 max-w-md p-6 bg-red-900/20 rounded-xl border border-red-900/50">
+                            <div className="text-center text-danger max-w-md p-6 bg-danger/10 rounded-xl border border-danger/20">
                                 <Icon icon="mdi:alert-circle" className="text-5xl mx-auto mb-3" />
                                 <h3 className="text-lg font-semibold mb-1">Playback Error</h3>
                                 <p>{error}</p>
@@ -147,7 +147,7 @@ export default function VideoPlayer() {
                                         {Math.floor((videoData.duration || 0) / 60)}:{String((videoData.duration || 0) % 60).padStart(2, '0')} min
                                     </span>
                                     <span className="w-1 h-1 rounded-full bg-zinc-600"></span>
-                                    <span className="text-green-400 flex items-center gap-1">
+                                    <span className="text-success-400 flex items-center gap-1">
                                         <Icon icon="mdi:shield-check" />
                                         Secure Stream
                                     </span>
@@ -157,7 +157,7 @@ export default function VideoPlayer() {
                                 </p>
                             </div>
                             <div className="hidden sm:block">
-                                <Chip variant="flat" className="bg-white/10 text-white">
+                                <Chip variant="flat" className="bg-default-100/10 text-white">
                                     Study Material
                                 </Chip>
                             </div>

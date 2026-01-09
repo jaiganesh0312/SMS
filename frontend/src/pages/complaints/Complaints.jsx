@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { PageHeader } from '@/components/common';
 import { useAuth } from '@/context/AuthContext';
-import CreateComplaint from './CreateComplaint';
 import ComplaintList from './ComplaintList';
-import { Tabs, Tab } from "@heroui/react";
+import CreateComplaint from './CreateComplaint';
 import { Icon } from '@iconify/react';
+import { motion } from 'framer-motion';
+import React, { useState } from 'react';
 
 const Complaints = () => {
     const { user } = useAuth();
@@ -28,10 +28,10 @@ const Complaints = () => {
             initial="hidden"
             animate="visible"
         >
-            <div className="flex flex-col gap-2">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Complaints & Feedback</h1>
-                <p className="text-gray-500">Manage and track issues raised by parents.</p>
-            </div>
+            <PageHeader
+                title="Complaints & Feedback"
+                subtitle="Manage and track issues raised by parents"
+            />
 
             {isParent ? (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

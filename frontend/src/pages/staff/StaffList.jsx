@@ -128,8 +128,8 @@ const StaffList = () => {
             {/* Header */}
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Staff Management</h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">Manage teachers and support staff</p>
+                    <h1 className="text-3xl font-bold text-foreground">Staff Management</h1>
+                    <p className="text-default-500 mt-1">Manage teachers and support staff</p>
                 </div>
                 <Button
                     color="primary"
@@ -142,7 +142,7 @@ const StaffList = () => {
 
             {/* Search */}
             <motion.div variants={itemVariants}>
-                <Card>
+                <Card className="bg-content1 border border-default-200">
                     <CardBody>
                         <Input
                             placeholder="Search by name, email or code..."
@@ -157,7 +157,10 @@ const StaffList = () => {
             </motion.div>
 
             {/* Table */}
-            <Table aria-label="Staff List">
+            <Table aria-label="Staff List" classNames={{
+                wrapper: "bg-content1 border border-default-200",
+                th: "bg-default-100 text-default-500",
+            }}>
                 <TableHeader>
                     <TableColumn>EMPLOYEE</TableColumn>
                     <TableColumn>CONTACT</TableColumn>

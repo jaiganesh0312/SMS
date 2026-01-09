@@ -67,10 +67,10 @@ const OfferLetterAcceptance = () => {
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6">
             <Card className="w-full max-w-5xl h-[85vh] shadow-xl">
                 <CardBody className="flex flex-col h-full p-0">
-                    <div className="flex justify-between items-center p-4 border-b bg-white">
+                    <div className="flex justify-between items-center p-4 border-b border-default-200 bg-content1">
                         <div>
-                            <h1 className="text-xl font-bold text-gray-800">Review Offer Letter</h1>
-                            <p className="text-sm text-gray-500">Please review and accept your offer to proceed.</p>
+                            <h1 className="text-xl font-bold text-foreground">Review Offer Letter</h1>
+                            <p className="text-sm text-default-500">Please review and accept your offer to proceed.</p>
                         </div>
                         <Button
                             color="success"
@@ -84,7 +84,7 @@ const OfferLetterAcceptance = () => {
                         </Button>
                     </div>
 
-                    <div className="flex-1 bg-gray-100 flex items-center justify-center relative overflow-hidden">
+                    <div className="flex-1 bg-default-50 flex items-center justify-center relative overflow-hidden">
                         {loading && <Spinner size="lg" label="Loading Document..." />}
                         {error && <div className="text-danger flex flex-col items-center"><Icon icon="lucide:alert-circle" width={48} /><p>{error}</p></div>}
                         {!loading && !error && pdfUrl && (

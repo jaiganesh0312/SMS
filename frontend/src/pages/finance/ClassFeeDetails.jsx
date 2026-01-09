@@ -100,14 +100,14 @@ export default function ClassFeeDetails() {
                         variant="light"
                         startContent={<Icon icon="mdi:arrow-left" />}
                         onPress={() => navigate('/finance/statistics')}
-                        className="mb-2"
+                        className="mb-2 text-default-500"
                     >
                         Back to Statistics
                     </Button>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                    <h1 className="text-3xl font-bold text-foreground">
                         {data?.classDetails?.name || 'Class'} - Fee Details
                     </h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                    <p className="text-default-500 mt-1">
                         Fee per student: {formatCurrency(data?.classDetails?.totalFeePerStudent || 0)}
                     </p>
                 </div>
@@ -125,15 +125,15 @@ export default function ClassFeeDetails() {
             {/* Summary Cards with Borders */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <motion.div whileHover={{ scale: 1.02 }}>
-                    <Card className="border-l-4 border-l-blue-500">
+                    <Card className="border-l-4 border-l-primary bg-content1 shadow-sm">
                         <CardBody className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Total Students</p>
-                                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
+                                    <p className="text-sm text-default-500">Total Students</p>
+                                    <p className="text-2xl font-bold text-foreground">{stats.total}</p>
                                 </div>
-                                <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg">
-                                    <Icon icon="mdi:account-group" className="text-2xl text-blue-600 dark:text-blue-400" />
+                                <div className="bg-primary/10 p-3 rounded-lg">
+                                    <Icon icon="mdi:account-group" className="text-2xl text-primary" />
                                 </div>
                             </div>
                         </CardBody>
@@ -141,15 +141,15 @@ export default function ClassFeeDetails() {
                 </motion.div>
 
                 <motion.div whileHover={{ scale: 1.02 }}>
-                    <Card className="border-l-4 border-l-success">
+                    <Card className="border-l-4 border-l-success bg-content1 shadow-sm">
                         <CardBody className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Paid</p>
-                                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.paid}</p>
+                                    <p className="text-sm text-default-500">Paid</p>
+                                    <p className="text-2xl font-bold text-foreground">{stats.paid}</p>
                                 </div>
-                                <div className="bg-success-100 dark:bg-success-900/30 p-3 rounded-lg">
-                                    <Icon icon="mdi:check-circle" className="text-2xl text-success-600 dark:text-success-400" />
+                                <div className="bg-success/10 p-3 rounded-lg">
+                                    <Icon icon="mdi:check-circle" className="text-2xl text-success" />
                                 </div>
                             </div>
                         </CardBody>
@@ -157,15 +157,15 @@ export default function ClassFeeDetails() {
                 </motion.div>
 
                 <motion.div whileHover={{ scale: 1.02 }}>
-                    <Card className="border-l-4 border-l-warning">
+                    <Card className="border-l-4 border-l-warning bg-content1 shadow-sm">
                         <CardBody className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Partial</p>
-                                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.partial}</p>
+                                    <p className="text-sm text-default-500">Partial</p>
+                                    <p className="text-2xl font-bold text-foreground">{stats.partial}</p>
                                 </div>
-                                <div className="bg-warning-100 dark:bg-warning-900/30 p-3 rounded-lg">
-                                    <Icon icon="mdi:alert-circle" className="text-2xl text-warning-600 dark:text-warning-400" />
+                                <div className="bg-warning/10 p-3 rounded-lg">
+                                    <Icon icon="mdi:alert-circle" className="text-2xl text-warning" />
                                 </div>
                             </div>
                         </CardBody>
@@ -173,15 +173,15 @@ export default function ClassFeeDetails() {
                 </motion.div>
 
                 <motion.div whileHover={{ scale: 1.02 }}>
-                    <Card className="border-l-4 border-l-danger">
+                    <Card className="border-l-4 border-l-danger bg-content1 shadow-sm">
                         <CardBody className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Pending</p>
-                                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pending}</p>
+                                    <p className="text-sm text-default-500">Pending</p>
+                                    <p className="text-2xl font-bold text-foreground">{stats.pending}</p>
                                 </div>
-                                <div className="bg-danger-100 dark:bg-danger-900/30 p-3 rounded-lg">
-                                    <Icon icon="mdi:close-circle" className="text-2xl text-danger-600 dark:text-danger-400" />
+                                <div className="bg-danger/10 p-3 rounded-lg">
+                                    <Icon icon="mdi:close-circle" className="text-2xl text-danger" />
                                 </div>
                             </div>
                         </CardBody>
@@ -190,15 +190,16 @@ export default function ClassFeeDetails() {
             </div>
 
             {/* Filters */}
-            <Card>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
                 <CardBody>
                     <div className="flex flex-col sm:flex-row gap-4">
                         <Input
                             placeholder="Search by name or admission number..."
                             value={searchQuery}
                             onValueChange={setSearchQuery}
-                            startContent={<Icon icon="mdi:magnify" size={18} />}
+                            startContent={<Icon icon="mdi:magnify" size={18} className="text-default-400" />}
                             className="sm:max-w-xs"
+                            variant="bordered"
                             isClearable
                             onClear={() => setSearchQuery('')}
                         />
@@ -207,7 +208,8 @@ export default function ClassFeeDetails() {
                             selectedKeys={[filterStatus]}
                             onChange={(e) => setFilterStatus(e.target.value)}
                             className="sm:max-w-xs"
-                            startContent={<Icon icon="mdi:filter" size={16} />}
+                            variant="bordered"
+                            startContent={<Icon icon="mdi:filter" size={16} className="text-default-400" />}
                         >
                             <SelectItem key="ALL" value="ALL">All Status</SelectItem>
                             <SelectItem key="PAID" value="PAID">Paid</SelectItem>
@@ -219,9 +221,13 @@ export default function ClassFeeDetails() {
             </Card>
 
             {/* Student Table */}
-            <Card>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
                 <CardBody className="p-0">
-                    <Table aria-label="Student payment status table" removeWrapper className='px-2'>
+                    <Table aria-label="Student payment status table" shadow="none" classNames={{
+                        wrapper: "bg-content1 shadow-none",
+                        th: "bg-default-100 text-default-500 font-medium",
+                        td: "text-foreground group-hover:bg-default-50"
+                    }}>
                         <TableHeader>
                             <TableColumn>ADMISSION NO</TableColumn>
                             <TableColumn>STUDENT NAME</TableColumn>
@@ -236,12 +242,12 @@ export default function ClassFeeDetails() {
                                 <div className="text-center py-12">
                                     <Icon
                                         icon="mdi:account-off"
-                                        className="mx-auto text-gray-400 dark:text-gray-600 text-6xl mb-4"
+                                        className="mx-auto text-default-400 text-6xl mb-4 opacity-50"
                                     />
-                                    <p className="text-lg font-medium text-gray-600 dark:text-gray-400">
+                                    <p className="text-lg font-medium text-foreground">
                                         No students found
                                     </p>
-                                    <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+                                    <p className="text-sm text-default-500 mt-1">
                                         {searchQuery || filterStatus !== 'ALL'
                                             ? "Try adjusting your filters"
                                             : "This class has no students yet"}
@@ -252,16 +258,16 @@ export default function ClassFeeDetails() {
                             loadingContent={<Spinner label="Loading students..." />}
                         >
                             {filteredStudents.map((student) => (
-                                <TableRow key={student.studentId}>
+                                <TableRow key={student.studentId} className="border-b border-default-100 last:border-none">
                                     <TableCell>
-                                        <span className="font-mono text-sm">{student.admissionNumber}</span>
+                                        <span className="font-mono text-sm text-default-500">{student.admissionNumber}</span>
                                     </TableCell>
-                                    <TableCell className="font-medium">{student.studentName}</TableCell>
+                                    <TableCell className="font-medium text-foreground">{student.studentName}</TableCell>
                                     <TableCell>{formatCurrency(student.totalFees)}</TableCell>
-                                    <TableCell className="text-green-600 font-medium">
+                                    <TableCell className="text-success font-medium">
                                         {formatCurrency(student.amountPaid)}
                                     </TableCell>
-                                    <TableCell className="text-orange-600 font-medium">
+                                    <TableCell className="text-warning font-medium">
                                         {formatCurrency(student.pendingAmount)}
                                     </TableCell>
                                     <TableCell>
@@ -274,7 +280,7 @@ export default function ClassFeeDetails() {
                                         </Chip>
                                     </TableCell>
                                     <TableCell>
-                                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                        <div className="flex items-center gap-2 text-sm text-default-500">
                                             {student.lastPaymentDate ? (
                                                 <>
                                                     <Icon icon="mdi:calendar" size={14} />

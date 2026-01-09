@@ -105,8 +105,8 @@ export default function FeeStructure() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Fee Structures</h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                    <h1 className="text-3xl font-bold text-foreground">Fee Structures</h1>
+                    <p className="text-default-500 mt-1">
                         Manage school fees and payment structures
                     </p>
                 </div>
@@ -131,20 +131,24 @@ export default function FeeStructure() {
             </div>
 
             {/* Fee Structures Table */}
-            <Card>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
                 <CardHeader>
                     <div className="flex items-center gap-3">
                         <Icon icon="mdi:file-document-multiple" size={24} className="text-primary" />
                         <div>
-                            <h2 className="text-xl font-bold">Fee Structures</h2>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                            <h2 className="text-xl font-bold text-foreground">Fee Structures</h2>
+                            <p className="text-sm text-default-500">
                                 {fees.length} fee structure{fees.length !== 1 ? 's' : ''} configured
                             </p>
                         </div>
                     </div>
                 </CardHeader>
                 <CardBody className="p-0">
-                    <Table aria-label="Fee structures table" removeWrapper className='px-2'>
+                    <Table aria-label="Fee structures table" shadow="none" classNames={{
+                        wrapper: "bg-content1 shadow-none",
+                        th: "bg-default-100 text-default-500 font-medium",
+                        td: "text-foreground group-hover:bg-default-50"
+                    }}>
                         <TableHeader>
                             <TableColumn>NAME</TableColumn>
                             <TableColumn>CLASS</TableColumn>
@@ -157,12 +161,12 @@ export default function FeeStructure() {
                                 <div className="text-center py-12">
                                     <Icon
                                         icon="mdi:file-document-outline"
-                                        className="mx-auto text-gray-400 dark:text-gray-600 text-6xl mb-4"
+                                        className="mx-auto text-default-400 text-6xl mb-4 opacity-50"
                                     />
-                                    <p className="text-lg font-medium text-gray-600 dark:text-gray-400">
+                                    <p className="text-lg font-medium text-foreground">
                                         No fee structures found
                                     </p>
-                                    <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+                                    <p className="text-sm text-default-500 mt-1">
                                         Create your first fee structure to get started
                                     </p>
                                     <Button
@@ -179,7 +183,7 @@ export default function FeeStructure() {
                             loadingContent={<Spinner label="Loading fee structures..." />}
                         >
                             {fees.map((fee) => (
-                                <TableRow key={fee.id}>
+                                <TableRow key={fee.id} className="border-b border-default-100 last:border-none">
                                     <TableCell className="font-medium">{fee.name}</TableCell>
                                     <TableCell>
                                         <Chip size="sm" variant="flat" color="primary">
@@ -188,8 +192,8 @@ export default function FeeStructure() {
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-1">
-                                            <Icon icon="mdi:currency-rupee" className="text-gray-500" />
-                                            <span className="font-medium">{fee.amount}</span>
+                                            <Icon icon="mdi:currency-rupee" className="text-default-400" />
+                                            <span className="font-medium">₹{fee.amount?.toLocaleString()}</span>
                                         </div>
                                     </TableCell>
                                     <TableCell>
@@ -200,7 +204,7 @@ export default function FeeStructure() {
                                             <Button
                                                 isIconOnly
                                                 size="sm"
-                                                variant="flat"
+                                                variant="light"
                                                 color="primary"
                                             >
                                                 <Icon icon="mdi:pencil" className="text-lg" />
@@ -219,31 +223,33 @@ export default function FeeStructure() {
                 <ModalContent>
                     {(onClose) => (
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <ModalHeader>
+                            <ModalHeader className="border-b border-default-200">
                                 <div className="flex items-center gap-2">
                                     <Icon icon="mdi:plus-circle" className="text-primary" />
-                                    <span>Add New Fee Structure</span>
+                                    <span className="text-foreground">Add New Fee Structure</span>
                                 </div>
                             </ModalHeader>
-                            <ModalBody>
+                            <ModalBody className="py-6">
                                 <div className="space-y-4">
                                     <div className='grid gap-3'>
                                         <Input
                                             {...register('name')}
                                             label="Fee Name"
                                             placeholder="e.g. Tuition Fee"
+                                            variant="bordered"
                                             isInvalid={!!errors.name}
                                             errorMessage={errors.name?.message}
-                                            startContent={<Icon icon="mdi:text" />}
+                                            startContent={<Icon icon="mdi:text" className="text-default-400" />}
                                         />
 
                                         <Select
                                             label="Class"
                                             {...register('classId')}
+                                            variant="bordered"
                                             isInvalid={!!errors.classId}
                                             errorMessage={errors.classId?.message}
                                             placeholder="Select a class"
-                                            startContent={<Icon icon="mdi:google-classroom" />}
+                                            startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
                                         >
                                             {classes.map((cls) => (
                                                 <SelectItem key={cls.id} value={cls.id}>
@@ -259,17 +265,19 @@ export default function FeeStructure() {
                                             type="number"
                                             label="Amount"
                                             placeholder="0"
-                                            startContent={<Icon icon="mdi:currency-rupee" />}
+                                            variant="bordered"
+                                            startContent={<Icon icon="mdi:currency-rupee" className="text-default-400" />}
                                             isInvalid={!!errors.amount}
                                             errorMessage={errors.amount?.message}
                                         />
                                         <Select
                                             label="Frequency"
                                             {...register('frequency')}
+                                            variant="bordered"
                                             isInvalid={!!errors.frequency}
                                             errorMessage={errors.frequency?.message}
                                             placeholder="Select frequency"
-                                            startContent={<Icon icon="mdi:calendar-refresh" />}
+                                            startContent={<Icon icon="mdi:calendar-refresh" className="text-default-400" />}
                                         >
                                             {['MONTHLY', 'QUARTERLY', 'YEARLY', 'ONE_TIME'].map((f) => (
                                                 <SelectItem key={f} value={f}>{f.replace('_', ' ')}</SelectItem>
@@ -282,14 +290,15 @@ export default function FeeStructure() {
                                             {...register('dueDate')}
                                             type="date"
                                             label="Due Date"
+                                            variant="bordered"
                                             isInvalid={!!errors.dueDate}
                                             errorMessage={errors.dueDate?.message}
-                                            startContent={<Icon icon="mdi:calendar" />}
+                                            startContent={<Icon icon="mdi:calendar" className="text-default-400" />}
                                         />
                                     </div>
                                 </div>
                             </ModalBody>
-                            <ModalFooter>
+                            <ModalFooter className="border-t border-default-200">
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Cancel
                                 </Button>

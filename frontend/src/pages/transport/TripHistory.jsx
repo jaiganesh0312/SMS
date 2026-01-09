@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import { PageHeader } from '@/components/common';
+import { transportService } from '@/services';
 import {
+    Button,
     Card,
     CardBody,
-    CardHeader,
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
     Chip,
-    Spinner,
+    Input,
     Select,
     SelectItem,
-    Input,
-    Button,
+    Spinner,
+    Table,
+    TableBody,
+    TableCell,
+    TableColumn,
+    TableHeader,
+    TableRow
 } from '@heroui/react';
 import { Icon } from '@iconify/react';
 import { format } from 'date-fns';
-import { transportService } from '@/services';
+import React, { useEffect, useState } from 'react';
 
 const TripHistory = () => {
     const [trips, setTrips] = useState([]);
@@ -105,13 +105,13 @@ const TripHistory = () => {
 
     return (
         <div className="p-6 space-y-6">
-            <div>
-                <h1 className="text-2xl font-bold">Trip History</h1>
-                <p className="text-default-500">View past bus trips and their details</p>
-            </div>
+            <PageHeader
+                title="Trip History"
+                subtitle="View past bus trips and their details"
+            />
 
             {/* Filters */}
-            <Card>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
                 <CardBody>
                     <div className="flex flex-wrap items-end gap-4">
                         <Select
@@ -122,6 +122,9 @@ const TripHistory = () => {
                             onSelectionChange={(keys) =>
                                 setFilters((p) => ({ ...p, busId: [...keys][0] || '' }))
                             }
+                            variant="bordered"
+                            labelPlacement="outside"
+                            size="sm"
                         >
                             {buses.map((bus) => (
                                 <SelectItem key={bus.id} textValue={bus.busNumber}>
@@ -136,6 +139,9 @@ const TripHistory = () => {
                             label="Filter by Date"
                             value={filters.date}
                             onChange={(e) => setFilters((p) => ({ ...p, date: e.target.value }))}
+                            variant="bordered"
+                            labelPlacement="outside"
+                            size="sm"
                         />
 
                         <Select
@@ -146,6 +152,9 @@ const TripHistory = () => {
                             onSelectionChange={(keys) =>
                                 setFilters((p) => ({ ...p, status: [...keys][0] || '' }))
                             }
+                            variant="bordered"
+                            labelPlacement="outside"
+                            size="sm"
                         >
                             <SelectItem key="NOT_STARTED">Not Started</SelectItem>
                             <SelectItem key="IN_PROGRESS">In Progress</SelectItem>
@@ -153,7 +162,7 @@ const TripHistory = () => {
                             <SelectItem key="CANCELLED">Cancelled</SelectItem>
                         </Select>
 
-                        <Button variant="flat" onPress={clearFilters}>
+                        <Button variant="flat" color="default" onPress={clearFilters} size="sm" startContent={<Icon icon="mdi:filter-off" />}>
                             Clear Filters
                         </Button>
                     </div>
@@ -161,14 +170,22 @@ const TripHistory = () => {
             </Card>
 
             {/* Trips Table */}
-            <Card>
-                <CardBody>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
+                <CardBody className="p-0">
                     {loading ? (
                         <div className="flex justify-center py-8">
                             <Spinner size="lg" />
                         </div>
                     ) : (
-                        <Table aria-label="Trip history table">
+                        <Table
+                            aria-label="Trip history table"
+                            shadow="none"
+                            classNames={{
+                                wrapper: "shadow-none bg-content1",
+                                th: "bg-default-100 text-default-500 font-medium",
+                                td: "py-3"
+                            }}
+                        >
                             <TableHeader>
                                 <TableColumn>Date</TableColumn>
                                 <TableColumn>Bus</TableColumn>
@@ -181,25 +198,29 @@ const TripHistory = () => {
                             </TableHeader>
                             <TableBody items={trips} emptyContent="No trips found">
                                 {(trip) => (
-                                    <TableRow key={trip.id}>
+                                    <TableRow key={trip.id} className="border-b border-default-100 last:border-0 hover:bg-default-50">
                                         <TableCell>
-                                            {trip.startTime
-                                                ? format(new Date(trip.startTime), 'dd MMM yyyy')
-                                                : '-'}
+                                            <span className="text-foreground font-medium">
+                                                {trip.startTime
+                                                    ? format(new Date(trip.startTime), 'dd MMM yyyy')
+                                                    : '-'}
+                                            </span>
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex items-center gap-2">
-                                                <Icon icon="mdi:bus" className="text-primary" />
-                                                <span className="font-medium">
+                                                <div className="p-2 bg-primary/10 rounded-lg">
+                                                    <Icon icon="mdi:bus" className="text-primary" width={16} />
+                                                </div>
+                                                <span className="font-medium text-foreground">
                                                     {trip.Bus?.busNumber || 'N/A'}
                                                 </span>
                                             </div>
                                         </TableCell>
-                                        <TableCell>{trip.BusRoute?.routeName || '-'}</TableCell>
+                                        <TableCell><span className="text-foreground">{trip.BusRoute?.routeName || '-'}</span></TableCell>
                                         <TableCell>
-                                            <div className="flex items-center gap-1">
-                                                <Icon icon={getTripTypeIcon(trip.tripType)} />
-                                                <span>{trip.tripType}</span>
+                                            <div className="flex items-center gap-2">
+                                                <Icon icon={getTripTypeIcon(trip.tripType)} className="text-default-500" width={18} />
+                                                <span className="text-foreground">{trip.tripType}</span>
                                             </div>
                                         </TableCell>
                                         <TableCell>
@@ -207,22 +228,27 @@ const TripHistory = () => {
                                                 size="sm"
                                                 color={getStatusColor(trip.status)}
                                                 variant="flat"
+                                                classNames={{ content: "font-medium" }}
                                             >
                                                 {trip.status?.replace('_', ' ')}
                                             </Chip>
                                         </TableCell>
                                         <TableCell>
-                                            {trip.startTime
-                                                ? format(new Date(trip.startTime), 'HH:mm')
-                                                : '-'}
+                                            <span className="text-default-500 font-mono text-sm">
+                                                {trip.startTime
+                                                    ? format(new Date(trip.startTime), 'HH:mm')
+                                                    : '-'}
+                                            </span>
                                         </TableCell>
                                         <TableCell>
-                                            {trip.endTime
-                                                ? format(new Date(trip.endTime), 'HH:mm')
-                                                : '-'}
+                                            <span className="text-default-500 font-mono text-sm">
+                                                {trip.endTime
+                                                    ? format(new Date(trip.endTime), 'HH:mm')
+                                                    : '-'}
+                                            </span>
                                         </TableCell>
                                         <TableCell>
-                                            <span className="font-mono">
+                                            <span className="text-foreground font-mono font-medium">
                                                 {formatDuration(trip.startTime, trip.endTime)}
                                             </span>
                                         </TableCell>

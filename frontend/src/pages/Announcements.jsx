@@ -146,7 +146,7 @@ const Announcements = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {announcements.length > 0 ? (
                         announcements.map((announcement, index) => (
-                            <motion.div key={announcement.id} variants={itemVariants}>
+                            <motion.div key={announcement.id}>
                                 <Card className="h-full">
                                     <CardBody className="p-5 flex flex-col justify-between">
                                         <div>

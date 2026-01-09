@@ -119,15 +119,22 @@ const LeaveManagement = () => {
             animate="visible"
         >
             <motion.div variants={itemVariants}>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Leave Management</h1>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">Review and manage staff leave applications</p>
+                <h1 className="text-3xl font-bold text-foreground">Leave Management</h1>
+                <p className="text-default-500 mt-1">Review and manage staff leave applications</p>
             </motion.div>
 
-            <Tabs aria-label="Leave Tabs" selectedKey={activeTab} onSelectionChange={setActiveTab} variant="underlined" color="primary" >
-                <Tab key="PENDING" title="Pending Requests" >
+            <Tabs aria-label="Leave Tabs" selectedKey={activeTab} onSelectionChange={setActiveTab} variant="underlined" color="primary"
+                classNames={{
+                    tabList: "gap-6 w-full relative rounded-none p-0 border-b border-divider",
+                    cursor: "w-full bg-primary",
+                    tab: "max-w-fit px-0 h-12",
+                    tabContent: "group-data-[selected=true]:text-primary"
+                }}
+            >
+                <Tab key="PENDING" title={<div className="flex items-center space-x-2"><span>Pending Requests</span></div>} >
                     <LeavesTable leaves={leaves} type="PENDING" loading={loading} />
                 </Tab>
-                <Tab key="HISTORY" title="History" >
+                <Tab key="HISTORY" title={<div className="flex items-center space-x-2"><span>History</span></div>} >
                     <LeavesTable leaves={leaves} type="HISTORY" loading={loading} />
                 </Tab>
             </Tabs>
@@ -139,10 +146,10 @@ const LeaveManagement = () => {
                                 {actionType === "APPROVED" ? "Approve Leave" : "Reject Leave"}
                             </ModalHeader>
                             <ModalBody>
-                                <p>Are you sure you want to <strong>{actionType === "APPROVED" ? "approve" : "reject"}</strong> the leave request for <strong>{selectedLeave?.User?.name}</strong>?</p>
+                                <p className="text-foreground">Are you sure you want to <strong>{actionType === "APPROVED" ? "approve" : "reject"}</strong> the leave request for <strong>{selectedLeave?.User?.name}</strong>?</p>
                                 <div className="bg-default-100 p-3 rounded-md text-small">
                                     <p className="font-semibold text-default-600">Reason:</p>
-                                    <p>{selectedLeave?.reason}</p>
+                                    <p className="text-default-500">{selectedLeave?.reason}</p>
                                 </div>
                                 {/* Placeholder for admin notes if backend supports it later */}
                                 {/* <Textarea label="Notes" placeholder="Optional notes..." value={actionNotes} onValueChange={setActionNotes} /> */}
@@ -176,7 +183,10 @@ const LeavesTable = ({ leaves, type, loading }) => {
     };
 
     return (
-        <Table aria-label="Leaves Table">
+        <Table aria-label="Leaves Table" classNames={{
+            wrapper: "bg-content1 border border-default-200 shadow-sm",
+            th: "bg-default-100 text-default-500 font-medium"
+        }}>
             <TableHeader>
                 <TableColumn>APPLICANT</TableColumn>
                 <TableColumn>TYPE</TableColumn>

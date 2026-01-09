@@ -72,17 +72,17 @@ export default function UpdatePassword() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-default-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="flex justify-center">
                     <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
                         <Icon icon="mdi:lock-reset" className="text-3xl text-primary" />
                     </div>
                 </div>
-                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
+                <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground font-heading">
                     Update Your Password
                 </h2>
-                <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+                <p className="mt-2 text-center text-sm text-default-500">
                     Choose a strong password to keep your account secure
                 </p>
             </div>
@@ -93,14 +93,13 @@ export default function UpdatePassword() {
                 transition={{ duration: 0.5 }}
                 className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
             >
-                <Card className="shadow-xl">
-                    <CardHeader className="flex gap-3 px-6 pt-6">
+                <Card className="shadow-xl bg-content1 border border-default-200">
+                    <CardHeader className="flex gap-3 px-6 pt-6 border-b border-default-100">
                         <div className="flex flex-col">
-                            <p className="text-md font-bold">Password Update</p>
+                            <p className="text-md font-bold text-foreground font-heading">Password Update</p>
                             <p className="text-small text-default-500">Enter your current and new password</p>
                         </div>
                     </CardHeader>
-                    <Divider />
                     <CardBody className="px-6 py-6">
                         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
                             {/* Current Password */}
@@ -110,6 +109,7 @@ export default function UpdatePassword() {
                                 placeholder='Enter your current password'
                                 label="Current Password"
                                 variant="bordered"
+                                labelPlacement="outside"
                                 isInvalid={!!errors.currentPassword}
                                 errorMessage={errors.currentPassword?.message}
                                 startContent={<Icon icon="mdi:lock" className="text-default-400" />}
@@ -135,6 +135,7 @@ export default function UpdatePassword() {
                                     placeholder='Enter your new password'
                                     label="New Password"
                                     variant="bordered"
+                                    labelPlacement="outside"
                                     isInvalid={!!errors.newPassword}
                                     errorMessage={errors.newPassword?.message}
                                     startContent={<Icon icon="mdi:lock-plus" className="text-default-400" />}
@@ -162,6 +163,7 @@ export default function UpdatePassword() {
                                 placeholder='Confirm your new password'
                                 label="Confirm New Password"
                                 variant="bordered"
+                                labelPlacement="outside"
                                 isInvalid={!!errors.confirmPassword}
                                 errorMessage={errors.confirmPassword?.message}
                                 startContent={<Icon icon="mdi:lock-check" className="text-default-400" />}

@@ -188,7 +188,7 @@ export default function ParentDashboard() {
                     </motion.div>
 
                     <motion.div whileHover={{ scale: 1.02 }} className="h-full">
-                        <Card className="border-l-4 border-l-warning bg-content1 dark:bg-content1 shadow-sm">
+                        <Card className="border-l-4 border-l-warning-500 bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
@@ -206,7 +206,7 @@ export default function ParentDashboard() {
                     </motion.div>
 
                     <motion.div whileHover={{ scale: 1.02 }} className="h-full">
-                        <Card className="border-l-4 border-l-success bg-content1 dark:bg-content1 shadow-sm">
+                        <Card className="border-l-4 border-l-success-500 bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>

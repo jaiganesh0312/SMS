@@ -94,17 +94,17 @@ export default function CreateExam() {
             animate="visible"
         >
             <motion.div variants={itemVariants} className="flex items-center gap-4">
-                <Button isIconOnly variant="light" onPress={() => navigate(-1)}>
+                <Button isIconOnly variant="light" onPress={() => navigate(-1)} className="text-default-500 hover:text-foreground">
                     <Icon icon="mdi:arrow-left" className="text-xl" />
                 </Button>
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Create Exam</h1>
-                    <p className="text-sm text-gray-500">Schedule a new exam period</p>
+                    <h1 className="text-2xl font-bold text-foreground">Create Exam</h1>
+                    <p className="text-sm text-default-500">Schedule a new exam period</p>
                 </div>
             </motion.div>
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm">
+                <Card className="shadow-md bg-content1 border border-default-200 dark:border-default-100">
                     <CardBody className="p-6">
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                             <div className="grid gap-3">
@@ -116,6 +116,10 @@ export default function CreateExam() {
                                     isInvalid={!!errors.name}
                                     errorMessage={errors.name?.message}
                                     startContent={<Icon icon="mdi:format-title" className="text-default-400" />}
+                                    classNames={{
+                                        label: "text-default-500 group-data-[filled-within=true]:text-foreground",
+                                        input: "text-foreground",
+                                    }}
                                 />
                             </div>
 
@@ -128,9 +132,13 @@ export default function CreateExam() {
                                     isInvalid={!!errors.classId}
                                     errorMessage={errors.classId?.message}
                                     startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
+                                    classNames={{
+                                        label: "text-default-500",
+                                        value: "text-foreground",
+                                    }}
                                 >
                                     {classes.map((cls) => (
-                                        <SelectItem key={cls.id} value={cls.id}>
+                                        <SelectItem key={cls.id} value={cls.id} textValue={`${cls.name}-${cls.section}`}>
                                             {`${cls.name}-${cls.section}`}
                                         </SelectItem>
                                     ))}
@@ -145,6 +153,10 @@ export default function CreateExam() {
                                     errorMessage={errors.type?.message}
                                     defaultSelectedKeys={["UNIT_TEST"]}
                                     startContent={<Icon icon="mdi:shape-outline" className="text-default-400" />}
+                                    classNames={{
+                                        label: "text-default-500",
+                                        value: "text-foreground",
+                                    }}
                                 >
                                     <SelectItem key="UNIT_TEST" value="UNIT_TEST">Unit Test</SelectItem>
                                     <SelectItem key="HALF_YEARLY" value="HALF_YEARLY">Half Yearly</SelectItem>
@@ -162,6 +174,10 @@ export default function CreateExam() {
                                     isInvalid={!!errors.startDate}
                                     errorMessage={errors.startDate?.message}
                                     startContent={<Icon icon="mdi:calendar-start" className="text-default-400" />}
+                                    classNames={{
+                                        label: "text-default-500 group-data-[filled-within=true]:text-foreground",
+                                        input: "text-foreground",
+                                    }}
                                 />
                                 <Input
                                     {...register('endDate')}
@@ -171,6 +187,10 @@ export default function CreateExam() {
                                     isInvalid={!!errors.endDate}
                                     errorMessage={errors.endDate?.message}
                                     startContent={<Icon icon="mdi:calendar-end" className="text-default-400" />}
+                                    classNames={{
+                                        label: "text-default-500 group-data-[filled-within=true]:text-foreground",
+                                        input: "text-foreground",
+                                    }}
                                 />
                             </div>
 
@@ -178,7 +198,7 @@ export default function CreateExam() {
                                 <Button color="danger" variant="light" onPress={() => navigate(-1)}>
                                     Cancel
                                 </Button>
-                                <Button color="primary" type="submit" isLoading={isLoading} startContent={<Icon icon="mdi:check" />}>
+                                <Button className="bg-primary-600 text-white shadow-md shadow-primary-500/20" type="submit" isLoading={isLoading} startContent={<Icon icon="mdi:check" />}>
                                     Create Exam
                                 </Button>
                             </div>

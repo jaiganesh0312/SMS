@@ -123,32 +123,33 @@ const MyLeaves = () => {
 
     return (
         <motion.div
-            className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6"
+            className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 p-4 md:p-6"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
             {/* Application Form */}
-            <motion.div variants={itemVariants} className="lg:col-span-1 space-y-6">
+            <motion.div variants={itemVariants} className="lg:col-span-1 space-y-4 md:space-y-6">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Apply for Leave</h2>
-                    <p className="text-gray-600 dark:text-gray-400">Submit a new leave request</p>
+                    <h2 className="text-xl md:text-2xl font-bold text-foreground">Apply for Leave</h2>
+                    <p className="text-default-500">Submit a new leave request</p>
                 </div>
-                <Card>
+                <Card className="bg-content1 border border-default-200 shadow-sm">
                     <CardBody>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="grid gap-3">
-                            <Select
-                                label="Leave Type"
-                                placeholder="Select type"
-                                selectedKeys={form.type ? [form.type] : []}
-                                onChange={(e) => handleSelect("type", e.target.value)}
-                            >
-                                {LEAVE_TYPES.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
-                            </Select>
+                                <Select
+                                    label="Leave Type"
+                                    placeholder="Select type"
+                                    variant="bordered"
+                                    selectedKeys={form.type ? [form.type] : []}
+                                    onChange={(e) => handleSelect("type", e.target.value)}
+                                >
+                                    {LEAVE_TYPES.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
+                                </Select>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                 <Input
                                     type="date"
                                     label="Start Date"
@@ -156,6 +157,7 @@ const MyLeaves = () => {
                                     value={form.startDate}
                                     onChange={handleChange}
                                     placeholder="YYYY-MM-DD"
+                                    variant="bordered"
                                 />
                                 <Input
                                     type="date"
@@ -164,16 +166,18 @@ const MyLeaves = () => {
                                     value={form.endDate}
                                     onChange={handleChange}
                                     placeholder="YYYY-MM-DD"
+                                    variant="bordered"
                                 />
                             </div>
                             <div className="grid gap-3">
-                            <Textarea
-                                label="Reason"
-                                name="reason"
-                                value={form.reason}
-                                onChange={handleChange}
-                                placeholder="Why do you need this leave?"
-                            />
+                                <Textarea
+                                    label="Reason"
+                                    name="reason"
+                                    value={form.reason}
+                                    onChange={handleChange}
+                                    placeholder="Why do you need this leave?"
+                                    variant="bordered"
+                                />
                             </div>
 
                             <Button
@@ -191,47 +195,50 @@ const MyLeaves = () => {
             </motion.div>
 
             {/* History List */}
-            <motion.div variants={itemVariants} className="lg:col-span-2 space-y-6">
+            <motion.div variants={itemVariants} className="lg:col-span-2 space-y-4 md:space-y-6">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">My Leave History</h2>
-                    <p className="text-gray-600 dark:text-gray-400">Track status of your applications</p>
+                    <h2 className="text-xl md:text-2xl font-bold text-foreground">My Leave History</h2>
+                    <p className="text-default-500">Track status of your applications</p>
                 </div>
-                    <Table aria-label="My Leaves">
-                        <TableHeader>
-                            <TableColumn>TYPE</TableColumn>
-                            <TableColumn>DATES</TableColumn>
-                            <TableColumn>REASON</TableColumn>
-                            <TableColumn>STATUS</TableColumn>
-                            <TableColumn>APPLIED ON</TableColumn>
-                        </TableHeader>
-                        <TableBody
-                            isLoading={loading}
-                            loadingContent={<Spinner label="Loading history..." />}
-                            emptyContent="No leave history found"
-                        >
-                            {leaves.map((leave, index) => (
-                                <TableRow key={leave.id} as={motion.tr} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}>
-                                    <TableCell>
-                                        <Chip variant="flat" color="primary" size="sm">{leave.type}</Chip>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="text-small">
-                                            <p>{format(new Date(leave.startDate), "MMM dd")} - {format(new Date(leave.endDate), "MMM dd, yyyy")}</p>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <p className="max-w-[150px] truncate text-small text-default-500">{leave.reason}</p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Chip color={getStatusColor(leave.status)} size="sm" variant="dot">{leave.status}</Chip>
-                                    </TableCell>
-                                    <TableCell>
-                                        <span className="text-tiny text-default-400">{formatDistanceToNow(new Date(leave.createdAt), { addSuffix: true })}</span>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                <Table aria-label="My Leaves" classNames={{
+                    wrapper: "bg-content1 border border-default-200 shadow-sm",
+                    th: "bg-default-100 text-default-500 font-medium"
+                }}>
+                    <TableHeader>
+                        <TableColumn>TYPE</TableColumn>
+                        <TableColumn>DATES</TableColumn>
+                        <TableColumn className="hidden sm:table-cell">REASON</TableColumn>
+                        <TableColumn>STATUS</TableColumn>
+                        <TableColumn className="hidden md:table-cell">APPLIED ON</TableColumn>
+                    </TableHeader>
+                    <TableBody
+                        isLoading={loading}
+                        loadingContent={<Spinner label="Loading history..." />}
+                        emptyContent="No leave history found"
+                    >
+                        {leaves.map((leave, index) => (
+                            <TableRow key={leave.id} as={motion.tr} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}>
+                                <TableCell>
+                                    <Chip variant="flat" color="primary" size="sm">{leave.type}</Chip>
+                                </TableCell>
+                                <TableCell>
+                                    <div className="text-small">
+                                        <p>{format(new Date(leave.startDate), "MMM dd")} - {format(new Date(leave.endDate), "MMM dd, yyyy")}</p>
+                                    </div>
+                                </TableCell>
+                                <TableCell className="hidden sm:table-cell">
+                                    <p className="max-w-[150px] truncate text-small text-default-500">{leave.reason}</p>
+                                </TableCell>
+                                <TableCell>
+                                    <Chip color={getStatusColor(leave.status)} size="sm" variant="dot">{leave.status}</Chip>
+                                </TableCell>
+                                <TableCell className="hidden md:table-cell">
+                                    <span className="text-tiny text-default-400">{formatDistanceToNow(new Date(leave.createdAt), { addSuffix: true })}</span>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             </motion.div>
         </motion.div>
     );

@@ -37,33 +37,33 @@ export default function SchoolAdminDashboard() {
             title: 'Total Students',
             value: stats.counts.students,
             icon: 'mdi:account-school',
-            color: 'text-indigo-600 dark:text-indigo-400',
-            bgColor: 'bg-indigo-100 dark:bg-indigo-900/30',
-            borderColor: 'border-l-indigo-500'
+            color: 'text-primary-600 dark:text-primary-400',
+            bgColor: 'bg-primary-100 dark:bg-primary-500/20',
+            borderColor: 'border-l-primary-500'
         },
         {
             title: 'Total Teachers',
             value: stats.counts.teachers,
             icon: 'mdi:account-tie',
-            color: 'text-fuchsia-600 dark:text-fuchsia-400',
-            bgColor: 'bg-fuchsia-100 dark:bg-fuchsia-900/30',
-            borderColor: 'border-l-fuchsia-500'
+            color: 'text-secondary-600 dark:text-secondary-400',
+            bgColor: 'bg-secondary-100 dark:bg-secondary-500/20',
+            borderColor: 'border-l-secondary-500'
         },
         {
             title: 'Total Classes',
             value: stats.counts.classes,
             icon: 'mdi:google-classroom',
-            color: 'text-teal-600 dark:text-teal-400',
-            bgColor: 'bg-teal-100 dark:bg-teal-900/30',
-            borderColor: 'border-l-teal-500'
+            color: 'text-success-600 dark:text-success-400',
+            bgColor: 'bg-success-100 dark:bg-success-500/20',
+            borderColor: 'border-l-success-500'
         },
         {
             title: 'Parents',
             value: stats.counts.parents,
             icon: 'mdi:human-male-female-child',
-            color: 'text-rose-600 dark:text-rose-400',
-            bgColor: 'bg-rose-100 dark:bg-rose-900/30',
-            borderColor: 'border-l-rose-500'
+            color: 'text-warning-600 dark:text-warning-400',
+            bgColor: 'bg-warning-100 dark:bg-warning-500/20',
+            borderColor: 'border-l-warning-500'
         },
     ];
 
@@ -145,7 +145,7 @@ export default function SchoolAdminDashboard() {
                                 removeWrapper
                                 className='px-2'
                                 classNames={{
-                                    th: "bg-default-100 dark:bg-default-50 text-default-600",
+                                    th: "bg-default-50 dark:bg-default-50 text-default-600",
                                     td: "border-b border-default-100 dark:border-default-50 last:border-none"
                                 }}
                             >

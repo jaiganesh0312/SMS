@@ -59,14 +59,14 @@ const CreateComplaint = ({ onSuccess }) => {
     };
 
     return (
-        <Card className="max-w-2xl mx-auto">
-            <CardHeader className="flex gap-3 px-6 pt-6">
+        <Card className="max-w-2xl mx-auto bg-content1 border border-default-200 shadow-sm">
+            <CardHeader className="flex gap-3 px-6 pt-6 border-b border-default-100">
                 <div className="p-2 bg-primary/10 rounded-lg">
                     <Icon icon="fluent:person-feedback-24-filled" width={24} className="text-primary" />
                 </div>
                 <div>
-                    <h2 className="text-xl font-bold">Submit a Complaint</h2>
-                    <p className="text-sm text-gray-500">We value your feedback. Please describe your concern.</p>
+                    <h2 className="text-xl font-bold text-foreground font-heading">Submit a Complaint</h2>
+                    <p className="text-sm text-default-500">We value your feedback. Please describe your concern.</p>
                 </div>
             </CardHeader>
             <CardBody className="px-6 py-6 space-y-4">
@@ -78,6 +78,7 @@ const CreateComplaint = ({ onSuccess }) => {
                         value={formData.title}
                         onChange={handleChange}
                         variant="bordered"
+                        labelPlacement="outside"
                         isRequired
                     />
 
@@ -88,6 +89,7 @@ const CreateComplaint = ({ onSuccess }) => {
                         value={formData.description}
                         onChange={handleChange}
                         variant="bordered"
+                        labelPlacement="outside"
                         minRows={4}
                         isRequired
                     />
@@ -99,6 +101,7 @@ const CreateComplaint = ({ onSuccess }) => {
                             selectedKeys={new Set([formData.priority])}
                             onSelectionChange={(keys) => handleSelectionChange('priority', keys)}
                             variant="bordered"
+                            labelPlacement="outside"
                         >
                             {PRIORITIES.map(p => (
                                 <SelectItem key={p.value} textValue={p.label} startContent={

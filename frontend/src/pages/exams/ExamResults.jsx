@@ -99,10 +99,10 @@ export default function ExamResults() {
             initial="hidden"
             animate="visible"
         >
-            <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-content1 p-5 rounded-2xl border border-default-200 dark:border-default-100 shadow-sm">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Exam Results</h1>
-                    <p className="text-sm text-gray-500">View and manage student academic performance</p>
+                    <h1 className="text-2xl font-bold text-foreground">Exam Results</h1>
+                    <p className="text-sm text-default-500">View and manage student academic performance</p>
                 </div>
                 <div className="flex gap-2">
                     <Link to="/admin/bulk-upload/results">
@@ -111,7 +111,7 @@ export default function ExamResults() {
                         </Button>
                     </Link>
                     <Link to="/exams/results/add">
-                        <Button color="primary" startContent={<Icon icon="mdi:plus" />}>
+                        <Button className="bg-primary-600 text-white shadow-md shadow-primary-500/20" startContent={<Icon icon="mdi:plus" />}>
                             Add Results
                         </Button>
                     </Link>
@@ -119,7 +119,7 @@ export default function ExamResults() {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm">
+                <Card className="shadow-sm bg-content1 border border-default-200 dark:border-default-100">
                     <CardBody className="p-4 gap-4">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <Select
@@ -128,6 +128,8 @@ export default function ExamResults() {
                                 selectedKeys={selectedExam ? [selectedExam] : []}
                                 onChange={(e) => setSelectedExam(e.target.value)}
                                 startContent={<Icon icon="mdi:file-document-outline" className="text-default-400" />}
+                                variant="bordered"
+                                classNames={{ value: "text-foreground", label: "text-default-500" }}
                             >
                                 {exams.map((exam) => (
                                     <SelectItem key={exam.id || exam.id} value={exam.id || exam.id}>
@@ -142,6 +144,8 @@ export default function ExamResults() {
                                 selectedKeys={selectedSubject ? [selectedSubject] : []}
                                 onChange={(e) => setSelectedSubject(e.target.value)}
                                 startContent={<Icon icon="mdi:book-open-variant" className="text-default-400" />}
+                                variant="bordered"
+                                classNames={{ value: "text-foreground", label: "text-default-500" }}
                             >
                                 {subjects.map((sub) => (
                                     <SelectItem key={sub.id} value={sub.id}>
@@ -155,10 +159,19 @@ export default function ExamResults() {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm">
+                <Card className="shadow-sm bg-content1 border border-default-200 dark:border-default-100">
                     <CardBody className="p-0">
                         {results.length > 0 ? (
-                            <Accordion selectionMode="multiple" variant="splitted">
+                            <Accordion
+                                selectionMode="multiple"
+                                variant="splitted"
+                                itemClasses={{
+                                    base: "group-[.is-splitted]:px-4 group-[.is-splitted]:bg-default-50 dark:group-[.is-splitted]:bg-default-100/50 shadow-sm border border-default-200 dark:border-default-100",
+                                    title: "text-foreground font-medium",
+                                    trigger: "py-3",
+                                    content: "py-2"
+                                }}
+                            >
                                 {results.map((studentRecord) => {
                                     const { student, totalObtained, totalMax, percentage, results: subjectResults, isFailed } = studentRecord;
                                     return (
@@ -172,30 +185,32 @@ export default function ExamResults() {
                                                         {/* Row 1: Name and Badge */}
                                                         <div className="flex items-center justify-between gap-2">
                                                             <div className="flex items-center gap-2 min-w-0 flex-1">
-                                                                <Icon icon="lucide:user" className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                                                                <span className="font-semibold text-sm truncate">{student.name}</span>
+                                                                <Icon icon="lucide:user" className="w-4 h-4 text-default-500 flex-shrink-0" />
+                                                                <span className="font-semibold text-sm truncate text-foreground">{student.name}</span>
                                                             </div>
-                                                            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold flex-shrink-0 ${isFailed
-                                                                ? 'bg-red-100 text-red-700'
-                                                                : 'bg-green-100 text-green-700'
-                                                                }`}>
+                                                            <Chip
+                                                                size="sm"
+                                                                variant="flat"
+                                                                color={isFailed ? "danger" : "success"}
+                                                                className="flex-shrink-0"
+                                                            >
                                                                 {isFailed ? 'FAIL' : 'PASS'}
-                                                            </span>
+                                                            </Chip>
                                                         </div>
 
                                                         {/* Row 2: Reg No */}
-                                                        <div className="flex items-center gap-2 text-xs text-gray-600">
+                                                        <div className="flex items-center gap-2 text-xs text-default-500">
                                                             <Icon icon="lucide:hash" className="w-3 h-3 flex-shrink-0" />
                                                             <span className="truncate">{student.admissionNumber || "N/A"}</span>
                                                         </div>
 
                                                         {/* Row 3: Stats */}
                                                         <div className="flex items-center justify-between text-xs">
-                                                            <div className="flex items-center gap-1.5 text-gray-600">
+                                                            <div className="flex items-center gap-1.5 text-default-500">
                                                                 <Icon icon="lucide:target" className="w-3 h-3" />
                                                                 <span>{totalObtained}/{totalMax}</span>
                                                             </div>
-                                                            <div className={`flex items-center gap-1.5 font-bold ${isFailed ? 'text-red-600' : 'text-green-600'
+                                                            <div className={`flex items-center gap-1.5 font-bold ${isFailed ? 'text-danger-600' : 'text-success-600'
                                                                 }`}>
                                                                 <Icon icon="lucide:trending-up" className="w-3 h-3" />
                                                                 <span>{percentage.toFixed(1)}%</span>
@@ -208,10 +223,10 @@ export default function ExamResults() {
                                                         {/* Left: Student Info */}
                                                         <div className="flex flex-col min-w-0 flex-1">
                                                             <div className="flex items-center gap-2">
-                                                                <Icon icon="lucide:user" className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                                                                <span className="font-semibold text-sm truncate">{student.name}</span>
+                                                                <Icon icon="lucide:user" className="w-4 h-4 text-default-500 flex-shrink-0" />
+                                                                <span className="font-semibold text-sm truncate text-foreground">{student.name}</span>
                                                             </div>
-                                                            <div className="flex items-center gap-2 text-xs text-gray-600 mt-0.5">
+                                                            <div className="flex items-center gap-2 text-xs text-default-500 mt-0.5">
                                                                 <Icon icon="lucide:hash" className="w-3 h-3 flex-shrink-0" />
                                                                 <span className="truncate">{student.admissionNumber || "N/A"}</span>
                                                             </div>
@@ -219,23 +234,25 @@ export default function ExamResults() {
 
                                                         {/* Right: Stats and Badge */}
                                                         <div className="flex items-center gap-4 flex-shrink-0">
-                                                            <div className="text-xs text-gray-600 text-right">
+                                                            <div className="text-xs text-default-500 text-right">
                                                                 <div className="flex items-center gap-1.5 justify-end">
                                                                     <Icon icon="lucide:target" className="w-3 h-3" />
                                                                     <span>{totalObtained}/{totalMax}</span>
                                                                 </div>
-                                                                <div className={`flex items-center gap-1.5 font-bold mt-0.5 justify-end ${isFailed ? 'text-red-600' : 'text-green-600'
+                                                                <div className={`flex items-center gap-1.5 font-bold mt-0.5 justify-end ${isFailed ? 'text-danger-600' : 'text-success-600'
                                                                     }`}>
                                                                     <Icon icon="lucide:trending-up" className="w-3 h-3" />
                                                                     <span>{percentage.toFixed(1)}%</span>
                                                                 </div>
                                                             </div>
-                                                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${isFailed
-                                                                ? 'bg-red-100 text-red-700'
-                                                                : 'bg-green-100 text-green-700'
-                                                                }`}>
+                                                            <Chip
+                                                                size="sm"
+                                                                variant="flat"
+                                                                color={isFailed ? "danger" : "success"}
+                                                                className="flex-shrink-0"
+                                                            >
                                                                 {isFailed ? 'FAIL' : 'PASS'}
-                                                            </span>
+                                                            </Chip>
                                                         </div>
                                                     </div>
 
@@ -244,10 +261,10 @@ export default function ExamResults() {
                                                         {/* Left: Student Info */}
                                                         <div className="flex items-center gap-6 min-w-0 flex-1">
                                                             <div className="flex items-center gap-2 min-w-0">
-                                                                <Icon icon="lucide:user" className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                                                                <span className="font-semibold truncate">{student.name}</span>
+                                                                <Icon icon="lucide:user" className="w-4 h-4 text-default-500 flex-shrink-0" />
+                                                                <span className="font-semibold truncate text-foreground">{student.name}</span>
                                                             </div>
-                                                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                                                            <div className="flex items-center gap-2 text-sm text-default-500">
                                                                 <Icon icon="lucide:hash" className="w-4 h-4 flex-shrink-0" />
                                                                 <span className="whitespace-nowrap">{student.admissionNumber || "N/A"}</span>
                                                             </div>
@@ -255,29 +272,39 @@ export default function ExamResults() {
 
                                                         {/* Right: Stats and Badge */}
                                                         <div className="flex items-center gap-6 flex-shrink-0">
-                                                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                                                            <div className="flex items-center gap-2 text-sm text-default-500">
                                                                 <Icon icon="lucide:target" className="w-4 h-4" />
                                                                 <span className="whitespace-nowrap">{totalObtained} / {totalMax}</span>
                                                             </div>
-                                                            <div className="w-px h-6 bg-gray-300" />
-                                                            <div className={`flex items-center gap-2 text-sm font-bold ${isFailed ? 'text-red-600' : 'text-green-600'
+                                                            <div className="w-px h-6 bg-default-300" />
+                                                            <div className={`flex items-center gap-2 text-sm font-bold ${isFailed ? 'text-danger-600' : 'text-success-600'
                                                                 }`}>
                                                                 <Icon icon="lucide:trending-up" className="w-4 h-4" />
                                                                 <span className="whitespace-nowrap">{percentage.toFixed(2)}%</span>
                                                             </div>
-                                                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${isFailed
-                                                                ? 'bg-red-100 text-red-700'
-                                                                : 'bg-green-100 text-green-700'
-                                                                }`}>
+                                                            <Chip
+                                                                size="sm"
+                                                                variant="flat"
+                                                                color={isFailed ? "danger" : "success"}
+                                                                className="flex-shrink-0"
+                                                            >
                                                                 {isFailed ? 'FAIL' : 'PASS'}
-                                                            </span>
+                                                            </Chip>
                                                         </div>
                                                     </div>
                                                 </div>
                                             }
                                         >
                                             <div className="py-2">
-                                                <Table aria-label="Subject marks" shadow="none" classNames={{ wrapper: "p-0" }}>
+                                                <Table
+                                                    aria-label="Subject marks"
+                                                    shadow="none"
+                                                    classNames={{
+                                                        wrapper: "p-0 bg-transparent shadow-none",
+                                                        th: "bg-default-100 text-default-500 h-8",
+                                                        td: "text-foreground"
+                                                    }}
+                                                >
                                                     <TableHeader>
                                                         <TableColumn>SUBJECT</TableColumn>
                                                         <TableColumn>MARKS OBTAINED</TableColumn>
@@ -293,7 +320,7 @@ export default function ExamResults() {
                                                                     <TableCell>{subRes.marksObtained}</TableCell>
                                                                     <TableCell>{subRes.maxMarks}</TableCell>
                                                                     <TableCell>
-                                                                        <Chip size='sm' color={subRes.grade !== 'F' ? "success" : "danger"}>
+                                                                        <Chip size='sm' color={subRes.grade !== 'F' ? "success" : "danger"} variant="flat">
                                                                             {subRes.grade}
                                                                         </Chip>
                                                                     </TableCell>
@@ -309,11 +336,11 @@ export default function ExamResults() {
                             </Accordion>
                         ) : (
                             <div className="py-12 flex flex-col items-center text-center">
-                                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
-                                    <Icon icon="mdi:chart-box-outline" className="text-3xl text-gray-400" />
+                                <div className="w-16 h-16 bg-default-100 rounded-full flex items-center justify-center mb-4 text-default-400">
+                                    <Icon icon="mdi:chart-box-outline" className="text-3xl" />
                                 </div>
-                                <h3 className="text-lg font-medium text-gray-900 dark:text-white">No Results Found</h3>
-                                <p className="text-gray-500 max-w-sm mt-2 mb-6">
+                                <h3 className="text-lg font-medium text-foreground">No Results Found</h3>
+                                <p className="text-default-500 max-w-sm mt-2 mb-6">
                                     {selectedExam ? "No results recorded for this selection." : "Select an exam to view results."}
                                 </p>
                                 <Link to="/exams/results/add">

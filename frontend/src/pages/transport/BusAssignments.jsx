@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import { PageHeader } from '@/components/common';
+import { studentService, transportService } from '@/services';
 import {
+    Button,
     Card,
     CardBody,
     CardHeader,
-    Button,
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    useDisclosure,
     Chip,
-    Spinner,
+    Input,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
     Select,
     SelectItem,
-    Input,
+    Spinner,
+    Table,
+    TableBody,
+    TableCell,
+    TableColumn,
+    TableHeader,
+    TableRow,
+    useDisclosure
 } from '@heroui/react';
 import { Icon } from '@iconify/react';
-import { transportService } from '@/services';
-import { studentService } from '@/services';
+import React, { useEffect, useState } from 'react';
 
 const BusAssignments = () => {
     const [assignments, setAssignments] = useState([]);
@@ -133,26 +133,27 @@ const BusAssignments = () => {
 
     return (
         <div className="p-6 space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold">Bus Assignments</h1>
-                    <p className="text-default-500">Assign students to buses</p>
-                </div>
-                <Button color="primary" startContent={<Icon icon="mdi:plus" />} onPress={onOpen}>
-                    Assign Student
-                </Button>
-            </div>
+            <PageHeader
+                title="Bus Assignments"
+                subtitle="Assign students to buses"
+                action={
+                    <Button color="primary" startContent={<Icon icon="mdi:plus" />} onPress={onOpen}>
+                        Assign Student
+                    </Button>
+                }
+            />
 
-            <Card>
-                <CardHeader>
-                    <div className="flex items-center gap-4">
-                        <span className="font-medium">Filter by Bus:</span>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
+                <CardHeader className="bg-default-50 border-b border-default-100 px-6 py-4">
+                    <div className="flex items-center gap-4 w-full md:w-auto">
+                        <span className="font-medium text-default-500 whitespace-nowrap">Filter by Bus:</span>
                         <Select
                             className="w-48"
                             size="sm"
                             placeholder="All buses"
                             selectedKeys={selectedBus ? [selectedBus] : []}
                             onSelectionChange={(keys) => setSelectedBus([...keys][0] || '')}
+                            variant="flat"
                         >
                             {buses.map((bus) => (
                                 <SelectItem key={bus.id} textValue={bus.busNumber}>
@@ -162,13 +163,21 @@ const BusAssignments = () => {
                         </Select>
                     </div>
                 </CardHeader>
-                <CardBody>
+                <CardBody className="p-0">
                     {loading ? (
                         <div className="flex justify-center py-8">
                             <Spinner size="lg" />
                         </div>
                     ) : (
-                        <Table aria-label="Assignments table">
+                        <Table
+                            aria-label="Assignments table"
+                            shadow="none"
+                            classNames={{
+                                wrapper: "shadow-none bg-content1",
+                                th: "bg-default-100 text-default-500 font-medium",
+                                td: "py-3"
+                            }}
+                        >
                             <TableHeader>
                                 <TableColumn>Student</TableColumn>
                                 <TableColumn>Admission No.</TableColumn>
@@ -180,28 +189,33 @@ const BusAssignments = () => {
                             </TableHeader>
                             <TableBody items={assignments} emptyContent="No assignments found">
                                 {(assignment) => (
-                                    <TableRow key={assignment.id}>
+                                    <TableRow key={assignment.id} className="border-b border-default-100 last:border-0 hover:bg-default-50">
                                         <TableCell>
-                                            <span className="font-medium">{assignment.Student?.name}</span>
+                                            <div className="flex items-center gap-2">
+                                                <div className="p-2 bg-primary/10 rounded-full">
+                                                    <Icon icon="mdi:account" className="text-primary" width={16} />
+                                                </div>
+                                                <span className="font-medium text-foreground">{assignment.Student?.name}</span>
+                                            </div>
                                         </TableCell>
-                                        <TableCell>{assignment.Student?.admissionNumber}</TableCell>
+                                        <TableCell><span className="text-default-500">{assignment.Student?.admissionNumber}</span></TableCell>
                                         <TableCell>
-                                            <Chip size="sm" variant="flat" color="primary">
+                                            <Chip size="sm" variant="flat" color="primary" classNames={{ content: "font-medium" }}>
                                                 {assignment.Bus?.busNumber}
                                             </Chip>
                                         </TableCell>
-                                        <TableCell>{assignment.BusRoute?.routeName || '-'}</TableCell>
-                                        <TableCell>{assignment.stopName || '-'}</TableCell>
-                                        <TableCell>{assignment.pickupTime || '-'}</TableCell>
+                                        <TableCell><span className="text-foreground">{assignment.BusRoute?.routeName || '-'}</span></TableCell>
+                                        <TableCell><span className="text-default-500">{assignment.stopName || '-'}</span></TableCell>
+                                        <TableCell><span className="text-default-500 font-mono">{assignment.pickupTime || '-'}</span></TableCell>
                                         <TableCell>
                                             <Button
                                                 size="sm"
                                                 isIconOnly
-                                                variant="flat"
+                                                variant="light"
                                                 color="danger"
                                                 onPress={() => handleRemove(assignment.studentId)}
                                             >
-                                                <Icon icon="mdi:delete" />
+                                                <Icon icon="mdi:delete" width={20} />
                                             </Button>
                                         </TableCell>
                                     </TableRow>
@@ -213,12 +227,20 @@ const BusAssignments = () => {
             </Card>
 
             {/* Assign Modal */}
-            <Modal isOpen={isOpen} onClose={handleCloseModal} size="lg">
+            {/* Assign Modal */}
+            <Modal isOpen={isOpen} onClose={handleCloseModal} size="lg" classNames={{
+                base: "bg-content1 border border-default-200",
+                header: "border-b border-default-200",
+                footer: "border-t border-default-200"
+            }}>
                 <ModalContent>
-                    <ModalHeader>Assign Student to Bus</ModalHeader>
-                    <ModalBody className="space-y-4">
+                    <ModalHeader className="flex gap-2 items-center">
+                        <Icon icon="mdi:account-plus" className="text-primary" />
+                        Assign Student to Bus
+                    </ModalHeader>
+                    <ModalBody className="space-y-4 py-6">
                         {error && (
-                            <div className="p-3 bg-danger-50 text-danger rounded-lg">{error}</div>
+                            <div className="p-3 bg-danger-50 text-danger rounded-lg border border-danger-200 text-sm">{error}</div>
                         )}
 
                         <Select
@@ -229,6 +251,8 @@ const BusAssignments = () => {
                                 setFormData((prev) => ({ ...prev, studentId: [...keys][0] || '' }))
                             }
                             isRequired
+                            variant="bordered"
+                            labelPlacement="outside"
                         >
                             {unassignedStudents.map((student) => (
                                 <SelectItem key={student.id} textValue={student.name}>
@@ -243,6 +267,8 @@ const BusAssignments = () => {
                             selectedKeys={formData.busId ? [formData.busId] : []}
                             onSelectionChange={(keys) => handleBusChange([...keys][0] || '')}
                             isRequired
+                            variant="bordered"
+                            labelPlacement="outside"
                         >
                             {buses.map((bus) => (
                                 <SelectItem key={bus.id} textValue={bus.busNumber}>
@@ -259,6 +285,8 @@ const BusAssignments = () => {
                                 onSelectionChange={(keys) =>
                                     setFormData((prev) => ({ ...prev, routeId: [...keys][0] || '' }))
                                 }
+                                variant="bordered"
+                                labelPlacement="outside"
                             >
                                 {routes.map((route) => (
                                     <SelectItem key={route.id} textValue={route.routeName}>
@@ -275,6 +303,8 @@ const BusAssignments = () => {
                             onChange={(e) =>
                                 setFormData((prev) => ({ ...prev, stopName: e.target.value }))
                             }
+                            variant="bordered"
+                            labelPlacement="outside"
                         />
 
                         <div className="grid grid-cols-2 gap-4">
@@ -285,6 +315,8 @@ const BusAssignments = () => {
                                 onChange={(e) =>
                                     setFormData((prev) => ({ ...prev, pickupTime: e.target.value }))
                                 }
+                                variant="bordered"
+                                labelPlacement="outside"
                             />
                             <Input
                                 label="Dropoff Time"
@@ -293,14 +325,16 @@ const BusAssignments = () => {
                                 onChange={(e) =>
                                     setFormData((prev) => ({ ...prev, dropoffTime: e.target.value }))
                                 }
+                                variant="bordered"
+                                labelPlacement="outside"
                             />
                         </div>
                     </ModalBody>
                     <ModalFooter>
-                        <Button variant="flat" onPress={handleCloseModal}>
+                        <Button variant="flat" color="default" onPress={handleCloseModal}>
                             Cancel
                         </Button>
-                        <Button color="primary" onPress={handleSubmit}>
+                        <Button color="primary" onPress={handleSubmit} startContent={<Icon icon="mdi:check" />}>
                             Assign
                         </Button>
                     </ModalFooter>

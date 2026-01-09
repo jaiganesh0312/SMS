@@ -4,15 +4,34 @@ import { Icon } from '@iconify/react';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import DriverSchedule from '@/pages/transport/DriverSchedule';
+import { motion } from "framer-motion";
 
 const DriverDashboard = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.1 }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: { y: 0, opacity: 1 }
+    };
+
     return (
-        <div className="p-6 space-y-6 max-w-7xl mx-auto min-h-screen bg-transparent">
+        <motion.div
+            className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-7xl mx-auto min-h-screen"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
             {/* 1. Welcome Section */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-content1 p-6 rounded-2xl shadow-sm border border-default-200 dark:border-default-100">
+            <motion.div variants={itemVariants} className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-content1 p-4 md:p-6 rounded-2xl shadow-sm border border-default-200 dark:border-default-100">
                 <div className="flex items-center gap-4">
                     <Avatar
                         src={`https://ui-avatars.com/api/?name=${user?.name}&background=random`}
@@ -22,7 +41,7 @@ const DriverDashboard = () => {
                         color="primary"
                     />
                     <div>
-                        <h1 className="text-2xl font-bold text-foreground">
+                        <h1 className="text-xl md:text-2xl font-bold text-foreground">
                             Welcome, {user?.name}
                         </h1>
                         <div className="flex items-center gap-2 text-default-500 text-sm mt-1">
@@ -31,36 +50,36 @@ const DriverDashboard = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
                     <Button
                         color="primary"
                         size="lg"
                         startContent={<Icon icon="mdi:map-marker-radius" />}
                         onPress={() => navigate('/transport/driver-panel')}
-                        className="shadow-md shadow-primary-500/20"
+                        className="shadow-md shadow-primary-500/20 w-full sm:w-auto"
                     >
                         Start Trip / Live Location
                     </Button>
                 </div>
-            </div>
+            </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
                 {/* 2. Main Content - Schedule */}
-                <div className="lg:col-span-2 space-y-6">
+                <motion.div variants={itemVariants} className="lg:col-span-2 space-y-4 md:space-y-6">
                     <div className="flex items-center gap-2 mb-2">
-                        <Icon icon="mdi:calendar-clock" className="text-2xl text-primary" />
-                        <h2 className="text-xl font-bold text-foreground">Your Schedule</h2>
+                        <Icon icon="mdi:calendar-clock" className="text-xl md:text-2xl text-primary-500" />
+                        <h2 className="text-lg md:text-xl font-bold text-foreground">Your Schedule</h2>
                     </div>
                     <DriverSchedule />
-                </div>
+                </motion.div>
 
                 {/* 3. Sidebar - Quick Stats / Actions */}
-                <div className="space-y-6">
+                <motion.div variants={itemVariants} className="space-y-4 md:space-y-6">
                     {/* Quick Links Card */}
                     <Card className="bg-content1 dark:bg-content1 shadow-sm border border-default-200 dark:border-default-100">
                         <CardBody className="p-5">
                             <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-foreground">
-                                <Icon icon="mdi:lightning-bolt" className="text-warning" />
+                                <Icon icon="mdi:lightning-bolt" className="text-warning-500" />
                                 Quick Actions
                             </h3>
                             <div className="space-y-3">
@@ -114,9 +133,9 @@ const DriverDashboard = () => {
                             </div>
                         </CardBody>
                     </Card>
-                </div>
+                </motion.div>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

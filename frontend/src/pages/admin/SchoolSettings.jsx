@@ -101,60 +101,18 @@ const SchoolSettings = () => {
     }
 
     return (
-        <div className="p-6 max-w-4xl mx-auto space-y-6">
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">School Settings</h1>
+        <div className="p-6 max-w-6xl mx-auto space-y-6">
+            <div className="flex flex-col gap-2">
+                <h1 className="text-3xl font-bold text-foreground">School Settings</h1>
+                <p className="text-default-500">Manage your school's profile and configuration</p>
+            </div>
 
-            <Card className="w-full">
-                <CardHeader className="flex gap-3 px-6 pt-6">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                        <Icon icon="mdi:domain" className="text-2xl text-primary" />
-                    </div>
-                    <div className="flex flex-col">
-                        <p className="text-md font-semibold text-gray-700 dark:text-gray-200">General Information</p>
-                        <p className="text-small text-default-500">Basic details about your school</p>
-                    </div>
-                </CardHeader>
-                <Divider />
-                <CardBody className="px-6 py-6">
-                    {school ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">School Name</p>
-                                <p className="font-medium text-lg text-gray-900 dark:text-gray-100">{school.name}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Address</p>
-                                <p className="font-medium text-gray-900 dark:text-gray-100">{school.address || 'N/A'}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Board</p>
-                                <p className="font-medium text-gray-900 dark:text-gray-100">{school.board || 'N/A'}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Academic Year</p>
-                                <p className="font-medium text-gray-900 dark:text-gray-100">{school.academicYear || 'N/A'}</p>
-                            </div>
-                        </div>
-                    ) : (
-                        <p className="text-gray-500">No school details found.</p>
-                    )}
-                </CardBody>
-            </Card>
-
-            <Card className="w-full">
-                <CardHeader className="flex gap-3 px-6 pt-6">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                        <Icon icon="mdi:image-area" className="text-2xl text-primary" />
-                    </div>
-                    <div className="flex flex-col">
-                        <p className="text-md font-semibold text-gray-700 dark:text-gray-200">School Logo</p>
-                        <p className="text-small text-default-500">Upload and manage school branding</p>
-                    </div>
-                </CardHeader>
-                <Divider />
-                <CardBody className="px-6 py-6">
-                    <div className="flex flex-col md:flex-row items-center gap-8">
-                        <div className="w-40 h-40 border-2 border-default-200 border-dashed rounded-xl flex items-center justify-center bg-default-50 overflow-hidden relative">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Logo Section */}
+                <Card className="md:col-span-1 h-fit bg-content1 border border-default-200 shadow-sm">
+                    <CardHeader className="pb-0 pt-6 px-4 flex-col items-center">
+                        <h4 className="font-bold text-large mb-4 text-foreground">School Logo</h4>
+                        <div className="relative group cursor-pointer w-48 h-48 rounded-full overflow-hidden border-4 border-default-100 shadow-sm">
                             {preview ? (
                                 <Image
                                     src={preview}
@@ -171,16 +129,16 @@ const SchoolSettings = () => {
                                     removeWrapper
                                 />
                             ) : (
-                                <div className="flex flex-col items-center justify-center text-default-400">
+                                <div className="flex flex-col items-center justify-center text-default-400 w-full h-full bg-default-50">
                                     <Icon icon="mdi:image-off-outline" className="text-3xl mb-1" />
                                     <span className="text-xs">No Logo</span>
                                 </div>
                             )}
                         </div>
 
-                        <div className="flex-1 w-full space-y-4">
+                        <div className="flex-1 w-full space-y-4 mt-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label className="block text-sm font-medium text-default-700 mb-2">
                                     Upload New Logo
                                 </label>
                                 <div className="relative">
@@ -189,10 +147,12 @@ const SchoolSettings = () => {
                                         accept="image/png, image/jpeg, image/jpg"
                                         onChange={handleFileChange}
                                         classNames={{
-                                            input: "file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20",
+                                            input: "file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 text-default-500",
+                                            inputWrapper: "bg-default-50 hover:bg-default-100 transition-colors"
                                         }}
+                                        variant="flat"
                                     />
-                                    <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                                    <p className="text-xs text-default-400 mt-2 flex items-center gap-1">
                                         <Icon icon="mdi:information-outline" />
                                         Supported formats: PNG, JPG (Max 2MB)
                                     </p>
@@ -206,30 +166,137 @@ const SchoolSettings = () => {
                                         onPress={handleUpload}
                                         isLoading={uploading}
                                         startContent={!uploading && <Icon icon="mdi:cloud-upload" />}
+                                        fullWidth
                                     >
                                         {uploading ? 'Uploading...' : 'Save Logo'}
                                     </Button>
                                     <Button
                                         color="danger"
-                                        variant="light"
+                                        variant="flat"
                                         onPress={() => { setLogoFile(null); setPreview(''); }}
                                         isDisabled={uploading}
+                                        isIconOnly
                                     >
-                                        Cancel
+                                        <Icon icon="mdi:close" />
                                     </Button>
-
-                                </div>
-                            )}
-                            {school?.logo && !logoFile && (
-                                <div className="flex items-center gap-2 p-3 bg-warning/10 text-warning rounded-lg text-sm">
-                                    <Icon icon="mdi:alert-circle-outline" className="text-lg" />
-                                    Current logo is active. Uploading a new one will replace it.
                                 </div>
                             )}
                         </div>
-                    </div>
-                </CardBody>
-            </Card>
+                    </CardHeader>
+                    <CardBody className="px-4 pb-6">
+                        {school?.logo && !logoFile && (
+                            <div className="flex items-center gap-2 p-3 bg-warning/10 text-warning-600 rounded-lg text-sm border border-warning-200">
+                                <Icon icon="mdi:alert-circle-outline" className="text-lg shrink-0" />
+                                <span>Current logo is active. Upload to replace.</span>
+                            </div>
+                        )}
+                    </CardBody>
+                </Card>
+
+                {/* Details Section */}
+                <Card className="md:col-span-2 bg-content1 border border-default-200 shadow-sm">
+                    <CardHeader className="flex gap-3 px-6 pt-6">
+                        <div className="flex flex-col">
+                            <p className="text-md font-bold text-foreground">School Information</p>
+                            <p className="text-small text-default-500">Update your school's basic details</p>
+                        </div>
+                    </CardHeader>
+                    <Divider className="my-2 bg-default-100" />
+                    <CardBody className="px-6 py-4">
+                        {school ? (
+                            <div className="flex flex-col gap-4">
+                                <Input
+                                    label="School Name"
+                                    placeholder="Enter school name"
+                                    variant="bordered"
+                                    value={school.name || ''}
+                                    isReadOnly
+                                    description="Contact support to change school name"
+                                    classNames={{
+                                        inputWrapper: "bg-default-50/50"
+                                    }}
+                                />
+
+                                <Input
+                                    label="Address"
+                                    placeholder="Enter school address"
+                                    variant="bordered"
+                                    value={school.address || ''}
+                                    onChange={(e) => setSchool({ ...school, address: e.target.value })}
+                                />
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <Input
+                                        label="Board"
+                                        placeholder="e.g. CBSE"
+                                        variant="bordered"
+                                        value={school.board || ''}
+                                        onChange={(e) => setSchool({ ...school, board: e.target.value })}
+                                    />
+                                    <Input
+                                        label="Academic Year"
+                                        placeholder="e.g. 2023-2024"
+                                        variant="bordered"
+                                        value={school.academicYear || ''}
+                                        onChange={(e) => setSchool({ ...school, academicYear: e.target.value })}
+                                    />
+                                </div>
+
+                                <Divider className="my-2 bg-default-100" />
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <Input
+                                        label="Phone Number"
+                                        placeholder="Enter phone number"
+                                        variant="bordered"
+                                        value={school.phone || ''}
+                                        onChange={(e) => setSchool({ ...school, phone: e.target.value })}
+                                        startContent={
+                                            <Icon icon="mdi:phone" className="text-default-400 text-xl" />
+                                        }
+                                    />
+                                    <Input
+                                        label="Email Address"
+                                        placeholder="Enter email address"
+                                        variant="bordered"
+                                        value={school.email || school.adminEmail || ''}
+                                        onChange={(e) => setSchool({ ...school, email: e.target.value })}
+                                        startContent={
+                                            <Icon icon="mdi:email" className="text-default-400 text-xl" />
+                                        }
+                                    />
+                                </div>
+
+                                <Input
+                                    label="Website"
+                                    placeholder="Enter website URL"
+                                    variant="bordered"
+                                    value={school.website || ''}
+                                    onChange={(e) => setSchool({ ...school, website: e.target.value })}
+                                    startContent={
+                                        <Icon icon="mdi:web" className="text-default-400 text-xl" />
+                                    }
+                                />
+                            </div>
+                        ) : (
+                            <div className="flex justify-center py-8 text-default-500">
+                                No school details available.
+                            </div>
+                        )}
+
+                        <div className="flex justify-end mt-8">
+                            <Button
+                                color="primary"
+                                className="font-semibold shadow-md"
+                                // Note: Save functionality is a placeholder here as per original file structure/services
+                                onPress={() => addToast({ title: "Note", description: "Save functionality to be implemented in backend integration", color: "warning" })}
+                            >
+                                Save Changes
+                            </Button>
+                        </div>
+                    </CardBody>
+                </Card>
+            </div>
         </div>
     );
 };

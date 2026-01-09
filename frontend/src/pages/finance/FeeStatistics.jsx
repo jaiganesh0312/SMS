@@ -72,8 +72,8 @@ export default function FeeStatistics() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Fee Statistics</h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                    <h1 className="text-3xl font-bold text-foreground">Fee Statistics</h1>
+                    <p className="text-default-500 mt-1">
                         Overview of fee collection across all classes
                     </p>
                 </div>
@@ -91,20 +91,20 @@ export default function FeeStatistics() {
             {/* Statistics Cards with Borders */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <motion.div whileHover={{ scale: 1.02 }} className="h-full">
-                    <Card className="border-l-4 border-l-blue-500">
+                    <Card className="border-l-4 border-l-primary bg-content1 shadow-sm">
                         <CardBody className="p-4">
                             {isLoading ? (
                                 <Skeleton className="h-20 rounded" />
                             ) : (
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Total Fees</p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                        <p className="text-sm text-default-500">Total Fees</p>
+                                        <p className="text-2xl font-bold text-foreground">
                                             {formatCurrency(statistics?.overview?.totalFees || 0)}
                                         </p>
                                     </div>
-                                    <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg">
-                                        <Icon icon="mdi:currency-usd" className="text-2xl text-blue-600 dark:text-blue-400" />
+                                    <div className="bg-primary/10 p-3 rounded-lg">
+                                        <Icon icon="mdi:currency-usd" className="text-2xl text-primary" />
                                     </div>
                                 </div>
                             )}
@@ -113,20 +113,20 @@ export default function FeeStatistics() {
                 </motion.div>
 
                 <motion.div whileHover={{ scale: 1.02 }} className="h-full">
-                    <Card className="border-l-4 border-l-success">
+                    <Card className="border-l-4 border-l-success bg-content1 shadow-sm">
                         <CardBody className="p-4">
                             {isLoading ? (
                                 <Skeleton className="h-20 rounded" />
                             ) : (
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Collected</p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                        <p className="text-sm text-default-500">Collected</p>
+                                        <p className="text-2xl font-bold text-foreground">
                                             {formatCurrency(statistics?.overview?.totalCollected || 0)}
                                         </p>
                                     </div>
-                                    <div className="bg-success-100 dark:bg-success-900/30 p-3 rounded-lg">
-                                        <Icon icon="mdi:check-circle" className="text-2xl text-success-600 dark:text-success-400" />
+                                    <div className="bg-success/10 p-3 rounded-lg">
+                                        <Icon icon="mdi:check-circle" className="text-2xl text-success" />
                                     </div>
                                 </div>
                             )}
@@ -135,20 +135,20 @@ export default function FeeStatistics() {
                 </motion.div>
 
                 <motion.div whileHover={{ scale: 1.02 }} className="h-full">
-                    <Card className="border-l-4 border-l-warning">
+                    <Card className="border-l-4 border-l-warning bg-content1 shadow-sm">
                         <CardBody className="p-4">
                             {isLoading ? (
                                 <Skeleton className="h-20 rounded" />
                             ) : (
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Pending</p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                        <p className="text-sm text-default-500">Pending</p>
+                                        <p className="text-2xl font-bold text-foreground">
                                             {formatCurrency(statistics?.overview?.totalPending || 0)}
                                         </p>
                                     </div>
-                                    <div className="bg-warning-100 dark:bg-warning-900/30 p-3 rounded-lg">
-                                        <Icon icon="mdi:clock-alert" className="text-2xl text-warning-600 dark:text-warning-400" />
+                                    <div className="bg-warning/10 p-3 rounded-lg">
+                                        <Icon icon="mdi:clock-alert" className="text-2xl text-warning" />
                                     </div>
                                 </div>
                             )}
@@ -157,20 +157,20 @@ export default function FeeStatistics() {
                 </motion.div>
 
                 <motion.div whileHover={{ scale: 1.02 }} className="h-full">
-                    <Card className="border-l-4 border-l-primary">
+                    <Card className="border-l-4 border-l-secondary bg-content1 shadow-sm">
                         <CardBody className="p-4">
                             {isLoading ? (
                                 <Skeleton className="h-20 rounded" />
                             ) : (
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Collection Rate</p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                        <p className="text-sm text-default-500">Collection Rate</p>
+                                        <p className="text-2xl font-bold text-foreground">
                                             {statistics?.overview?.overallCollectionRate || 0}%
                                         </p>
                                     </div>
-                                    <div className="bg-primary-100 dark:bg-primary-900/30 p-3 rounded-lg">
-                                        <Icon icon="mdi:chart-line" className="text-2xl text-primary-600 dark:text-primary-400" />
+                                    <div className="bg-secondary/10 p-3 rounded-lg">
+                                        <Icon icon="mdi:chart-line" className="text-2xl text-secondary" />
                                     </div>
                                 </div>
                             )}
@@ -180,20 +180,24 @@ export default function FeeStatistics() {
             </div>
 
             {/* Class-wise Table */}
-            <Card>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
                 <CardHeader>
                     <div className="flex items-center gap-3">
                         <Icon icon="mdi:google-classroom" size={24} className="text-primary" />
                         <div>
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Class-wise Summary</h2>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                            <h2 className="text-xl font-bold text-foreground">Class-wise Summary</h2>
+                            <p className="text-sm text-default-500">
                                 {statistics?.classSummary?.length || 0} class{statistics?.classSummary?.length !== 1 ? 'es' : ''} found
                             </p>
                         </div>
                     </div>
                 </CardHeader>
                 <CardBody className="p-0">
-                    <Table aria-label="Class-wise fee summary table" removeWrapper className='px-2'>
+                    <Table aria-label="Class-wise fee summary table" shadow="none" classNames={{
+                        wrapper: "bg-content1 shadow-none",
+                        th: "bg-default-100 text-default-500 font-medium",
+                        td: "text-foreground group-hover:bg-default-50"
+                    }}>
                         <TableHeader>
                             <TableColumn>CLASS</TableColumn>
                             <TableColumn>STUDENTS</TableColumn>
@@ -208,12 +212,12 @@ export default function FeeStatistics() {
                                 <div className="text-center py-12">
                                     <Icon
                                         icon="mdi:google-classroom"
-                                        className="mx-auto text-gray-400 dark:text-gray-600 text-6xl mb-4"
+                                        className="mx-auto text-default-400 text-6xl mb-4 opacity-50"
                                     />
-                                    <p className="text-lg font-medium text-gray-600 dark:text-gray-400">
+                                    <p className="text-lg font-medium text-foreground">
                                         No classes found
                                     </p>
-                                    <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+                                    <p className="text-sm text-default-500 mt-1">
                                         Create classes to see fee statistics
                                     </p>
                                 </div>
@@ -222,16 +226,16 @@ export default function FeeStatistics() {
                             loadingContent={<Spinner label="Loading statistics..." />}
                         >
                             {(statistics?.classSummary || []).map((classItem) => (
-                                <TableRow key={classItem.classId}>
-                                    <TableCell className="font-medium">{classItem.className}</TableCell>
+                                <TableRow key={classItem.classId} className="border-b border-default-100 last:border-none">
+                                    <TableCell className="font-medium text-foreground">{classItem.className}</TableCell>
                                     <TableCell>
                                         <Chip size="sm" variant="flat" color="primary">{classItem.studentCount}</Chip>
                                     </TableCell>
                                     <TableCell>{formatCurrency(classItem.totalFees)}</TableCell>
-                                    <TableCell className="text-green-600 font-medium">
+                                    <TableCell className="text-success font-medium">
                                         {formatCurrency(classItem.collectedAmount)}
                                     </TableCell>
-                                    <TableCell className="text-orange-600 font-medium">
+                                    <TableCell className="text-warning font-medium">
                                         {formatCurrency(classItem.pendingAmount)}
                                     </TableCell>
                                     <TableCell>
@@ -246,7 +250,7 @@ export default function FeeStatistics() {
                                     <TableCell>
                                         <Button
                                             size="sm"
-                                            variant="flat"
+                                            variant="light"
                                             color="primary"
                                             startContent={<Icon icon="mdi:eye" />}
                                             onPress={() => navigate(`/finance/class/${classItem.classId}`)}

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Select, SelectItem, Card, CardBody, addToast } from "@heroui/react";
-import { Icon } from "@iconify/react";
+import { PageHeader } from '@/components/common';
 import { academicService, examService, studentService } from '@/services';
+import { addToast, Button, Card, CardBody, Select, SelectItem } from "@heroui/react";
+import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+import React, { useEffect, useState } from 'react';
 
 export default function ReportCard() {
     const [classes, setClasses] = useState([]);
@@ -105,12 +106,14 @@ export default function ReportCard() {
             animate="visible"
         >
             <motion.div variants={itemVariants}>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Download Report Card</h1>
-                <p className="text-sm text-gray-500 mt-1">Select details to generate and download student report card</p>
+                <PageHeader
+                    title="Download Report Card"
+                    subtitle="Select details to generate and download student report card"
+                />
             </motion.div>
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm">
+                <Card className="shadow-sm bg-content1 border border-default-200">
                     <CardBody className="p-6 gap-6">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <Select
@@ -118,6 +121,8 @@ export default function ReportCard() {
                                 placeholder="Choose a class"
                                 selectedKeys={selectedClass ? [selectedClass] : []}
                                 onChange={(e) => setSelectedClass(e.target.value)}
+                                variant="bordered"
+                                labelPlacement="outside"
                                 startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
                             >
                                 {classes.map((cls) => (
@@ -132,6 +137,8 @@ export default function ReportCard() {
                                 placeholder="Choose an exam"
                                 selectedKeys={selectedExam ? [selectedExam] : []}
                                 onChange={(e) => setSelectedExam(e.target.value)}
+                                variant="bordered"
+                                labelPlacement="outside"
                                 startContent={<Icon icon="mdi:file-document-outline" className="text-default-400" />}
                             >
                                 {exams.map((exam) => (
@@ -146,6 +153,8 @@ export default function ReportCard() {
                                 placeholder="Choose a student"
                                 selectedKeys={selectedStudent ? [selectedStudent] : []}
                                 onChange={(e) => setSelectedStudent(e.target.value)}
+                                variant="bordered"
+                                labelPlacement="outside"
                                 startContent={<Icon icon="mdi:account" className="text-default-400" />}
                                 isDisabled={!selectedClass}
                             >
@@ -173,7 +182,7 @@ export default function ReportCard() {
             </motion.div>
 
             <motion.div variants={itemVariants} className="flex justify-center mt-10">
-                <div className="text-center text-gray-400">
+                <div className="text-center text-default-400">
                     <Icon icon="mdi:printer" className="text-6xl mx-auto mb-4 opacity-50" />
                     <p>Select criteria above to generate a printable PDF report card.</p>
                 </div>

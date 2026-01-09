@@ -300,6 +300,7 @@ export default function StudentList() {
                 <PageHeader
                     title="Students"
                     description="Manage student records"
+                    className="p-0 mb-6"
                     action={
                         <div className="flex gap-2">
                             {(selectedKeys === "all" || selectedKeys.size > 0) && (
@@ -329,13 +330,15 @@ export default function StudentList() {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm">
+                <Card className="bg-content1 border border-default-200 shadow-sm">
                     <CardHeader className="flex justify-between items-center px-6 pt-6">
                         <div className="flex items-center gap-3">
-                            <Icon icon="mdi:account-school" className="text-primary text-2xl" />
+                            <div className="p-2 rounded-full bg-primary-100 dark:bg-primary-900/50">
+                                <Icon icon="mdi:account-school" className="text-primary text-2xl" />
+                            </div>
                             <div>
-                                <h3 className="text-lg font-semibold">Student Directory</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                                <h3 className="text-lg font-bold text-foreground">Student Directory</h3>
+                                <p className="text-sm text-default-500 font-normal">
                                     {students.length} student{students.length !== 1 ? 's' : ''} found
                                 </p>
                             </div>
@@ -351,12 +354,12 @@ export default function StudentList() {
                             removeWrapper
                         >
                             <TableHeader>
-                                <TableColumn>STUDENT</TableColumn>
-                                <TableColumn>ADMISSION NO</TableColumn>
-                                <TableColumn>GENDER</TableColumn>
-                                <TableColumn>CLASS</TableColumn>
-                                <TableColumn>PARENT</TableColumn>
-                                <TableColumn>ACTIONS</TableColumn>
+                                <TableColumn className="bg-default-100 text-default-500 font-semibold">STUDENT</TableColumn>
+                                <TableColumn className="bg-default-100 text-default-500 font-semibold">ADMISSION NO</TableColumn>
+                                <TableColumn className="bg-default-100 text-default-500 font-semibold">GENDER</TableColumn>
+                                <TableColumn className="bg-default-100 text-default-500 font-semibold">CLASS</TableColumn>
+                                <TableColumn className="bg-default-100 text-default-500 font-semibold">PARENT</TableColumn>
+                                <TableColumn className="bg-default-100 text-default-500 font-semibold">ACTIONS</TableColumn>
                             </TableHeader>
                             <TableBody emptyContent={"No students found"} isLoading={loading}>
                                 {students.map((student) => (
@@ -413,6 +416,7 @@ export default function StudentList() {
                                                     onPress={() => handleDownloadIDCard(student)}
                                                     title="Download ID Card"
                                                     isLoading={generatingIdCardFor === student.id}
+                                                    color="secondary"
                                                 >
                                                     <Icon icon="mdi:id-card" className="text-lg text-secondary" />
                                                 </Button>
@@ -422,8 +426,9 @@ export default function StudentList() {
                                                     variant="light"
                                                     onPress={() => openSingleUpdateModal(student.id)}
                                                     title="Change Class"
+
                                                 >
-                                                    <Icon icon="mdi:school-outline" className="text-lg" />
+                                                    <Icon icon="mdi:school-outline" className="text-lg text-default" />
                                                 </Button>
                                             </div>
                                         </TableCell>

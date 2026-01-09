@@ -60,22 +60,23 @@ export default function MyClassTimetable() {
     }, {});
 
     return (
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 max-w-7xl mx-auto">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
                     <Button
                         isIconOnly
                         variant="light"
                         onPress={() => navigate(-1)}
+                        className="text-default-500 hover:text-foreground"
                     >
                         <Icon icon="mdi:arrow-left" className="text-2xl" />
                     </Button>
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                        <h1 className="text-2xl font-bold text-foreground">
                             My Class Timetable
                         </h1>
                         {classDetails && (
-                            <p className="text-gray-500">
+                            <p className="text-default-500">
                                 Class: <span className="font-semibold text-primary">{classDetails.name} - {classDetails.section}</span>
                             </p>
                         )}
@@ -84,9 +85,9 @@ export default function MyClassTimetable() {
             </div>
 
             {error && (
-                <div className="flex flex-col items-center justify-center p-10 bg-gray-50 dark:bg-gray-800 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
-                    <Icon icon="mdi:alert-circle-outline" className="text-4xl text-gray-400 mb-2" />
-                    <p className="text-gray-600 dark:text-gray-300">{error}</p>
+                <div className="flex flex-col items-center justify-center p-10 bg-content1 rounded-lg border border-dashed border-default-300">
+                    <Icon icon="mdi:alert-circle-outline" className="text-4xl text-default-400 mb-2" />
+                    <p className="text-default-600">{error}</p>
                     <Button
                         color="primary"
                         variant="flat"
@@ -105,20 +106,20 @@ export default function MyClassTimetable() {
                         if (slots.length === 0) return null;
 
                         return (
-                            <Card key={day} className="h-full shadow-sm">
+                            <Card key={day} className="h-full shadow-sm bg-content1 border border-default-200">
                                 <CardBody className="p-0">
-                                    <div className="py-3 px-4 bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600 font-bold text-gray-700 dark:text-gray-200 flex justify-between items-center">
+                                    <div className="py-3 px-4 bg-default-100 border-b border-default-200 font-bold text-default-700 flex justify-between items-center">
                                         {day}
-                                        <Chip size="sm" variant="flat">{slots.length}</Chip>
+                                        <Chip size="sm" variant="flat" color="primary">{slots.length}</Chip>
                                     </div>
-                                    <div className="divide-y divide-gray-100 dark:divide-gray-700">
+                                    <div className="divide-y divide-default-100">
                                         {slots.map((slot) => (
-                                            <div key={slot.id} className="p-4 flex gap-4 items-start hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                            <div key={slot.id} className="p-4 flex gap-4 items-start hover:bg-default-50 transition-colors">
                                                 <div className="text-center min-w-[80px]">
-                                                    <div className="text-sm font-bold text-gray-800 dark:text-white">
+                                                    <div className="text-sm font-bold text-foreground">
                                                         {slot.startTime?.slice(0, 5)}
                                                     </div>
-                                                    <div className="text-xs text-gray-500">
+                                                    <div className="text-xs text-default-500">
                                                         {slot.endTime?.slice(0, 5)}
                                                     </div>
                                                 </div>
@@ -127,7 +128,7 @@ export default function MyClassTimetable() {
                                                         {slot.Subject?.name}
                                                     </div>
                                                     {slot.User && (
-                                                        <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                                                        <div className="text-sm text-default-500 flex items-center gap-1">
                                                             <Icon icon="mdi:account-tie" className="text-xs" />
                                                             <span>Teacher: {slot.User.name || 'Unknown'}</span>
                                                         </div>

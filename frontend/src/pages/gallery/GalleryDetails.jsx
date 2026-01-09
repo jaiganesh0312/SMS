@@ -61,14 +61,15 @@ const GalleryDetails = () => {
     return (
         <div className="p-6 space-y-6">
             <div className="flex items-center gap-4 mb-6">
-                <Button isIconOnly variant="light" onPress={() => navigate('/gallery')}>
+                <Button isIconOnly variant="light" onPress={() => navigate('/gallery')} className="text-default-500 hover:text-primary">
                     <Icon icon="lucide:arrow-left" width={24} />
                 </Button>
                 <div>
-                    <h1 className="text-2xl font-bold">{gallery.title}</h1>
-                    <p className="text-gray-500">
+                    <h1 className="text-2xl font-bold text-foreground">{gallery.title}</h1>
+                    <p className="text-default-500">
                         {gallery.eventDate ? format(new Date(gallery.eventDate), 'MMMM d, yyyy') : ''}
-                        {gallery.description && ` • ${gallery.description}`}
+                        {gallery.description && <span className="mx-2">•</span>}
+                        {gallery.description}
                     </p>
                 </div>
                 {isAdmin && (
@@ -84,9 +85,9 @@ const GalleryDetails = () => {
                         key={img.id}
                         isPressable
                         onPress={() => setSelectedImage(img.imageUrl)}
-                        className="hover:scale-[1.02] transition-transform"
+                        className="bg-content1 border border-default-200 hover:scale-[1.02] transition-transform shadow-sm"
                     >
-                        <CardBody className="p-0 overflow-hidden aspect-square">
+                        <CardBody className="p-0 overflow-hidden aspect-square bg-default-100">
                             <Image
                                 removeWrapper
                                 alt="Gallery Image"
@@ -99,8 +100,8 @@ const GalleryDetails = () => {
             </div>
 
             {gallery.images?.length === 0 && (
-                <div className="text-center py-20 text-gray-500">
-                    <Icon icon="lucide:image-off" className="mx-auto text-4xl mb-2" />
+                <div className="text-center py-20 text-default-400 bg-content1 border border-dashed border-default-200 rounded-xl">
+                    <Icon icon="lucide:image-off" className="mx-auto text-4xl mb-2 opacity-50" />
                     <p>No images in this album yet.</p>
                 </div>
             )}

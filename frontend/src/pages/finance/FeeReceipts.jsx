@@ -175,25 +175,25 @@ export default function FeeReceipts() {
             title: 'Collected Today',
             value: `₹${stats.todayCollected.toLocaleString('en-IN')}`,
             icon: 'solar:wad-of-money-bold-duotone',
-            color: 'text-success-600',
-            bgColor: 'bg-success-100 dark:bg-success-900/30',
-            borderColor: 'border-l-success-500'
+            color: 'text-success',
+            bgColor: 'bg-success/10',
+            borderColor: 'border-l-success'
         },
         {
             title: 'Total Revenue',
             value: `₹${stats.totalCollected.toLocaleString('en-IN')}`,
             icon: 'solar:chart-square-bold-duotone',
-            color: 'text-primary-600',
-            bgColor: 'bg-primary-100 dark:bg-primary-900/30',
-            borderColor: 'border-l-primary-500'
+            color: 'text-primary',
+            bgColor: 'bg-primary/10',
+            borderColor: 'border-l-primary'
         },
         {
             title: 'Total Receipts',
             value: stats.receiptCount,
             icon: 'solar:documents-bold-duotone',
-            color: 'text-purple-600',
-            bgColor: 'bg-purple-100 dark:bg-purple-900/30',
-            borderColor: 'border-l-purple-500'
+            color: 'text-secondary',
+            bgColor: 'bg-secondary/10',
+            borderColor: 'border-l-secondary'
         }
     ];
 
@@ -205,21 +205,21 @@ export default function FeeReceipts() {
         >
             {/* Header */}
             <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                     Fee Receipts
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400">Manage and track all fee payments</p>
+                <p className="text-default-500">Manage and track all fee payments</p>
             </div>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {statCards.map((stat, index) => (
-                    <Card key={index} className={`border-l-4 ${stat.borderColor} shadow-sm`}>
+                    <Card key={index} className={`border-l-4 ${stat.borderColor} shadow-sm bg-content1`}>
                         <CardBody className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{stat.title}</p>
-                                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{stat.value}</h3>
+                                    <p className="text-sm font-medium text-default-500 uppercase tracking-wider">{stat.title}</p>
+                                    <h3 className="text-2xl font-bold text-foreground mt-1">{stat.value}</h3>
                                 </div>
                                 <div className={`p-3 rounded-lg ${stat.bgColor}`}>
                                     <Icon icon={stat.icon} className={`text-2xl ${stat.color}`} />
@@ -231,13 +231,13 @@ export default function FeeReceipts() {
             </div>
 
             {/* Controls Bar */}
-            <Card className="shadow-sm border border-gray-100 dark:border-gray-800">
+            <Card className="shadow-sm border border-default-200 bg-content1">
                 <CardBody className="p-4">
                     <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full md:w-auto">
                             <Select
                                 placeholder="Filter by Class"
-                                startContent={<Icon icon="solar:users-group-rounded-bold-duotone" className="text-gray-400" />}
+                                startContent={<Icon icon="solar:users-group-rounded-bold-duotone" className="text-default-400" />}
                                 variant="bordered"
                                 selectedKeys={selectedClass ? new Set([String(selectedClass)]) : new Set()}
                                 onChange={(e) => setSelectedClass(e.target.value)}
@@ -251,7 +251,7 @@ export default function FeeReceipts() {
 
                             <Input
                                 placeholder={selectedClass ? "Search student in class..." : "Search receipts..."}
-                                startContent={<Icon icon="solar:magnifer-linear" className="text-gray-400" />}
+                                startContent={<Icon icon="solar:magnifer-linear" className="text-default-400" />}
                                 variant="bordered"
                                 isClearable
                                 value={searchQuery}
@@ -265,7 +265,7 @@ export default function FeeReceipts() {
                                 isIconOnly
                                 variant="light"
                                 onPress={handleRefresh}
-                                className="text-gray-500"
+                                className="text-default-500"
                                 title="Refresh Data"
                             >
                                 <Icon icon="solar:refresh-circle-linear" width={24} />
@@ -284,11 +284,11 @@ export default function FeeReceipts() {
             </Card>
 
             {/* Main Content Area */}
-            <Card className="shadow-sm border border-gray-100 dark:border-gray-800 min-h-[400px]">
+            <Card className="shadow-sm border border-default-200 bg-content1 min-h-[400px]">
                 <CardHeader className="px-6 pt-6 pb-0 flex justify-between items-center">
                     <div className="flex items-center gap-2">
-                        <Icon icon={selectedClass ? "solar:users-group-rounded-bold-duotone" : "solar:bill-list-bold-duotone"} className="text-xl text-gray-500" />
-                        <h3 className="font-semibold text-lg text-gray-800 dark:text-white">
+                        <Icon icon={selectedClass ? "solar:users-group-rounded-bold-duotone" : "solar:bill-list-bold-duotone"} className="text-xl text-default-500" />
+                        <h3 className="font-semibold text-lg text-foreground">
                             {selectedClass ?
                                 `Students in Class ${classes.find(c => String(c.id) === String(selectedClass))?.name || ''}` :
                                 'Recent Transactions'
@@ -302,7 +302,11 @@ export default function FeeReceipts() {
                 <CardBody className="px-2">
                     {selectedClass ? (
                         // CLASS STUDENT VIEW
-                        <Table aria-label="Class Students" removeWrapper shadow="none" classNames={{ th: "bg-gray-50 dark:bg-gray-800 text-gray-500 font-medium" }}>
+                        <Table aria-label="Class Students" shadow="none" classNames={{
+                            wrapper: "bg-content1 shadow-none",
+                            th: "bg-default-100 text-default-500 font-medium",
+                            td: "text-foreground group-hover:bg-default-50"
+                        }}>
                             <TableHeader>
                                 <TableColumn>STUDENT DETAILS</TableColumn>
                                 <TableColumn>ADMISSION NO</TableColumn>
@@ -315,14 +319,14 @@ export default function FeeReceipts() {
                                 isLoading={loadingStudents}
                                 loadingContent={<Spinner label="Loading students..." />}
                                 emptyContent={
-                                    <div className="py-12 flex flex-col items-center text-gray-400">
+                                    <div className="py-12 flex flex-col items-center text-default-400">
                                         <Icon icon="solar:user-block-broken" width={48} className="mb-2 opacity-50" />
                                         <p>No students found matching your search.</p>
                                     </div>
                                 }
                             >
                                 {(student) => (
-                                    <TableRow key={student.studentId || student.admissionNumber} className="hover:bg-gray-50/50 cursor-default transition-colors">
+                                    <TableRow key={student.studentId || student.admissionNumber} className="border-b border-default-100 last:border-none">
                                         <TableCell>
                                             <div className="flex items-center gap-3">
                                                 <User
@@ -337,7 +341,7 @@ export default function FeeReceipts() {
                                                 />
                                             </div>
                                         </TableCell>
-                                        <TableCell><span className="text-gray-500 font-mono text-xs">{student.admissionNumber}</span></TableCell>
+                                        <TableCell><span className="text-default-500 font-mono text-xs">{student.admissionNumber}</span></TableCell>
                                         <TableCell>
                                             <Chip
                                                 size="sm"
@@ -373,7 +377,11 @@ export default function FeeReceipts() {
                         </Table>
                     ) : (
                         // ALL RECEIPTS VIEW
-                        <Table aria-label="Fee Receipts" removeWrapper shadow="none" classNames={{ th: "bg-gray-50 dark:bg-gray-800 text-gray-500 font-medium" }}>
+                        <Table aria-label="Fee Receipts" shadow="none" classNames={{
+                            wrapper: "bg-content1 shadow-none",
+                            th: "bg-default-100 text-default-500 font-medium",
+                            td: "text-foreground group-hover:bg-default-50"
+                        }}>
                             <TableHeader>
                                 <TableColumn>RECEIPT INFO</TableColumn>
                                 <TableColumn>STUDENT</TableColumn>
@@ -388,20 +396,20 @@ export default function FeeReceipts() {
                                 isLoading={loading}
                                 loadingContent={<Spinner label="Loading receipts..." />}
                                 emptyContent={
-                                    <div className="py-12 flex flex-col items-center text-gray-400">
+                                    <div className="py-12 flex flex-col items-center text-default-400">
                                         <Icon icon="solar:bill-cross-broken" width={48} className="mb-2 opacity-50" />
                                         <p>No receipts found.</p>
                                     </div>
                                 }
                             >
                                 {(item) => (
-                                    <TableRow key={item.id} className="hover:bg-gray-50/50 cursor-default transition-colors">
+                                    <TableRow key={item.id} className="border-b border-default-100 last:border-none">
                                         <TableCell>
                                             <div className="flex items-center gap-2">
-                                                <div className="p-1.5 bg-gray-100 rounded text-gray-600">
+                                                <div className="p-1.5 bg-default-100 rounded text-default-600">
                                                     <Icon icon="solar:document-text-linear" width={16} />
                                                 </div>
-                                                <span className="font-bold text-gray-700 dark:text-gray-300 text-sm">
+                                                <span className="font-bold text-foreground text-sm">
                                                     {item.transactionId || item.id}
                                                 </span>
                                             </div>
@@ -422,7 +430,7 @@ export default function FeeReceipts() {
                                             <span className="font-bold text-success-600">₹{(item.amount || item.amountPaid).toLocaleString('en-IN')}</span>
                                         </TableCell>
                                         <TableCell>
-                                            <span className="text-xs text-gray-600">
+                                            <span className="text-xs text-default-500">
                                                 {safeFormatDate(item.paymentDate || item.date)}
                                             </span>
                                         </TableCell>
@@ -435,7 +443,7 @@ export default function FeeReceipts() {
                                                     size="sm"
                                                     variant="flat"
                                                     isIconOnly
-                                                    className="bg-primary-50 text-primary-600"
+                                                    className="bg-primary/10 text-primary"
                                                     onPress={() => handleDownloadReceipt(item.id, `receipt-${item.transactionId || item.id}.pdf`)}
                                                     isLoading={downloadingId === item.id}
                                                 >
@@ -456,16 +464,20 @@ export default function FeeReceipts() {
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1 border-b">
-                                <span className="text-xl">Payment History</span>
-                                <div className="flex items-center gap-2 text-sm font-normal text-gray-500">
+                            <ModalHeader className="flex flex-col gap-1 border-b border-default-200">
+                                <span className="text-xl text-foreground">Payment History</span>
+                                <div className="flex items-center gap-2 text-sm font-normal text-default-500">
                                     <Icon icon="solar:user-circle-bold" />
                                     {selectedStudentForHistory?.studentName} ({selectedStudentForHistory?.admissionNumber})
                                 </div>
                             </ModalHeader>
                             <ModalBody className="p-0">
                                 {studentReceipts.length > 0 ? (
-                                    <Table aria-label="Student Receipts" removeWrapper shadow="none" classNames={{ th: "bg-gray-100 text-gray-600" }}>
+                                    <Table aria-label="Student Receipts" shadow="none" classNames={{
+                                        wrapper: "shadow-none",
+                                        th: "bg-default-100 text-default-600",
+                                        td: "text-foreground"
+                                    }}>
                                         <TableHeader>
                                             <TableColumn>RECEIPT NO</TableColumn>
                                             <TableColumn>DATE</TableColumn>
@@ -476,7 +488,7 @@ export default function FeeReceipts() {
                                         </TableHeader>
                                         <TableBody>
                                             {studentReceipts.map((receipt) => (
-                                                <TableRow key={receipt.id} className="border-b last:border-none border-gray-100">
+                                                <TableRow key={receipt.id} className="border-b last:border-none border-default-100">
                                                     <TableCell className="font-semibold">{receipt.transactionId || receipt.id}</TableCell>
                                                     <TableCell>{safeFormatDate(receipt.paymentDate || receipt.date)}</TableCell>
                                                     <TableCell>{receipt.FeeStructure?.name || 'School Fee'}</TableCell>
@@ -501,16 +513,16 @@ export default function FeeReceipts() {
                                         </TableBody>
                                     </Table>
                                 ) : (
-                                    <div className="py-16 text-center text-gray-500 flex flex-col items-center bg-gray-50">
-                                        <div className="p-4 bg-gray-100 rounded-full mb-3">
-                                            <Icon icon="solar:file-remove-bold-duotone" className="text-4xl text-gray-400" />
+                                    <div className="py-16 text-center text-default-500 flex flex-col items-center bg-content1">
+                                        <div className="p-4 bg-default-100 rounded-full mb-3">
+                                            <Icon icon="solar:file-remove-bold-duotone" className="text-4xl text-default-400" />
                                         </div>
-                                        <p className="font-medium text-gray-700">No payment records found</p>
-                                        <p className="text-xs mt-1 text-gray-400 max-w-xs">There are no receipt records available for this student in the system.</p>
+                                        <p className="font-medium text-foreground">No payment records found</p>
+                                        <p className="text-xs mt-1 text-default-400 max-w-xs">There are no receipt records available for this student in the system.</p>
                                     </div>
                                 )}
                             </ModalBody>
-                            <ModalFooter className="border-t">
+                            <ModalFooter className="border-t border-default-200">
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Close
                                 </Button>

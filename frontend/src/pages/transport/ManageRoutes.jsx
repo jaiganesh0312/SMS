@@ -1,30 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import { PageHeader } from '@/components/common';
+import { transportService } from '@/services';
 import {
+    Button,
     Card,
     CardBody,
-    CardHeader,
-    Button,
-    Input,
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    useDisclosure,
     Chip,
-    Spinner,
+    Input,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
     Select,
     SelectItem,
-    Textarea,
+    Spinner,
+    Table,
+    TableBody,
+    TableCell,
+    TableColumn,
+    TableHeader,
+    TableRow,
+    useDisclosure
 } from '@heroui/react';
 import { Icon } from '@iconify/react';
-import { transportService } from '@/services';
+import React, { useEffect, useState } from 'react';
 
 const ManageRoutes = () => {
     const [routes, setRoutes] = useState([]);
@@ -159,24 +158,32 @@ const ManageRoutes = () => {
 
     return (
         <div className="p-6 space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold">Manage Routes</h1>
-                    <p className="text-default-500">Create and manage bus routes with stops</p>
-                </div>
-                <Button color="primary" startContent={<Icon icon="mdi:plus" />} onPress={onOpen}>
-                    Add Route
-                </Button>
-            </div>
+            <PageHeader
+                title="Manage Routes"
+                subtitle="Create and manage bus routes with stops"
+                action={
+                    <Button color="primary" startContent={<Icon icon="mdi:plus" />} onPress={onOpen}>
+                        Add Route
+                    </Button>
+                }
+            />
 
-            <Card>
-                <CardBody>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
+                <CardBody className="p-0">
                     {loading ? (
                         <div className="flex justify-center py-8">
                             <Spinner size="lg" />
                         </div>
                     ) : (
-                        <Table aria-label="Routes table">
+                        <Table
+                            aria-label="Routes table"
+                            shadow="none"
+                            classNames={{
+                                wrapper: "shadow-none bg-content1",
+                                th: "bg-default-100 text-default-500 font-medium",
+                                td: "py-3"
+                            }}
+                        >
                             <TableHeader>
                                 <TableColumn>Route Name</TableColumn>
                                 <TableColumn>Bus</TableColumn>
@@ -186,21 +193,32 @@ const ManageRoutes = () => {
                             </TableHeader>
                             <TableBody items={routes} emptyContent="No routes found">
                                 {(route) => (
-                                    <TableRow key={route.id}>
+                                    <TableRow key={route.id} className="border-b border-default-100 last:border-0 hover:bg-default-50">
                                         <TableCell>
                                             <div className="flex items-center gap-2">
-                                                <Icon icon="mdi:map-marker-path" className="text-primary" />
-                                                <span className="font-medium">{route.routeName}</span>
+                                                <div className="p-2 bg-primary/10 rounded-lg">
+                                                    <Icon icon="mdi:map-marker-path" className="text-primary" />
+                                                </div>
+                                                <span className="font-medium text-foreground">{route.routeName}</span>
                                             </div>
                                         </TableCell>
-                                        <TableCell>{route.Bus?.busNumber || 'N/A'}</TableCell>
                                         <TableCell>
-                                            <Chip size="sm" color={getRouteTypeColor(route.routeType)} variant="flat">
+                                            {route.Bus ? (
+                                                <div className="flex flex-col">
+                                                    <span className="text-foreground text-sm">{route.Bus.busNumber}</span>
+                                                    <span className="text-default-400 text-xs">{route.Bus.registrationNumber}</span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-default-400 italic">N/A</span>
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            <Chip size="sm" color={getRouteTypeColor(route.routeType)} variant="flat" classNames={{ content: "font-medium" }}>
                                                 {route.routeType}
                                             </Chip>
                                         </TableCell>
                                         <TableCell>
-                                            <Chip size="sm" variant="bordered">
+                                            <Chip size="sm" variant="bordered" className="border-default-200 text-default-500">
                                                 {route.stops?.length || 0} stops
                                             </Chip>
                                         </TableCell>
@@ -209,19 +227,20 @@ const ManageRoutes = () => {
                                                 <Button
                                                     size="sm"
                                                     isIconOnly
-                                                    variant="flat"
+                                                    variant="light"
+                                                    color="default"
                                                     onPress={() => handleEdit(route)}
                                                 >
-                                                    <Icon icon="mdi:pencil" />
+                                                    <Icon icon="mdi:pencil" width={20} />
                                                 </Button>
                                                 <Button
                                                     size="sm"
                                                     isIconOnly
-                                                    variant="flat"
+                                                    variant="light"
                                                     color="danger"
                                                     onPress={() => handleDelete(route.id)}
                                                 >
-                                                    <Icon icon="mdi:delete" />
+                                                    <Icon icon="mdi:delete" width={20} />
                                                 </Button>
                                             </div>
                                         </TableCell>
@@ -234,12 +253,20 @@ const ManageRoutes = () => {
             </Card>
 
             {/* Add/Edit Modal */}
-            <Modal isOpen={isOpen} onClose={handleCloseModal} size="2xl" scrollBehavior="inside">
+            {/* Add/Edit Modal */}
+            <Modal isOpen={isOpen} onClose={handleCloseModal} size="2xl" scrollBehavior="inside" classNames={{
+                base: "bg-content1 border border-default-200",
+                header: "border-b border-default-200",
+                footer: "border-t border-default-200"
+            }}>
                 <ModalContent>
-                    <ModalHeader>{editingRoute ? 'Edit Route' : 'Add New Route'}</ModalHeader>
-                    <ModalBody className="space-y-4">
+                    <ModalHeader className="flex gap-2 items-center">
+                        <Icon icon={editingRoute ? "mdi:pencil" : "mdi:plus-circle"} className="text-primary" />
+                        {editingRoute ? 'Edit Route' : 'Add New Route'}
+                    </ModalHeader>
+                    <ModalBody className="space-y-4 py-6">
                         {error && (
-                            <div className="p-3 bg-danger-50 text-danger rounded-lg">{error}</div>
+                            <div className="p-3 bg-danger-50 text-danger rounded-lg border border-danger-200 text-sm">{error}</div>
                         )}
 
                         <div className="grid grid-cols-2 gap-4">
@@ -250,6 +277,8 @@ const ManageRoutes = () => {
                                 value={formData.routeName}
                                 onChange={handleInputChange}
                                 isRequired
+                                variant="bordered"
+                                labelPlacement="outside"
                             />
                             <Select
                                 label="Bus"
@@ -259,6 +288,8 @@ const ManageRoutes = () => {
                                     setFormData((prev) => ({ ...prev, busId: [...keys][0] || '' }))
                                 }
                                 isRequired
+                                variant="bordered"
+                                labelPlacement="outside"
                             >
                                 {buses.map((bus) => (
                                     <SelectItem key={bus.id} textValue={bus.busNumber}>
@@ -274,6 +305,8 @@ const ManageRoutes = () => {
                             onSelectionChange={(keys) =>
                                 setFormData((prev) => ({ ...prev, routeType: [...keys][0] }))
                             }
+                            variant="bordered"
+                            labelPlacement="outside"
                         >
                             <SelectItem key="MORNING">Morning</SelectItem>
                             <SelectItem key="EVENING">Evening</SelectItem>
@@ -281,25 +314,32 @@ const ManageRoutes = () => {
                         </Select>
 
                         {/* Stops Section */}
-                        <div className="space-y-3">
-                            <h4 className="font-semibold">Stops</h4>
+                        <div className="space-y-3 pt-2">
+                            <div className="flex items-center justify-between">
+                                <h4 className="font-semibold text-foreground">Stops</h4>
+                                <Chip size="sm" variant="flat" color="primary">{formData.stops.length} stops</Chip>
+                            </div>
 
                             {/* Existing Stops */}
                             {formData.stops.length > 0 && (
-                                <div className="space-y-2 max-h-40 overflow-y-auto p-2 bg-default-100 rounded-lg">
+                                <div className="space-y-2 max-h-60 overflow-y-auto p-3 bg-default-50 rounded-xl border border-default-200">
                                     {formData.stops
                                         .sort((a, b) => a.order - b.order)
                                         .map((stop, idx) => (
                                             <div
                                                 key={idx}
-                                                className="flex items-center justify-between p-2 bg-white rounded"
+                                                className="flex items-center justify-between p-3 bg-white dark:bg-content1 rounded-lg border border-default-100 shadow-sm"
                                             >
-                                                <div className="flex items-center gap-2">
-                                                    <span className="font-medium">{stop.order}.</span>
-                                                    <span>{stop.name}</span>
-                                                    <span className="text-xs text-default-400">
-                                                        ({stop.lat}, {stop.lng})
-                                                    </span>
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold">
+                                                        {stop.order}
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="font-medium text-foreground">{stop.name}</span>
+                                                        <span className="text-xs text-default-400">
+                                                            {stop.lat}, {stop.lng}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                                 <Button
                                                     size="sm"
@@ -308,7 +348,7 @@ const ManageRoutes = () => {
                                                     color="danger"
                                                     onPress={() => handleRemoveStop(idx)}
                                                 >
-                                                    <Icon icon="mdi:close" />
+                                                    <Icon icon="mdi:close" width={18} />
                                                 </Button>
                                             </div>
                                         ))}
@@ -316,44 +356,61 @@ const ManageRoutes = () => {
                             )}
 
                             {/* Add New Stop */}
-                            <div className="grid grid-cols-4 gap-2">
-                                <Input
-                                    size="sm"
-                                    placeholder="Stop name"
-                                    value={newStop.name}
-                                    onChange={(e) => setNewStop((p) => ({ ...p, name: e.target.value }))}
-                                />
-                                <Input
-                                    size="sm"
-                                    placeholder="Latitude"
-                                    type="number"
-                                    step="any"
-                                    value={newStop.lat}
-                                    onChange={(e) => setNewStop((p) => ({ ...p, lat: e.target.value }))}
-                                />
-                                <Input
-                                    size="sm"
-                                    placeholder="Longitude"
-                                    type="number"
-                                    step="any"
-                                    value={newStop.lng}
-                                    onChange={(e) => setNewStop((p) => ({ ...p, lng: e.target.value }))}
-                                />
-                                <Button size="sm" color="primary" onPress={handleAddStop}>
-                                    Add
-                                </Button>
+                            <div className="grid grid-cols-12 gap-2 items-end">
+                                <div className="col-span-5">
+                                    <Input
+                                        size="sm"
+                                        label="Stop name"
+                                        placeholder="Enter stop name"
+                                        value={newStop.name}
+                                        onChange={(e) => setNewStop((p) => ({ ...p, name: e.target.value }))}
+                                        variant="bordered"
+                                        labelPlacement="outside"
+                                    />
+                                </div>
+                                <div className="col-span-3">
+                                    <Input
+                                        size="sm"
+                                        label="Latitude"
+                                        placeholder="Lat"
+                                        type="number"
+                                        step="any"
+                                        value={newStop.lat}
+                                        onChange={(e) => setNewStop((p) => ({ ...p, lat: e.target.value }))}
+                                        variant="bordered"
+                                        labelPlacement="outside"
+                                    />
+                                </div>
+                                <div className="col-span-3">
+                                    <Input
+                                        size="sm"
+                                        label="Longitude"
+                                        placeholder="Lng"
+                                        type="number"
+                                        step="any"
+                                        value={newStop.lng}
+                                        onChange={(e) => setNewStop((p) => ({ ...p, lng: e.target.value }))}
+                                        variant="bordered"
+                                        labelPlacement="outside"
+                                    />
+                                </div>
+                                <div className="col-span-1 pb-1">
+                                    <Button size="sm" isIconOnly color="primary" onPress={handleAddStop}>
+                                        <Icon icon="mdi:plus" width={20} />
+                                    </Button>
+                                </div>
                             </div>
-                            <p className="text-xs text-default-400">
+                            <p className="text-xs text-default-400 px-1">
                                 Tip: Get coordinates from Google Maps by right-clicking on a location
                             </p>
                         </div>
                     </ModalBody>
                     <ModalFooter>
-                        <Button variant="flat" onPress={handleCloseModal}>
+                        <Button variant="flat" color="default" onPress={handleCloseModal}>
                             Cancel
                         </Button>
-                        <Button color="primary" onPress={handleSubmit}>
-                            {editingRoute ? 'Update' : 'Create'}
+                        <Button color="primary" onPress={handleSubmit} startContent={<Icon icon="mdi:check" />}>
+                            {editingRoute ? 'Update Route' : 'Create Route'}
                         </Button>
                     </ModalFooter>
                 </ModalContent>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from "@heroui/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Card, CardBody } from "@heroui/react";
+import { Icon } from '@iconify/react';
 import libraryService from '@/services/libraryService';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -33,36 +34,51 @@ export default function SectionBooks() {
     };
 
     return (
-        <div className="p-6">
+        <div className="p-6 max-w-5xl mx-auto space-y-6">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">Books in Section</h1>
-                <Button onPress={() => navigate(-1)}>Back</Button>
+                <h1 className="text-2xl font-bold text-foreground">Books in Section</h1>
+                <Button onPress={() => navigate(-1)} variant="light" startContent={<Icon icon="mdi:arrow-left" />}>Back</Button>
             </div>
 
-            <Table aria-label="Section Books">
-                <TableHeader>
-                    <TableColumn>TITLE</TableColumn>
-                    <TableColumn>AUTHOR</TableColumn>
-                    <TableColumn>ISBN</TableColumn>
-                    <TableColumn>AVAILABLE</TableColumn>
-                    <TableColumn>ACTION</TableColumn>
-                </TableHeader>
-                <TableBody emptyContent={isLoading ? "Loading..." : "No books in this section."} isLoading={isLoading}>
-                    {books.map((book) => (
-                        <TableRow key={book.id}>
-                            <TableCell>{book.title}</TableCell>
-                            <TableCell>{book.author}</TableCell>
-                            <TableCell>{book.isbn}</TableCell>
-                            <TableCell>{book.available} / {book.quantity}</TableCell>
-                            <TableCell>
-                                <Button size="sm" onPress={() => navigate(`/library/book/${book.id}`)}>
-                                    View Details
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
+                <CardBody className="p-0">
+                    <Table aria-label="Section Books" shadow="none" classNames={{
+                        wrapper: "bg-content1 shadow-none",
+                        th: "bg-default-100 text-default-500 font-medium",
+                        td: "text-foreground group-hover:bg-default-50"
+                    }}>
+                        <TableHeader>
+                            <TableColumn>TITLE</TableColumn>
+                            <TableColumn>AUTHOR</TableColumn>
+                            <TableColumn>ISBN</TableColumn>
+                            <TableColumn>AVAILABLE</TableColumn>
+                            <TableColumn>ACTION</TableColumn>
+                        </TableHeader>
+                        <TableBody emptyContent={isLoading ? "Loading..." : "No books in this section."} isLoading={isLoading}>
+                            {books.map((book) => (
+                                <TableRow key={book.id} className="border-b border-default-100 last:border-none">
+                                    <TableCell>
+                                        <p className="font-semibold text-foreground">{book.title}</p>
+                                    </TableCell>
+                                    <TableCell>{book.author}</TableCell>
+                                    <TableCell className="font-mono text-xs text-default-500">{book.isbn}</TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-2">
+                                            <span className={book.available > 0 ? "text-success font-bold" : "text-danger font-bold"}>{book.available}</span>
+                                            <span className="text-default-400">/ {book.quantity}</span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button size="sm" variant="flat" color="primary" onPress={() => navigate(`/library/book/${book.id}`)}>
+                                            View Details
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardBody>
+            </Card>
         </div>
     );
 }

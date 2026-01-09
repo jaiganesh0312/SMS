@@ -28,6 +28,7 @@ import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ConfirmModal from '@/components/common/ConfirmModal';
+import { PageHeader } from '@/components/common';
 
 const attendanceSchema = z.object({
     date: z.string().min(1, "Date is required"),
@@ -230,47 +231,48 @@ const StaffAttendance = () => {
     }, [pendingStaff, markedRecords, pendingAttendance]);
 
     return (
-        <div className="p-6 space-y-6">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Staff Attendance</h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">Manage daily attendance for all employees</p>
-                </div>
-                <div className="flex gap-4 items-center bg-white dark:bg-gray-800 p-2 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                    <Controller
-                        name="date"
-                        control={control}
-                        render={({ field }) => (
-                            <Input
-                                type="date"
-                                label="Date"
-                                labelPlacement='outside-left'
-                                startContent={<Icon icon="lucide:calendar" className="text-gray-500" width={20} />}
-                                className="bg-transparent border-none focus:ring-0 text-gray-700 dark:text-gray-200 outline-none"
-                                {...field}
-                            />
-                        )}
-                    />
-                </div>
-            </div>
+        <div className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-7xl mx-auto">
+            <PageHeader
+                title="Staff Attendance"
+                subtitle="Manage daily attendance for all employees"
+                action={
+                    <div className="flex gap-4 items-center bg-content1 p-2 rounded-xl shadow-sm border border-default-200">
+                        <Controller
+                            name="date"
+                            control={control}
+                            render={({ field }) => (
+                                <Input
+                                    type="date"
+                                    label="Date"
+                                    labelPlacement='outside-left'
+                                    startContent={<Icon icon="lucide:calendar" className="text-default-500" width={20} />}
+                                    className="bg-transparent border-none focus:ring-0 text-foreground outline-none w-48"
+                                    classNames={{ inputWrapper: "shadow-none bg-transparent hover:bg-transparent" }}
+                                    {...field}
+                                />
+                            )}
+                        />
+                    </div>
+                }
+            />
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <Card className="shadow-sm border-l-4 border-l-primary">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <Card className="shadow-sm border-l-4 border-l-primary bg-content1 border-y border-r border-default-200">
                     <CardBody className="p-4">
-                        <p className="text-small text-gray-500 uppercase font-semibold">Total Staff</p>
-                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.TOTAL}</p>
+                        <p className="text-small text-default-500 uppercase font-bold">Total Staff</p>
+                        <p className="text-2xl font-bold text-foreground">{stats.TOTAL}</p>
                     </CardBody>
                 </Card>
                 {ATTENDANCE_STATUS.map(status => (
-                    <Card key={status.value} className={`shadow-sm border-l-4 border-l-${status.color}`}>
+                    <Card key={status.value} className={`shadow-sm border-l-4 border-l-${status.color} bg-content1 border-y border-r border-default-200`}>
                         <CardBody className="p-4 flex flex-row justify-between items-center">
                             <div>
-                                <p className="text-small text-gray-500 uppercase font-semibold">{status.label}</p>
-                                <p className={`text-2xl font-bold text-${status.color}-600`}>{stats[status.value]}</p>
+                                <p className="text-small text-default-500 uppercase font-bold">{status.label}</p>
+                                <p className={`text-2xl font-bold text-${status.color}`}>{stats[status.value]}</p>
                             </div>
-                            <div className={`p-2 rounded-full bg-${status.color}-100 dark:bg-${status.color}-900/20`}>
-                                <Icon icon={status.icon} width={24} className={`text-${status.color}-600`} />
+                            <div className={`p-2 rounded-full bg-${status.color}/10`}>
+                                <Icon icon={status.icon} width={24} className={`text-${status.color}`} />
                             </div>
                         </CardBody>
                     </Card>
@@ -279,16 +281,16 @@ const StaffAttendance = () => {
 
             {/* Pending Attendance Table */}
             {pendingStaff.length > 0 && (
-                <Card className="shadow-sm border border-warning-200 dark:border-warning-900/50">
-                    <CardHeader className="flex flex-col md:flex-row justify-between items-center px-6 py-4 gap-4 bg-warning-50 dark:bg-warning-900/10">
+                <Card className="shadow-sm border border-warning-200 bg-content1">
+                    <CardHeader className="flex flex-col md:flex-row justify-between items-start md:items-center px-4 md:px-6 py-4 gap-4 bg-warning/10">
                         <div className='flex gap-2 items-center w-full md:w-auto'>
-                            <Icon icon="lucide:clock" width={20} className='text-warning-600' />
-                            <span className='font-semibold text-warning-700 dark:text-warning-500'>Pending Attendance ({pendingStaff.length})</span>
+                            <Icon icon="lucide:clock" width={20} className='text-warning' />
+                            <span className='font-semibold text-sm sm:text-base text-warning-700 dark:text-warning'>Pending Attendance ({pendingStaff.length})</span>
                         </div>
-                        <div className="flex gap-2 w-full md:w-auto justify-end">
+                        <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto justify-end">
                             {(pendingSelected === "all" || pendingSelected.size > 0) && (
-                                <div className="flex gap-1 mr-2 items-center">
-                                    <span className="text-tiny text-gray-500 mr-2">Mark Selected:</span>
+                                <div className="flex gap-1 items-center">
+                                    <span className="text-tiny text-gray-500 mr-1 sm:mr-2">Mark:</span>
                                     {ATTENDANCE_STATUS.map(status => (
                                         <Tooltip key={status.value} content={`As ${status.label}`}>
                                             <Button
@@ -298,11 +300,11 @@ const StaffAttendance = () => {
                                                 variant="light"
                                                 onPress={() => handleBulkPendingUpdate(status.value)}
                                             >
-                                                <Icon icon={status.icon} width={16} />
+                                                <Icon icon={status.icon} width={14} />
                                             </Button>
                                         </Tooltip>
                                     ))}
-                                    <Divider orientation="vertical" className="h-4 mx-2" />
+                                    <Divider orientation="vertical" className="h-4 mx-2 hidden sm:block" />
                                 </div>
                             )}
                             <Button
@@ -310,6 +312,8 @@ const StaffAttendance = () => {
                                 onPress={onSavePendingClick}
                                 isLoading={submitLoading}
                                 startContent={!submitLoading && <Icon icon="lucide:check-circle" width={18} />}
+                                className="w-full sm:w-auto"
+                                size="sm"
                             >
                                 Submit Attendance
                             </Button>
@@ -321,11 +325,11 @@ const StaffAttendance = () => {
                         selectionMode="multiple"
                         selectedKeys={pendingSelected}
                         onSelectionChange={setPendingSelected}
-                        classNames={{ wrapper: "shadow-none" }}
+                        classNames={{ wrapper: "shadow-none bg-content1", th: "bg-warning/10 text-warning-700" }}
                     >
                         <TableHeader>
                             <TableColumn>EMPLOYEE</TableColumn>
-                            <TableColumn>DESIGNATION</TableColumn>
+                            <TableColumn className="hidden md:table-cell">DESIGNATION</TableColumn>
                             <TableColumn>STATUS</TableColumn>
                             <TableColumn width={300}>REMARKS</TableColumn>
                         </TableHeader>
@@ -342,14 +346,14 @@ const StaffAttendance = () => {
                                                 avatarProps={{ src: staff.profilePicture, name: (staff.name || staff.User?.name)?.charAt(0) }}
                                             />
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell className="hidden md:table-cell">
                                             <div className="flex flex-col">
                                                 <span className="text-small">{staff.designation || "Staff"}</span>
                                                 <span className="text-tiny text-default-400">{staff.department}</span>
                                             </div>
                                         </TableCell>
                                         <TableCell>
-                                            <div className="w-40">
+                                            <div className="w-full sm:w-40">
                                                 <Select
                                                     aria-label="Select status"
                                                     size="sm"
@@ -357,12 +361,12 @@ const StaffAttendance = () => {
                                                     onChange={(e) => handlePendingStatusChange(staff.id, e.target.value)}
                                                     color={statusConfig?.color || "default"}
                                                     variant="flat"
-                                                    startContent={<Icon icon={statusConfig?.icon} className={`text-${statusConfig?.color}-500`} width={16} />}
+                                                    startContent={<Icon icon={statusConfig?.icon} className={`text-${statusConfig?.color}`} width={16} />}
                                                 >
                                                     {ATTENDANCE_STATUS.map((s) => (
                                                         <SelectItem key={s.value} value={s.value} textValue={s.label}>
                                                             <div className="flex items-center gap-2">
-                                                                <Icon icon={s.icon} className={`text-${s.color}-500`} width={16} />
+                                                                <Icon icon={s.icon} className={`text-${s.color}`} width={16} />
                                                                 {s.label}
                                                             </div>
                                                         </SelectItem>
@@ -389,15 +393,15 @@ const StaffAttendance = () => {
 
             {/* Marked Attendance Table */}
             {markedRecords.length > 0 && (
-                <Card className="shadow-sm">
+                <Card className="shadow-sm bg-content1 border border-default-200">
                     <CardHeader className="flex gap-2 items-center px-6 py-4">
-                        <Icon icon="lucide:check-square" width={20} className='text-success-600' />
-                        <span className='font-semibold'>Marked Attendance ({markedRecords.length})</span>
+                        <Icon icon="lucide:check-square" width={20} className='text-success' />
+                        <span className='font-semibold text-foreground'>Marked Attendance ({markedRecords.length})</span>
                     </CardHeader>
-                    <Table aria-label="Marked Attendance Table" shadow="none" classNames={{ wrapper: "shadow-none" }}>
+                    <Table aria-label="Marked Attendance Table" shadow="none" classNames={{ wrapper: "shadow-none bg-content1", th: "bg-default-100 text-default-500" }}>
                         <TableHeader>
                             <TableColumn>EMPLOYEE</TableColumn>
-                            <TableColumn>DESIGNATION</TableColumn>
+                            <TableColumn className="hidden md:table-cell">DESIGNATION</TableColumn>
                             <TableColumn>STATUS</TableColumn>
                             <TableColumn>REMARKS</TableColumn>
                             <TableColumn>ACTIONS</TableColumn>
@@ -417,7 +421,7 @@ const StaffAttendance = () => {
                                                 avatarProps={{ src: staff?.profilePicture, name: (staff?.name || staff?.User?.name)?.charAt(0) }}
                                             />
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell className="hidden md:table-cell">
                                             <div className="flex flex-col">
                                                 <span className="text-small">{staff?.designation || "Staff"}</span>
                                                 <span className="text-tiny text-default-400">{staff?.department}</span>
@@ -425,7 +429,7 @@ const StaffAttendance = () => {
                                         </TableCell>
                                         <TableCell>
                                             {isEditing ? (
-                                                <div className="w-40">
+                                                <div className="w-full sm:w-40">
                                                     <Select
                                                         aria-label="val"
                                                         size="sm"

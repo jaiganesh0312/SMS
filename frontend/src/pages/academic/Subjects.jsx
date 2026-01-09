@@ -101,8 +101,8 @@ export default function Subjects() {
             <motion.div variants={itemVariants}>
                 <div className="flex justify-between items-center">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Subjects</h1>
-                        <p className="text-sm text-gray-500">Manage academic subjects</p>
+                        <h1 className="text-2xl font-bold text-foreground">Subjects</h1>
+                        <p className="text-sm text-default-500">Manage academic subjects</p>
                     </div>
                     <Button color="primary" startContent={<Icon icon="mdi:plus" />} onPress={onOpen}>
                         Add Subject
@@ -111,20 +111,23 @@ export default function Subjects() {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm">
+                <Card className="bg-content1 border border-default-200 shadow-sm">
                     <CardHeader className="flex justify-between items-center px-6 pt-6">
                         <div className="flex items-center gap-3">
                             <Icon icon="mdi:book-open-variant" className="text-primary text-2xl" />
                             <div>
-                                <h3 className="text-lg font-semibold">Subject List</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                                <h3 className="text-lg font-semibold text-foreground">Subject List</h3>
+                                <p className="text-sm text-default-500 font-normal">
                                     {subjects.length} active subject{subjects.length !== 1 ? 's' : ''}
                                 </p>
                             </div>
                         </div>
                     </CardHeader>
                     <CardBody className="px-0 pb-4">
-                        <Table aria-label="Subjects table" removeWrapper className="px-2">
+                        <Table aria-label="Subjects table" removeWrapper className="px-2" classNames={{
+                            wrapper: "bg-content1 border border-default-200 shadow-sm",
+                            th: "bg-default-100 text-default-500 font-medium"
+                        }}>
                             <TableHeader>
                                 <TableColumn>NAME</TableColumn>
                                 <TableColumn>CODE</TableColumn>
@@ -168,6 +171,7 @@ export default function Subjects() {
                                         placeholder="e.g. Mathematics"
                                         isInvalid={!!errors.name}
                                         errorMessage={errors.name?.message}
+                                        variant="bordered"
                                     />
                                     <Input
                                         {...register('code')}
@@ -175,6 +179,7 @@ export default function Subjects() {
                                         placeholder="e.g. MATH101"
                                         isInvalid={!!errors.code}
                                         errorMessage={errors.code?.message}
+                                        variant="bordered"
                                     />
                                 </div>
                             </ModalBody>

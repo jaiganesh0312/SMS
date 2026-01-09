@@ -312,17 +312,17 @@ export default function AddExamResult() {
             animate="visible"
         >
             <motion.div variants={itemVariants} className="flex items-center gap-4">
-                <Button isIconOnly variant="light" onPress={() => navigate(-1)}>
+                <Button isIconOnly variant="light" onPress={() => navigate(-1)} className="text-default-500 hover:text-foreground">
                     <Icon icon="mdi:arrow-left" className="text-xl" />
                 </Button>
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Manage Exam Results</h1>
-                    <p className="text-sm text-gray-500">Enter or update marks for students</p>
+                    <h1 className="text-2xl font-bold text-foreground">Manage Exam Results</h1>
+                    <p className="text-sm text-default-500">Enter or update marks for students</p>
                 </div>
             </motion.div>
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm mb-6">
+                <Card className="shadow-sm mb-6 bg-content1 border border-default-200 dark:border-default-100">
                     <CardBody className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <Select
                             label="Select Exam"
@@ -330,6 +330,8 @@ export default function AddExamResult() {
                             selectedKeys={selectedExam ? [selectedExam] : []}
                             onChange={handleExamChange}
                             startContent={<Icon icon="mdi:file-document-edit-outline" className="text-default-400" />}
+                            variant="bordered"
+                            classNames={{ label: "text-default-500", value: "text-foreground" }}
                         >
                             {exams.map((exam) => (
                                 <SelectItem key={exam.id || exam.id} value={exam.id || exam.id} textValue={exam.name}>
@@ -347,6 +349,8 @@ export default function AddExamResult() {
                             selectedKeys={selectedSubject ? [selectedSubject] : []}
                             onChange={(e) => setSelectedSubject(e.target.value)}
                             startContent={<Icon icon="mdi:book-open-page-variant" className="text-default-400" />}
+                            variant="bordered"
+                            classNames={{ label: "text-default-500", value: "text-foreground" }}
                         >
                             {subjects.map((sub) => (
                                 <SelectItem key={sub.id} value={sub.id}>
@@ -360,9 +364,18 @@ export default function AddExamResult() {
 
             {selectedExam && students.length > 0 && (
                 <motion.div variants={itemVariants}>
-                    <Card className="shadow-sm">
-                        <CardBody >
-                            <Table aria-label="Student marks table" shadow="none" removeWrapper>
+                    <Card className="shadow-sm bg-content1 border border-default-200 dark:border-default-100">
+                        <CardBody className="p-0">
+                            <Table
+                                aria-label="Student marks table"
+                                shadow="none"
+                                removeWrapper
+                                classNames={{
+                                    th: "bg-default-50 text-default-500 h-10",
+                                    td: "text-foreground py-3 border-b border-default-100",
+                                    tr: "hover:bg-default-50/50"
+                                }}
+                            >
                                 <TableHeader>
                                     <TableColumn>STUDENT NAME</TableColumn>
                                     <TableColumn>ADMISSION NO</TableColumn>
@@ -383,7 +396,7 @@ export default function AddExamResult() {
                                                 <TableCell>
                                                     <div className="flex flex-col">
                                                         <span className="font-medium">{student.firstName} {student.lastName}</span>
-                                                        <span className="text-xs text-gray-500">{student.admissionNumber}</span>
+                                                        <span className="text-xs text-default-500">{student.admissionNumber}</span>
                                                     </div>
                                                 </TableCell>
                                                 <TableCell>{student.admissionNumber || '-'}</TableCell>
@@ -398,6 +411,7 @@ export default function AddExamResult() {
                                                                 value={marks?.maxMarks || '100'}
                                                                 onValueChange={(val) => handleMarkChange(student.id, 'maxMarks', val)}
                                                                 size="sm"
+                                                                variant="bordered"
                                                             />
                                                         )}
                                                     </div>
@@ -413,6 +427,7 @@ export default function AddExamResult() {
                                                                 value={marks?.marksObtained || ''}
                                                                 onValueChange={(val) => handleMarkChange(student.id, 'marksObtained', val)}
                                                                 size="sm"
+                                                                variant="bordered"
                                                                 color={
                                                                     parseFloat(marks?.marksObtained) > parseFloat(marks?.maxMarks)
                                                                         ? "danger"
@@ -428,11 +443,11 @@ export default function AddExamResult() {
                                                             {marks.grade}
                                                         </Chip>
                                                     ) : (
-                                                        <span className="text-gray-400">-</span>
+                                                        <span className="text-default-400">-</span>
                                                     )}
                                                 </TableCell>
                                                 <TableCell>
-                                                    <span className="text-sm text-gray-600">
+                                                    <span className="text-sm text-default-500">
                                                         {marks?.remarks || '-'}
                                                     </span>
                                                 </TableCell>
@@ -455,7 +470,7 @@ export default function AddExamResult() {
                                                             )}
                                                         </div>
                                                     ) : (
-                                                        <span className="text-xs text-gray-400">New</span>
+                                                        <span className="text-xs text-default-400">New</span>
                                                     )}
                                                 </TableCell>
                                             </TableRow>
@@ -464,9 +479,9 @@ export default function AddExamResult() {
                                 </TableBody>
                             </Table>
                         </CardBody>
-                        <div className="p-6 border-t border-gray-100 dark:border-gray-800 flex justify-end">
+                        <div className="p-6 border-t border-default-200 dark:border-default-100 flex justify-end">
                             <Button
-                                color="primary"
+                                className="bg-primary-600 text-white shadow-md shadow-primary-500/20"
                                 onPress={handleSubmit}
                                 isLoading={isLoading}
                                 isDisabled={students.length === 0 || !selectedSubject}

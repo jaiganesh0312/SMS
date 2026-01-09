@@ -1,20 +1,21 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import { PageHeader } from '@/components/common';
+import { useSocket } from '@/context/SocketContext';
+import { transportService } from '@/services';
 import {
+    Button,
     Card,
     CardBody,
     CardHeader,
-    Button,
+    Chip,
     Select,
     SelectItem,
-    Chip,
-    Spinner,
+    Spinner
 } from '@heroui/react';
 import { Icon } from '@iconify/react';
-import { useSocket } from '@/context/SocketContext';
-import { transportService } from '@/services';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from 'react-leaflet';
 
 // Custom bus icon
 const busIcon = new L.Icon({
@@ -178,38 +179,40 @@ const BusTracking = () => {
 
     return (
         <div className="p-6 space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold">Bus Tracking</h1>
-                    <p className="text-default-500">Track live bus locations</p>
-                </div>
-                <div className="flex items-center gap-3">
-                    <Chip
-                        color={isConnected ? 'success' : 'danger'}
-                        variant="flat"
-                        startContent={
-                            <Icon icon={isConnected ? 'mdi:wifi' : 'mdi:wifi-off'} width={16} />
-                        }
-                    >
-                        {isConnected ? 'Live' : 'Offline'}
-                    </Chip>
-                    <Button
-                        isIconOnly
-                        variant="flat"
-                        onPress={handleRefresh}
-                        isDisabled={!selectedBus}
-                    >
-                        <Icon icon="mdi:refresh" width={20} />
-                    </Button>
-                </div>
-            </div>
+            <PageHeader
+                title="Bus Tracking"
+                subtitle="Track live bus locations in real-time"
+                action={
+                    <div className="flex items-center gap-3">
+                        <Chip
+                            color={isConnected ? 'success' : 'danger'}
+                            variant="flat"
+                            startContent={
+                                <Icon icon={isConnected ? 'mdi:wifi' : 'mdi:wifi-off'} width={16} />
+                            }
+                            classNames={{ content: "font-medium" }}
+                        >
+                            {isConnected ? 'Live' : 'Offline'}
+                        </Chip>
+                        <Button
+                            isIconOnly
+                            variant="flat"
+                            color="default"
+                            onPress={handleRefresh}
+                            isDisabled={!selectedBus}
+                        >
+                            <Icon icon="mdi:refresh" width={20} />
+                        </Button>
+                    </div>
+                }
+            />
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {/* Sidebar */}
                 <div className="space-y-4">
-                    <Card>
-                        <CardHeader>
-                            <h3 className="font-semibold">Select Bus</h3>
+                    <Card className="bg-content1 border border-default-200 shadow-sm">
+                        <CardHeader className="border-b border-default-100">
+                            <h3 className="font-semibold text-foreground">Select Bus</h3>
                         </CardHeader>
                         <CardBody>
                             {loading ? (
@@ -220,12 +223,14 @@ const BusTracking = () => {
                                     placeholder="Select bus to track"
                                     selectedKeys={selectedBus ? [selectedBus] : []}
                                     onSelectionChange={(keys) => setSelectedBus([...keys][0])}
+                                    variant="bordered"
+                                    labelPlacement="outside"
                                 >
                                     {buses.map((bus) => (
                                         <SelectItem key={bus.id} textValue={bus.busNumber}>
                                             <div className="flex justify-between items-center">
                                                 <span>{bus.busNumber}</span>
-                                                <Chip size="sm" color={bus.isActive ? 'success' : 'default'}>
+                                                <Chip size="sm" color={bus.isActive ? 'success' : 'default'} variant="flat">
                                                     {bus.isActive ? 'Active' : 'Inactive'}
                                                 </Chip>
                                             </div>
@@ -237,45 +242,47 @@ const BusTracking = () => {
                     </Card>
 
                     {selectedBusData && (
-                        <Card>
-                            <CardHeader>
-                                <h3 className="font-semibold">Bus Details</h3>
+                        <Card className="bg-content1 border border-default-200 shadow-sm">
+                            <CardHeader className="border-b border-default-100">
+                                <h3 className="font-semibold text-foreground">Bus Details</h3>
                             </CardHeader>
                             <CardBody className="space-y-3">
-                                <div className="flex justify-between">
+                                <div className="flex justify-between items-center">
                                     <span className="text-default-500">Number:</span>
-                                    <span className="font-medium">{selectedBusData.busNumber}</span>
+                                    <span className="font-medium text-foreground">{selectedBusData.busNumber}</span>
                                 </div>
-                                <div className="flex justify-between">
+                                <div className="flex justify-between items-center">
                                     <span className="text-default-500">Registration:</span>
-                                    <span className="font-medium">{selectedBusData.registrationNumber}</span>
+                                    <span className="font-medium text-foreground">{selectedBusData.registrationNumber}</span>
                                 </div>
                                 {selectedBusData.driver && (
-                                    <div className="flex justify-between">
+                                    <div className="flex justify-between items-center">
                                         <span className="text-default-500">Driver:</span>
-                                        <span className="font-medium">{selectedBusData.driver.name}</span>
+                                        <span className="font-medium text-foreground">{selectedBusData.driver.name}</span>
                                     </div>
                                 )}
-                                <div className="flex justify-between">
+                                <div className="flex justify-between items-center">
                                     <span className="text-default-500">Status:</span>
                                     <Chip
                                         size="sm"
                                         color={getStatusColor(activeTrip?.status || 'NOT_STARTED')}
+                                        variant="flat"
+                                        classNames={{ content: "font-medium" }}
                                     >
                                         {activeTrip?.status?.replace('_', ' ') || 'No Active Trip'}
                                     </Chip>
                                 </div>
                                 {busLocation && (
                                     <>
-                                        <div className="flex justify-between">
+                                        <div className="flex justify-between items-center">
                                             <span className="text-default-500">Speed:</span>
-                                            <span className="font-medium">
+                                            <span className="font-medium text-foreground font-mono">
                                                 {busLocation.speed ? `${busLocation.speed} km/h` : 'N/A'}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between">
+                                        <div className="flex justify-between items-center">
                                             <span className="text-default-500">Last Update:</span>
-                                            <span className="font-medium text-xs">
+                                            <span className="font-medium text-foreground text-xs">
                                                 {lastUpdate?.toLocaleTimeString()}
                                             </span>
                                         </div>
@@ -286,9 +293,9 @@ const BusTracking = () => {
                     )}
 
                     {route && route.stops && route.stops.length > 0 && (
-                        <Card>
-                            <CardHeader>
-                                <h3 className="font-semibold">Route: {route.routeName}</h3>
+                        <Card className="bg-content1 border border-default-200 shadow-sm">
+                            <CardHeader className="border-b border-default-100">
+                                <h3 className="font-semibold text-foreground">Route: {route.routeName}</h3>
                             </CardHeader>
                             <CardBody>
                                 <div className="space-y-2">
@@ -297,10 +304,10 @@ const BusTracking = () => {
                                         .map((stop, idx) => (
                                             <div
                                                 key={idx}
-                                                className="flex items-center gap-2 text-sm"
+                                                className="flex items-center gap-2 text-sm p-2 rounded-lg hover:bg-default-50 transition-colors"
                                             >
-                                                <Icon icon="mdi:map-marker" className="text-primary" />
-                                                <span>
+                                                <Icon icon="mdi:map-marker" className="text-primary" width={18} />
+                                                <span className="text-foreground">
                                                     {stop.order}. {stop.name}
                                                 </span>
                                             </div>
@@ -313,8 +320,8 @@ const BusTracking = () => {
 
                 {/* Map */}
                 <div className="lg:col-span-3">
-                    <Card className="h-[600px]">
-                        <CardBody className="p-0 overflow-hidden rounded-xl">
+                    <Card className="h-[600px] bg-content1 border border-default-200 shadow-sm">
+                        <CardBody className="p-0 overflow-hidden">
                             <MapContainer
                                 center={
                                     busLocation

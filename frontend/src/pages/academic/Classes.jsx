@@ -174,22 +174,22 @@ export default function Classes() {
             initial="hidden"
             animate="visible"
         >
-            <motion.div variants={itemVariants} className="flex justify-between items-center">
+            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Class Management</h1>
-                    <p className="text-sm text-gray-500">Manage Standards, Divisions and Class Teachers</p>
+                    <h1 className="text-2xl font-bold text-foreground">Class Management</h1>
+                    <p className="text-sm text-default-500">Manage Standards, Divisions and Class Teachers</p>
                 </div>
-                <Button color="primary" startContent={<Icon icon="mdi:plus" />} onPress={onStdOpen}>
+                <Button color="primary" startContent={<Icon icon="mdi:plus" />} onPress={onStdOpen} className="w-full sm:w-auto">
                     Add New Standard
                 </Button>
             </motion.div>
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm">
+                <Card className="bg-content1 border border-default-200 shadow-sm">
                     <CardHeader className="px-6 pt-6">
                         <div className="flex items-center gap-3">
                             <Icon icon="mdi:google-classroom" className="text-primary text-2xl" />
-                            <h3 className="text-lg font-semibold">Standards Directory</h3>
+                            <h3 className="text-lg font-semibold text-foreground">Standards Directory</h3>
                         </div>
                     </CardHeader>
                     <CardBody className="px-6 pb-6 pt-2">
@@ -198,7 +198,7 @@ export default function Classes() {
                                 <Spinner />
                             </div>
                         ) : standards.length === 0 ? (
-                            <div className="text-center text-gray-500 py-8">No standards found. Add one to get started.</div>
+                            <div className="text-center text-default-500 py-8">No standards found. Add one to get started.</div>
                         ) : (
                             <Accordion selectionMode="multiple" variant="splitted">
                                 {standards.map((std) => (
@@ -215,24 +215,28 @@ export default function Classes() {
                                         onPress={() => fetchDivisions(std)}
                                     >
                                         <div className="py-2">
-                                            <div className="flex justify-between items-center mb-4 px-2">
-                                                <h4 className="text-sm font-semibold text-gray-600">Divisions / Sections</h4>
+                                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-2 gap-2">
+                                                <h4 className="text-sm font-semibold text-default-500">Divisions / Sections</h4>
                                                 <Button
                                                     size="sm"
                                                     variant="flat"
                                                     color="primary"
                                                     startContent={<Icon icon="mdi:plus" />}
                                                     onPress={() => { setSelectedStandard(std); onDivOpen(); }}
+                                                    className="w-full sm:w-auto"
                                                 >
                                                     Add Division
                                                 </Button>
                                             </div>
 
-                                            <Table removeWrapper aria-label={`${std} divisions table`}>
+                                            <Table removeWrapper aria-label={`${std} divisions table`} classNames={{
+                                                wrapper: "bg-content1 border border-default-200 shadow-sm",
+                                                th: "bg-default-100 text-default-500 font-medium"
+                                            }}>
                                                 <TableHeader>
                                                     <TableColumn>SECTION</TableColumn>
                                                     <TableColumn>CLASS TEACHER</TableColumn>
-                                                    <TableColumn>STUDENTS</TableColumn>
+                                                    <TableColumn className="hidden md:table-cell">STUDENTS</TableColumn>
                                                     <TableColumn>ACTIONS</TableColumn>
                                                 </TableHeader>
                                                 <TableBody
@@ -249,9 +253,10 @@ export default function Classes() {
                                                                     aria-label="Assign Teacher"
                                                                     placeholder="Select Teacher"
                                                                     size="sm"
-                                                                    className="max-w-xs"
+                                                                    className="w-full sm:max-w-xs"
                                                                     defaultSelectedKeys={cls.classTeacherId ? [cls.classTeacherId] : []}
                                                                     onChange={(e) => handleAssignTeacher(cls.id, std, e.target.value)}
+                                                                    variant="bordered"
                                                                 >
                                                                     {teachers.map((t) => (
                                                                         <SelectItem key={t.id} value={t.id}>
@@ -260,7 +265,7 @@ export default function Classes() {
                                                                     ))}
                                                                 </Select>
                                                             </TableCell>
-                                                            <TableCell>
+                                                            <TableCell className="hidden md:table-cell">
                                                                 <Button
                                                                     size="sm"
                                                                     variant="light"
@@ -306,6 +311,7 @@ export default function Classes() {
                                         placeholder="e.g. 10th, XII"
                                         isInvalid={!!errorsStd.name}
                                         errorMessage={errorsStd.name?.message}
+                                        variant="bordered"
                                     />
                                     <Input
                                         {...registerStd('section')}
@@ -313,11 +319,13 @@ export default function Classes() {
                                         placeholder="e.g. A"
                                         isInvalid={!!errorsStd.section}
                                         errorMessage={errorsStd.section?.message}
+                                        variant="bordered"
                                     />
                                     <Select
                                         label="Class Teacher (Optional)"
                                         placeholder="Select Teacher"
                                         {...registerStd('classTeacherId')}
+                                        variant="bordered"
                                     >
                                         {teachers.map((t) => (
                                             <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
@@ -348,11 +356,13 @@ export default function Classes() {
                                         placeholder="e.g. B, C"
                                         isInvalid={!!errorsDiv.section}
                                         errorMessage={errorsDiv.section?.message}
+                                        variant="bordered"
                                     />
                                     <Select
                                         label="Class Teacher (Optional)"
                                         placeholder="Select Teacher"
                                         {...registerDiv('classTeacherId')}
+                                        variant="bordered"
                                     >
                                         {teachers.map((t) => (
                                             <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>

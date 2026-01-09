@@ -110,9 +110,12 @@ export default function ManageSections() {
     }
 
     return (
-        <div className="p-6">
+        <div className="p-6 space-y-6">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">Manage Sections</h1>
+                <div>
+                    <h1 className="text-2xl font-bold text-foreground">Manage Sections</h1>
+                    <p className="text-default-500 text-sm">Organize library sections and locations</p>
+                </div>
                 <div className="flex gap-2">
                     <Button color="secondary" variant="flat" startContent={<Icon icon="mdi:upload" />} onPress={() => navigate('/admin/bulk-upload/library-sections')}>
                         Bulk Upload
@@ -123,43 +126,65 @@ export default function ManageSections() {
                 </div>
             </div>
 
-            <Table aria-label="Sections Table">
-                <TableHeader>
-                    <TableColumn>NAME</TableColumn>
-                    <TableColumn>DESCRIPTION</TableColumn>
-                    <TableColumn>LOCATION</TableColumn>
-                    <TableColumn>ACTIONS</TableColumn>
-                </TableHeader>
-                <TableBody emptyContent={"No sections found."}>
-                    {sections.map((section) => (
-                        <TableRow key={section.id}>
-                            <TableCell>{section.name}</TableCell>
-                            <TableCell>{section.description}</TableCell>
-                            <TableCell>{section.location}</TableCell>
-                            <TableCell>
-                                <div className="flex gap-2">
-                                    <Button isIconOnly size="sm" color="success" variant="light" onPress={() => navigate(`/library/section/${section.id}/books`)} title="View Books">
-                                        <Icon icon="mdi:bookshelf" width={20} />
-                                    </Button>
-                                    <Button isIconOnly size="sm" color="primary" variant="light" onPress={() => handleEdit(section)}>
-                                        <Icon icon="mdi:pencil" width={20} />
-                                    </Button>
-                                    <Button isIconOnly size="sm" color="danger" variant="light" onPress={() => handleDelete(section.id)}>
-                                        <Icon icon="mdi:trash" width={20} />
-                                    </Button>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
+                <CardBody className="p-0">
+                    <Table aria-label="Sections Table" shadow="none" classNames={{
+                        wrapper: "bg-content1 shadow-none",
+                        th: "bg-default-100 text-default-500 font-medium",
+                        td: "text-foreground group-hover:bg-default-50"
+                    }}>
+                        <TableHeader>
+                            <TableColumn>NAME</TableColumn>
+                            <TableColumn>DESCRIPTION</TableColumn>
+                            <TableColumn>LOCATION</TableColumn>
+                            <TableColumn>ACTIONS</TableColumn>
+                        </TableHeader>
+                        <TableBody emptyContent={"No sections found."}>
+                            {sections.map((section) => (
+                                <TableRow key={section.id} className="border-b border-default-100 last:border-none">
+                                    <TableCell className="font-medium text-foreground">{section.name}</TableCell>
+                                    <TableCell className="text-default-500">{section.description}</TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-2 text-default-500">
+                                            <Icon icon="mdi:map-marker" />
+                                            {section.location || '-'}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex gap-2">
+                                            <Button isIconOnly size="sm" color="success" variant="light" onPress={() => navigate(`/library/section/${section.id}/books`)} title="View Books">
+                                                <Icon icon="mdi:bookshelf" width={20} />
+                                            </Button>
+                                            <Button isIconOnly size="sm" color="primary" variant="light" onPress={() => handleEdit(section)}>
+                                                <Icon icon="mdi:pencil" width={20} />
+                                            </Button>
+                                            <Button isIconOnly size="sm" color="danger" variant="light" onPress={() => handleDelete(section.id)}>
+                                                <Icon icon="mdi:trash" width={20} />
+                                            </Button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardBody>
+            </Card>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} classNames={{
+                base: "bg-content1 border border-default-200",
+                header: "border-b border-default-200",
+                footer: "border-t border-default-200"
+            }}>
                 <ModalContent>
                     {(onClose) => (
                         <form onSubmit={handleSubmit((data) => onSubmit(data, onClose))}>
-                            <ModalHeader className="flex flex-col gap-1">{currentSection ? "Edit Section" : "Add Section"}</ModalHeader>
-                            <ModalBody>
+                            <ModalHeader className="flex flex-col gap-1 text-foreground">
+                                <span className="flex items-center gap-2">
+                                    <Icon icon={currentSection ? "mdi:pencil" : "mdi:plus-circle"} className="text-primary" />
+                                    {currentSection ? "Edit Section" : "Add Section"}
+                                </span>
+                            </ModalHeader>
+                            <ModalBody className="py-6">
                                 <Input
                                     label="Name"
                                     placeholder="e.g. Premchand Collection"
@@ -168,18 +193,21 @@ export default function ManageSections() {
                                     isInvalid={!!errors.name}
                                     errorMessage={errors.name?.message}
                                     isRequired
+                                    variant="bordered"
                                 />
                                 <Input
                                     label="Description"
                                     placeholder="e.g. Works of Munshi Premchand"
                                     startContent={<Icon icon="mdi:text" className="text-default-400" />}
                                     {...register("description")}
+                                    variant="bordered"
                                 />
                                 <Input
                                     label="Location"
                                     placeholder="e.g. Second Floor, Aisle 3"
                                     startContent={<Icon icon="mdi:map-marker" className="text-default-400" />}
                                     {...register("location")}
+                                    variant="bordered"
                                 />
                             </ModalBody>
                             <ModalFooter>

@@ -61,24 +61,24 @@ export default function ExamList() {
 
     return (
         <motion.div
-            className="p-6 space-y-6"
+            className="p-4 md:p-6 space-y-4 md:space-y-6"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
-            <motion.div variants={itemVariants} className="flex justify-between items-center">
+            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-content1 p-4 rounded-xl border border-default-200 shadow-sm">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Exams</h1>
-                    <p className="text-sm text-gray-500">Manage school exams and assessments</p>
+                    <h1 className="text-xl sm:text-2xl font-bold text-foreground">Exams</h1>
+                    <p className="text-sm text-default-500">Manage school exams and assessments</p>
                 </div>
-                <div className="flex gap-2">
-                    <Link to="/admin/bulk-upload/exams">
-                        <Button color="secondary" variant="flat" startContent={<Icon icon="mdi:cloud-upload" />}>
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <Link to="/admin/bulk-upload/exams" className="w-full sm:w-auto">
+                        <Button color="secondary" variant="flat" startContent={<Icon icon="mdi:cloud-upload" />} className="w-full sm:w-auto">
                             Bulk Upload
                         </Button>
                     </Link>
-                    <Link to="/exams/new">
-                        <Button color="primary" startContent={<Icon icon="mdi:plus" />}>
+                    <Link to="/exams/new" className="w-full sm:w-auto">
+                        <Button className="bg-primary-600 text-white shadow-md shadow-primary-500/20 w-full sm:w-auto" startContent={<Icon icon="mdi:plus" />}>
                             Create Exam
                         </Button>
                     </Link>
@@ -87,11 +87,20 @@ export default function ExamList() {
 
             <motion.div variants={itemVariants}>
 
-                <Table aria-label="Exams table" shadow="none">
+                <Table
+                    aria-label="Exams table"
+                    shadow="none"
+                    classNames={{
+                        wrapper: "bg-content1 border border-default-200 dark:border-default-100 shadow-sm rounded-xl",
+                        th: "bg-default-50 text-default-500 font-semibold",
+                        td: "text-foreground",
+                        row: "hover:bg-default-50 transition-colors"
+                    }}
+                >
                     <TableHeader>
                         <TableColumn>EXAM TITLE</TableColumn>
-                        <TableColumn>CLASS</TableColumn>
-                        <TableColumn>DATE</TableColumn>
+                        <TableColumn className="hidden md:table-cell">CLASS</TableColumn>
+                        <TableColumn className="hidden sm:table-cell">DATE</TableColumn>
                         <TableColumn>STATUS</TableColumn>
                         <TableColumn>ACTIONS</TableColumn>
                     </TableHeader>
@@ -99,16 +108,21 @@ export default function ExamList() {
                         {exams.map((exam) => (
                             <TableRow key={exam.id}>
                                 <TableCell className="font-medium">{exam.name}</TableCell>
-                                <TableCell>{exam.Class?.name}</TableCell>
-                                <TableCell>{format(new Date(exam.startDate), 'PPP')}</TableCell>
+                                <TableCell className="hidden md:table-cell">{exam.Class?.name}</TableCell>
+                                <TableCell className="hidden sm:table-cell">{format(new Date(exam.startDate), 'PPP')}</TableCell>
                                 <TableCell>
-                                    <Chip size="sm" variant="flat" color={new Date(exam.startDate) > new Date() ? "primary" : "success"}>
+                                    <Chip
+                                        size="sm"
+                                        variant="flat"
+                                        color={new Date(exam.startDate) > new Date() ? "primary" : "success"}
+                                        classNames={{ content: "font-medium" }}
+                                    >
                                         {new Date(exam.startDate) > new Date() ? "Upcoming" : "Completed"}
                                     </Chip>
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex gap-2">
-                                        <Button isIconOnly size="sm" variant="light">
+                                        <Button isIconOnly size="sm" variant="light" color="primary">
                                             <Icon icon="mdi:pencil" className="text-lg" />
                                         </Button>
                                     </div>

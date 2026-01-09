@@ -162,30 +162,37 @@ export default function SectionDetails() {
     );
 
     return (
-        <div className="p-6 max-w-7xl mx-auto space-y-6">
+        <div className="p-3 sm:p-4 md:p-6 max-w-7xl mx-auto space-y-4 sm:space-y-6">
             {/* Header */}
-            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-zinc-800">
-                <div className="flex flex-col md:flex-row justify-between gap-4">
+            <div className="bg-content1 rounded-xl shadow-sm p-4 sm:p-6 border border-default-200">
+                <div className="flex flex-col gap-4">
                     <div>
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex flex-wrap items-center gap-2 mb-3">
                             <Button
                                 isIconOnly
                                 variant="light"
                                 size="sm"
                                 onPress={() => navigate('/study-materials')}
+                                className="text-default-500 hover:text-primary"
                             >
-                                <Icon icon="mdi:arrow-left" className="text-xl" />
+                                <Icon icon="mdi:arrow-left" className="text-lg sm:text-xl" />
                             </Button>
-                            <Chip size="sm" color="primary" variant="flat">{section.Subject?.name}</Chip>
-                            <Chip size="sm" variant="bordered">{section.Class?.name} {section.sectionId || ''}</Chip>
+                            <Chip size="sm" color="primary" variant="flat" className="text-xs">{section.Subject?.name}</Chip>
+                            <Chip size="sm" variant="bordered" className="border-default-300 text-default-600 text-xs">{section.Class?.name} {section.sectionId || ''}</Chip>
                         </div>
-                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{section.title}</h1>
-                        <p className="text-gray-600 dark:text-gray-400 max-w-2xl">{section.description}</p>
+                        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-2">{section.title}</h1>
+                        <p className="text-sm sm:text-base text-default-500 max-w-2xl">{section.description}</p>
                     </div>
 
                     {isTeacherOrAdmin && (
-                        <div className="flex gap-2 items-start">
-                            <Button color="primary" startContent={<Icon icon="mdi:upload" />} onPress={onOpen}>
+                        <div className="flex gap-2">
+                            <Button
+                                color="primary"
+                                startContent={<Icon icon="mdi:upload" />}
+                                onPress={onOpen}
+                                className="shadow-md shadow-primary/20 w-full sm:w-auto"
+                                size="sm"
+                            >
                                 Add Material
                             </Button>
                         </div>
@@ -194,13 +201,13 @@ export default function SectionDetails() {
             </div>
 
             {/* Content List */}
-            <div className="grid gap-4">
+            <div className="grid gap-3 sm:gap-4">
                 {section.materials?.length === 0 ? (
-                    <div className="text-center py-16 bg-gray-50 rounded-xl border border-dashed">
-                        <Icon icon="mdi:folder-open-outline" className="text-5xl text-gray-300 mx-auto mb-3" />
-                        <p className="text-gray-500">No materials in this section yet.</p>
+                    <div className="text-center py-12 sm:py-16 bg-content1 rounded-xl border border-dashed border-default-200">
+                        <Icon icon="mdi:folder-open-outline" className="text-4xl sm:text-5xl text-default-300 mx-auto mb-3" />
+                        <p className="text-sm sm:text-base text-default-500">No materials in this section yet.</p>
                         {isTeacherOrAdmin && (
-                            <Button color="primary" variant="flat" className="mt-4" onPress={onOpen}>
+                            <Button color="primary" variant="flat" className="mt-4" onPress={onOpen} size="sm">
                                 Add Material
                             </Button>
                         )}
@@ -211,31 +218,31 @@ export default function SectionDetails() {
                             key={material.id}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-white dark:bg-zinc-900 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-zinc-800 hover:shadow-md transition-shadow flex flex-col sm:flex-row items-center gap-4 group"
+                            className="bg-content1 rounded-lg p-3 sm:p-4 shadow-sm border border-default-200 hover:shadow-md transition-shadow flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 group"
                         >
                             {/* Icon / Thumbnail Box */}
                             <div
-                                className={`w-14 h-14 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-zinc-800 cursor-pointer ${getFileColor(material.type, material.status)}`}
+                                className={`w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 rounded-lg flex items-center justify-center bg-default-100 cursor-pointer ${getFileColor(material.type, material.status)}`}
                                 onClick={() => {
                                     if (material.status !== 'PROCESSING' && material.status !== 'FAILED') {
                                         handleMaterialClick(material);
                                     }
                                 }}
                             >
-                                <Icon icon={getFileIcon(material.type)} className="text-3xl" />
+                                <Icon icon={getFileIcon(material.type)} className="text-2xl sm:text-3xl" />
                             </div>
 
                             {/* Info */}
-                            <div className="flex-1 min-w-0 cursor-pointer" onClick={() => handleMaterialClick(material)}>
-                                <div className="flex items-center gap-2 mb-1">
-                                    <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
+                            <div className="flex-1 min-w-0 cursor-pointer w-full sm:w-auto" onClick={() => handleMaterialClick(material)}>
+                                <div className="flex flex-wrap items-center gap-2 mb-1">
+                                    <h3 className="text-sm sm:text-base font-semibold text-foreground truncate max-w-full">
                                         {material.title}
                                     </h3>
                                     {!material.isPublished && (
                                         <Chip size="sm" color="warning" variant="flat" className="h-5 text-xs">Unpublished</Chip>
                                     )}
                                 </div>
-                                <div className="flex items-center gap-4 text-xs text-gray-500">
+                                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-default-500">
                                     <span className="flex items-center gap-1">
                                         <Icon icon={material.type === 'VIDEO' ? "mdi:clock-outline" : "mdi:file-outline"} />
                                         {material.type === 'VIDEO'
@@ -243,48 +250,49 @@ export default function SectionDetails() {
                                             : `${(material.fileSize / 1024 / 1024).toFixed(1)} MB`
                                         }
                                     </span>
-                                    <span>•</span>
-                                    <span>Added by {material.uploader?.name}</span>
-                                    <span>•</span>
-                                    <span>{new Date(material.createdAt).toLocaleDateString()}</span>
+                                    <span className="hidden sm:inline">•</span>
+                                    <span className="truncate max-w-[150px] sm:max-w-none">Added by {material.uploader?.name}</span>
+                                    <span className="hidden sm:inline">•</span>
+                                    <span className="whitespace-nowrap">{new Date(material.createdAt).toLocaleDateString()}</span>
                                 </div>
                                 {material.description && (
-                                    <p className="text-sm text-gray-500 mt-1 line-clamp-1">{material.description}</p>
+                                    <p className="text-xs sm:text-sm text-default-400 mt-1 line-clamp-1">{material.description}</p>
                                 )}
                             </div>
 
                             {/* Actions */}
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 w-full sm:w-auto flex-shrink-0">
                                 <Button
                                     size="sm"
                                     variant="flat"
                                     color={material.type === 'VIDEO' ? "primary" : "secondary"}
-                                    startContent={<Icon icon={material.type === 'VIDEO' ? "mdi:play" : "mdi:download"} />}
+                                    startContent={<Icon icon={material.type === 'VIDEO' ? "mdi:play" : "mdi:download"} className="text-base" />}
                                     onPress={() => handleMaterialClick(material)}
                                     isDisabled={material.status === 'PROCESSING' || material.status === 'FAILED'}
+                                    className="flex-1 sm:flex-none min-w-[100px]"
                                 >
-                                    {material.type === 'VIDEO' ? "Watch" : "Download"}
+                                    <span className="text-xs">{material.type === 'VIDEO' ? "Watch" : "Download"}</span>
                                 </Button>
 
 
                                 {material.status === 'PROCESSING' && (
-                                    <div className="flex items-center gap-2 bg-yellow-50 text-yellow-700 px-3 py-1 rounded-lg text-sm">
+                                    <div className="flex items-center gap-1 sm:gap-2 bg-warning/10 text-warning-700 px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm border border-warning/20">
                                         Processing...
                                     </div>
                                 )}
 
                                 {material.status === 'FAILED' && (
-                                    <div className="flex items-center gap-2 bg-red-50 text-red-600 px-3 py-1 rounded-lg text-sm">
-                                        <Icon icon="mdi:alert" />
-                                        Failed
+                                    <div className="flex items-center gap-1 sm:gap-2 bg-danger/10 text-danger-600 px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm border border-danger/20">
+                                        <Icon icon="mdi:alert" className="text-sm" />
+                                        <span className="hidden sm:inline">Failed</span>
                                     </div>
                                 )}
 
                                 {isTeacherOrAdmin && (
                                     <Dropdown>
                                         <DropdownTrigger>
-                                            <Button isIconOnly size="sm" variant="light">
-                                                <Icon icon="mdi:dots-vertical" className="text-lg" />
+                                            <Button isIconOnly size="sm" variant="light" className="text-default-400 hover:text-default-600">
+                                                <Icon icon="mdi:dots-vertical" className="text-base sm:text-lg" />
                                             </Button>
                                         </DropdownTrigger>
                                         <DropdownMenu aria-label="Material actions">
@@ -318,19 +326,26 @@ export default function SectionDetails() {
                 isDismissable={!isUploading}
                 hideCloseButton={isUploading}
                 size="2xl"
+                backdrop="blur"
+                classNames={{
+                    base: "bg-content1 border border-default-200",
+                    header: "border-b border-default-200 text-foreground",
+                    footer: "border-t border-default-200",
+                    closeButton: "hover:bg-default-100 active:bg-default-200 text-default-500",
+                }}
             >
                 <ModalContent>
                     {(onClose) => (
                         <form onSubmit={handleSubmit(handleUpload)}>
                             <ModalHeader>Upload Material</ModalHeader>
-                            <ModalBody>
+                            <ModalBody className="py-6">
                                 {isUploading ? (
                                     <div className="py-10 text-center space-y-4">
                                         <div className="flex justify-center mb-4">
                                             <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary"></div>
                                         </div>
-                                        <h3 className="text-xl font-semibold">Uploading...</h3>
-                                        <p className="text-gray-500">Please wait while your file is being uploaded.</p>
+                                        <h3 className="text-xl font-semibold text-foreground">Uploading...</h3>
+                                        <p className="text-default-500">Please wait while your file is being uploaded.</p>
                                         <Progress
                                             value={uploadProgress}
                                             showValueLabel={true}
@@ -340,7 +355,7 @@ export default function SectionDetails() {
                                     </div>
                                 ) : (
                                     <div className="space-y-4">
-                                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50 hover:bg-gray-100 transition-colors relative">
+                                        <div className="border-2 border-dashed border-default-300 rounded-lg p-8 text-center bg-default-50 hover:bg-default-100 transition-colors relative">
                                             <input
                                                 type="file"
                                                 {...register('file', { required: "File is required" })}
@@ -349,19 +364,19 @@ export default function SectionDetails() {
                                             />
                                             {file && file.length > 0 ? (
                                                 <div className="flex flex-col items-center">
-                                                    <Icon icon="mdi:file-check" className="text-4xl text-green-500 mb-2" />
-                                                    <p className="font-semibold text-gray-700">{file[0].name}</p>
-                                                    <p className="text-xs text-gray-500 mt-1">{(file[0].size / 1024 / 1024).toFixed(2)} MB</p>
+                                                    <Icon icon="mdi:file-check" className="text-4xl text-success mb-2" />
+                                                    <p className="font-semibold text-foreground">{file[0].name}</p>
+                                                    <p className="text-xs text-default-500 mt-1">{(file[0].size / 1024 / 1024).toFixed(2)} MB</p>
                                                 </div>
                                             ) : (
                                                 <div className="flex flex-col items-center">
-                                                    <Icon icon="mdi:cloud-upload" className="text-4xl text-gray-400 mb-2" />
-                                                    <p className="font-semibold text-gray-700">Click or Drag file to upload</p>
-                                                    <p className="text-xs text-gray-500 mt-1">Supports MP4, PDF, PPT</p>
+                                                    <Icon icon="mdi:cloud-upload" className="text-4xl text-default-400 mb-2" />
+                                                    <p className="font-semibold text-foreground">Click or Drag file to upload</p>
+                                                    <p className="text-xs text-default-500 mt-1">Supports MP4, PDF, PPT</p>
                                                 </div>
                                             )}
                                         </div>
-                                        {errors.file && <p className="text-xs text-red-500">{errors.file.message}</p>}
+                                        {errors.file && <p className="text-xs text-danger">{errors.file.message}</p>}
 
                                         <Input
                                             {...register('title', { required: "Title is required" })}
@@ -369,12 +384,14 @@ export default function SectionDetails() {
                                             placeholder="e.g. Lecture 1: Introduction"
                                             isInvalid={!!errors.title}
                                             errorMessage={errors.title?.message}
+                                            variant="bordered"
                                         />
 
                                         <Input
                                             {...register('description')}
                                             label="Description (Optional)"
                                             placeholder="Brief description of the content"
+                                            variant="bordered"
                                         />
 
                                         <Checkbox
@@ -384,7 +401,7 @@ export default function SectionDetails() {
                                             Publish Immediately
                                         </Checkbox>
 
-                                        <div className="bg-blue-50 text-blue-700 text-xs p-3 rounded-lg flex items-start gap-2">
+                                        <div className="bg-primary/10 text-primary-700 text-xs p-3 rounded-lg flex items-start gap-2 border border-primary/20">
                                             <Icon icon="mdi:information-outline" className="text-lg flex-shrink-0" />
                                             <p>Videos will be converted for secure streaming. This may take some time depending on video length. Downloads are disabled for videos.</p>
                                         </div>
@@ -397,7 +414,7 @@ export default function SectionDetails() {
                                         <Button color="danger" variant="light" onPress={onClose}>
                                             Cancel
                                         </Button>
-                                        <Button color="primary" type="submit" isLoading={isUploading}>
+                                        <Button color="primary" type="submit" isLoading={isUploading} className="shadow-md shadow-primary/20">
                                             Upload
                                         </Button>
                                     </>

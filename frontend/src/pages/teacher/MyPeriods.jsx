@@ -67,37 +67,38 @@ export default function MyPeriods() {
     }
 
     return (
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 max-w-7xl mx-auto">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
                     <Button
                         isIconOnly
                         variant="light"
                         onPress={() => navigate(-1)}
+                        className="text-default-500 hover:text-foreground"
                     >
                         <Icon icon="mdi:arrow-left" className="text-2xl" />
                     </Button>
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                        <h1 className="text-2xl font-bold text-foreground">
                             My Periods
                         </h1>
-                        <p className="text-gray-500">Your weekly teaching schedule</p>
+                        <p className="text-default-500">Your weekly teaching schedule</p>
                     </div>
                 </div>
             </div>
 
             {error && (
-                <Card className="bg-red-50 border-red-200">
+                <Card className="bg-danger-50 border-danger-200">
                     <CardBody>
-                        <p className="text-red-600">{error}</p>
+                        <p className="text-danger-600">{error}</p>
                     </CardBody>
                 </Card>
             )}
 
             {!loading && !error && Object.keys(groupedPeriods).length === 0 && (
                 <div className="text-center py-10">
-                    <Icon icon="mdi:calendar-blank" className="text-6xl text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-500">No periods assigned to you yet.</p>
+                    <Icon icon="mdi:calendar-blank" className="text-6xl text-default-300 mx-auto mb-4" />
+                    <p className="text-default-500">No periods assigned to you yet.</p>
                 </div>
             )}
 
@@ -109,26 +110,26 @@ export default function MyPeriods() {
             >
                 {Object.entries(groupedPeriods).map(([day, dayPeriods]) => (
                     <motion.div key={day} variants={itemVariants}>
-                        <Card className="h-full shadow-sm hover:shadow-md transition-shadow">
-                            <CardHeader className="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-700 px-6 py-4">
+                        <Card className="h-full shadow-sm hover:shadow-md transition-shadow bg-content1 border border-default-200">
+                            <CardHeader className="bg-default-100 border-b border-default-200 px-6 py-4">
                                 <span className="font-bold text-lg text-primary">{day}</span>
                                 <Chip size="sm" variant="flat" color="primary" className="ml-auto">
                                     {dayPeriods.length} Periods
                                 </Chip>
                             </CardHeader>
                             <CardBody className="p-0">
-                                <div className="divide-y divide-gray-100 dark:divide-gray-700">
+                                <div className="divide-y divide-default-100">
                                     {dayPeriods.map((period) => (
-                                        <div key={period.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+                                        <div key={period.id} className="p-4 hover:bg-default-50 transition-colors">
                                             <div className="flex justify-between items-start mb-2">
-                                                <div className="font-semibold text-gray-800 dark:text-gray-200">
+                                                <div className="font-semibold text-foreground">
                                                     {period.Subject?.name || "Subject"}
                                                 </div>
-                                                <div className="text-xs font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                                                <div className="text-xs font-mono bg-default-100 text-default-600 px-2 py-1 rounded">
                                                     {period.startTime ? period.startTime.slice(0, 5) : ''} - {period.endTime ? period.endTime.slice(0, 5) : ''}
                                                 </div>
                                             </div>
-                                            <div className="flex justify-between items-center text-sm text-gray-500">
+                                            <div className="flex justify-between items-center text-sm text-default-500">
                                                 <div className="flex items-center gap-2">
                                                     <Icon icon="mdi:google-classroom" />
                                                     <span>{period.Class?.name} - {period.Class?.section}</span>

@@ -108,7 +108,7 @@ export default function ChildDashboard() {
 
     if (loading) {
         return (
-            <div className="p-6 space-y-6">
+            <div className="p-4 md:p-6 space-y-4 md:space-y-6">
                 <Skeleton className="h-32 rounded mb-4" />
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Skeleton className="h-24 rounded" />
@@ -136,16 +136,16 @@ export default function ChildDashboard() {
         <div className="min-h-screen bg-background">
             {/* School Header Banner */}
             {school && (
-                <div className="bg-gradient-to-r from-primary-700 to-primary-900 text-white p-6 mb-6 shadow-md">
+                <div className="bg-gradient-to-r from-primary-700 to-primary-900 text-white p-4 md:p-6 mb-4 md:mb-6 shadow-md">
                     <div className="max-w-7xl mx-auto">
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                             <div className="flex items-center gap-4">
-                                <div className="w-16 h-16 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg">
-                                    <Icon icon="mdi:school" className="text-4xl text-primary-700" />
+                                <div className="w-12 h-12 md:w-16 md:h-16 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg">
+                                    <Icon icon="mdi:school" className="text-2xl md:text-4xl text-primary-700" />
                                 </div>
                                 <div>
-                                    <h1 className="text-2xl font-bold tracking-tight">{school.name}</h1>
-                                    <div className="flex gap-4 text-sm mt-1 opacity-90 font-medium">
+                                    <h1 className="text-lg md:text-2xl font-bold tracking-tight">{school.name}</h1>
+                                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs md:text-sm mt-1 opacity-90 font-medium">
                                         {school.phone && (
                                             <span className="flex items-center gap-1">
                                                 <Icon icon="mdi:phone" />
@@ -165,7 +165,8 @@ export default function ChildDashboard() {
                                 variant="light"
                                 startContent={<Icon icon="mdi:arrow-left" />}
                                 onPress={() => navigate('/parent-dashboard')}
-                                className="text-white/80 hover:text-white"
+                                className="text-white/80 hover:text-white w-full md:w-auto"
+                                size="sm"
                             >
                                 Back to Dashboard
                             </Button>
@@ -174,16 +175,16 @@ export default function ChildDashboard() {
                 </div>
             )}
 
-            <div className="max-w-7xl mx-auto p-6 space-y-6">
+            <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-4 md:space-y-6">
                 {/* Page Header */}
-                <div className="flex justify-between items-start">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <h2 className="text-3xl font-bold text-foreground">{student.name}</h2>
-                        <div className="flex items-center gap-3 text-default-500 mt-1">
+                        <h2 className="text-2xl md:text-3xl font-bold text-foreground">{student.name}</h2>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 text-default-500 mt-1">
                             <span className="bg-primary-100 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 px-2 py-0.5 rounded text-sm font-medium">
                                 {student.admissionNumber}
                             </span>
-                            <span>|</span>
+                            <span className="hidden sm:inline">|</span>
                             <span className="flex items-center gap-1">
                                 <Icon icon="mdi:google-classroom" />
                                 Class {student.Class?.name} - {student.Class?.section}
@@ -205,7 +206,7 @@ export default function ChildDashboard() {
                 </div>
 
                 {/* Overview Cards with Bordered Design */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <motion.div whileHover={{ scale: 1.02 }}>
                         <Card className="border-l-4 border-l-primary-500 bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
@@ -225,7 +226,7 @@ export default function ChildDashboard() {
                     </motion.div>
 
                     <motion.div whileHover={{ scale: 1.02 }}>
-                        <Card className="border-l-4 border-l-warning bg-content1 dark:bg-content1 shadow-sm">
+                        <Card className="border-l-4 border-l-warning-500 bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
@@ -243,7 +244,7 @@ export default function ChildDashboard() {
                     </motion.div>
 
                     <motion.div whileHover={{ scale: 1.02 }}>
-                        <Card className="border-l-4 border-l-success bg-content1 dark:bg-content1 shadow-sm">
+                        <Card className="border-l-4 border-l-success-500 bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
@@ -264,7 +265,7 @@ export default function ChildDashboard() {
                     </motion.div>
 
                     <motion.div whileHover={{ scale: 1.02 }}>
-                        <Card className="border-l-4 border-l-secondary bg-content1 dark:bg-content1 shadow-sm">
+                        <Card className="border-l-4 border-l-secondary-500 bg-content1 dark:bg-content1 shadow-sm">
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
@@ -302,7 +303,7 @@ export default function ChildDashboard() {
                             >
                                 <div className="pt-2">
                                     {timetable.length > 0 ? (
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                             {timetable.map((t) => (
                                                 <Card key={t.id} className="bg-default-50 dark:bg-default-100/20 border border-default-200 dark:border-default-100 hover:border-primary-500 transition-colors shadow-sm">
                                                     <CardBody>
@@ -371,15 +372,15 @@ export default function ChildDashboard() {
                                     <Table aria-label="Attendance records" removeWrapper classNames={{ th: "bg-default-100 text-default-500", td: "text-foreground" }}>
                                         <TableHeader>
                                             <TableColumn>DATE</TableColumn>
-                                            <TableColumn>DAY</TableColumn>
+                                            <TableColumn className="hidden sm:table-cell">DAY</TableColumn>
                                             <TableColumn>STATUS</TableColumn>
-                                            <TableColumn>REMARKS</TableColumn>
+                                            <TableColumn className="hidden md:table-cell">REMARKS</TableColumn>
                                         </TableHeader>
                                         <TableBody emptyContent="No attendance records">
                                             {attendance.slice(0, 30).map((att) => (
                                                 <TableRow key={att.id} className="border-b border-default-100 last:border-0 hover:bg-default-50/50">
                                                     <TableCell>{format(new Date(att.date), 'PPP')}</TableCell>
-                                                    <TableCell>{format(new Date(att.date), 'EEEE')}</TableCell>
+                                                    <TableCell className="hidden sm:table-cell">{format(new Date(att.date), 'EEEE')}</TableCell>
                                                     <TableCell>
                                                         <Chip
                                                             color={
@@ -394,7 +395,7 @@ export default function ChildDashboard() {
                                                             {att.status}
                                                         </Chip>
                                                     </TableCell>
-                                                    <TableCell className="text-sm text-default-500">{att.remarks || '-'}</TableCell>
+                                                    <TableCell className="text-sm text-default-500 hidden md:table-cell">{att.remarks || '-'}</TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>
@@ -419,7 +420,7 @@ export default function ChildDashboard() {
                             >
                                 <div className="pt-2 space-y-4">
                                     {/* Fee Summary */}
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                         <Card className="bg-primary-50 dark:bg-primary-900/20 border-none shadow-sm">
                                             <CardBody className="text-center p-4">
                                                 <p className="text-sm text-primary-700 dark:text-primary-300">Total Fees</p>
@@ -465,7 +466,7 @@ export default function ChildDashboard() {
                                                 <TableColumn>DATE</TableColumn>
                                                 <TableColumn>FEE NAME</TableColumn>
                                                 <TableColumn>AMOUNT</TableColumn>
-                                                <TableColumn>TRANSACTION ID</TableColumn>
+                                                <TableColumn className="hidden sm:table-cell">TRANSACTION ID</TableColumn>
                                             </TableHeader>
                                             <TableBody emptyContent="No payment history">
                                                 {feeInfo.recentPayments.map((payment) => (
@@ -475,7 +476,7 @@ export default function ChildDashboard() {
                                                         <TableCell className="text-success-600 font-medium">
                                                             {formatCurrency(payment.amount)}
                                                         </TableCell>
-                                                        <TableCell>
+                                                        <TableCell className="hidden sm:table-cell">
                                                             <code className="text-xs bg-default-100 px-2 py-1 rounded text-default-600">{payment.transactionId}</code>
                                                         </TableCell>
                                                     </TableRow>
@@ -518,7 +519,7 @@ export default function ChildDashboard() {
                                                                 </p>
                                                             )}
                                                         </div>
-                                                        <div className="flex items-center gap-3">
+                                                        <div className="flex flex-col md:flex-row items-start md:items-center gap-3">
                                                             <Chip
                                                                 size="lg"
                                                                 color={parseFloat(exam.overallPercentage) >= 60 ? "success" : parseFloat(exam.overallPercentage) >= 40 ? "warning" : "danger"}
@@ -533,7 +534,7 @@ export default function ChildDashboard() {
                                                                 startContent={<Icon icon="mdi:download" />}
                                                                 onPress={() => downloadReportCard(exam.examId, exam.examName)}
                                                                 isLoading={downloadingReports[exam.examId]}
-                                                                className="shadow-sm"
+                                                                className="shadow-sm w-full md:w-auto"
                                                             >
                                                                 Generate Report
                                                             </Button>
@@ -544,19 +545,19 @@ export default function ChildDashboard() {
                                                     <Table aria-label={`${exam.examName} results`} removeWrapper classNames={{ th: "bg-transparent text-default-500", td: "text-foreground", base: "p-4" }}>
                                                         <TableHeader>
                                                             <TableColumn>SUBJECT</TableColumn>
-                                                            <TableColumn>SUBJECT CODE</TableColumn>
+                                                            <TableColumn className="hidden sm:table-cell">SUBJECT CODE</TableColumn>
                                                             <TableColumn>OBTAINED MARKS</TableColumn>
-                                                            <TableColumn>MAX MARKS</TableColumn>
+                                                            <TableColumn className="hidden md:table-cell">MAX MARKS</TableColumn>
                                                             <TableColumn>PERCENTAGE</TableColumn>
-                                                            <TableColumn>GRADE</TableColumn>
+                                                            <TableColumn className="hidden sm:table-cell">GRADE</TableColumn>
                                                         </TableHeader>
                                                         <TableBody>
                                                             {exam.subjects && exam.subjects.map((subject, subIdx) => (
                                                                 <TableRow key={subject.subjectId || subIdx} className="border-b border-default-50 last:border-0">
                                                                     <TableCell className="font-medium">{subject.subjectName}</TableCell>
-                                                                    <TableCell className="text-sm text-default-500">{subject.subjectCode}</TableCell>
+                                                                    <TableCell className="text-sm text-default-500 hidden sm:table-cell">{subject.subjectCode}</TableCell>
                                                                     <TableCell className="font-semibold">{subject.marksObtained}</TableCell>
-                                                                    <TableCell>{subject.maxMarks}</TableCell>
+                                                                    <TableCell className="hidden md:table-cell">{subject.maxMarks}</TableCell>
                                                                     <TableCell>
                                                                         <Chip
                                                                             size="sm"
@@ -567,7 +568,7 @@ export default function ChildDashboard() {
                                                                             {subject.percentage}%
                                                                         </Chip>
                                                                     </TableCell>
-                                                                    <TableCell>
+                                                                    <TableCell className="hidden sm:table-cell">
                                                                         <span className="font-semibold">
                                                                             {subject.grade || (
                                                                                 parseFloat(subject.percentage) >= 90 ? 'A+' :

@@ -147,17 +147,19 @@ const CreateDailyTimetable = () => {
         }
     };
 
+
     const renderStep1 = () => (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
-                <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Step 1: Basic Configuration</h3>
+                <h3 className="text-lg font-semibold mb-4 text-foreground">Step 1: Basic Configuration</h3>
             </div>
             <div>
-                <label className="text-sm font-medium mb-1.5 block text-gray-700 dark:text-gray-300">Class</label>
+                <label className="text-sm font-medium mb-1.5 block text-default-700">Class</label>
                 <Select
                     placeholder="Select Class"
                     onSelectionChange={(keys) => handleSelectionChange('classId', keys)}
                     selectedKeys={formData.classId ? new Set([formData.classId]) : new Set()}
+                    variant="bordered"
                 >
                     {classes.map(c => (
                         <SelectItem key={String(c.id)} textValue={`${c.name} - ${c.section}`}>
@@ -167,11 +169,12 @@ const CreateDailyTimetable = () => {
                 </Select>
             </div>
             <div>
-                <label className="text-sm font-medium mb-1.5 block text-gray-700 dark:text-gray-300">Day</label>
+                <label className="text-sm font-medium mb-1.5 block text-default-700">Day</label>
                 <Select
                     placeholder="Select Day"
                     onSelectionChange={(keys) => handleSelectionChange('day', keys)}
                     selectedKeys={formData.day ? new Set([formData.day]) : new Set()}
+                    variant="bordered"
                 >
                     {days.map(d => (
                         <SelectItem key={d.toUpperCase()} textValue={d} value={d.toUpperCase()}>
@@ -181,7 +184,7 @@ const CreateDailyTimetable = () => {
                 </Select>
             </div>
             <div>
-                <label className="text-sm font-medium mb-1.5 block text-gray-700 dark:text-gray-300">Number of Periods</label>
+                <label className="text-sm font-medium mb-1.5 block text-default-700">Number of Periods</label>
                 <Input
                     type="number"
                     min="1"
@@ -190,6 +193,7 @@ const CreateDailyTimetable = () => {
                     value={formData.periodCount}
                     onChange={handleInputChange}
                     onBlur={(e) => handleSelectionChange('periodCount', new Set([e.target.value]))}
+                    variant="bordered"
                 />
             </div>
         </div>
@@ -198,33 +202,37 @@ const CreateDailyTimetable = () => {
     const renderStep2 = () => (
         <div className="space-y-6">
             <div>
-                <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Step 2: Time Slots</h3>
-                <p className="text-sm text-gray-500 mb-4">Define the start and end time for each period.</p>
+                <h3 className="text-lg font-semibold mb-4 text-foreground">Step 2: Time Slots</h3>
+                <p className="text-sm text-default-500 mb-4">Define the start and end time for each period.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {formData.periods.map((period, index) => (
-                    <Card key={index} className="bg-gray-50 dark:bg-gray-800/50 border-none shadow-sm">
+                    <Card key={index} className="bg-default-50 border border-default-200 shadow-sm">
                         <CardBody className="p-4">
                             <h4 className="font-semibold text-primary mb-3">Period {index + 1}</h4>
                             <div className="space-y-3">
                                 <div>
-                                    <label className="text-xs text-gray-500 mb-1 block">Start Time</label>
+                                    <label className="text-xs text-default-500 mb-1 block">Start Time</label>
                                     <Input
                                         type="time"
                                         size="sm"
                                         value={period.startTime}
                                         onChange={(e) => handlePeriodChange(index, 'startTime', e.target.value)}
                                         aria-label={`Start Time Period ${index + 1}`}
+                                        variant="bordered"
+                                        classNames={{ inputWrapper: "bg-white dark:bg-black" }}
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-xs text-gray-500 mb-1 block">End Time</label>
+                                    <label className="text-xs text-default-500 mb-1 block">End Time</label>
                                     <Input
                                         type="time"
                                         size="sm"
                                         value={period.endTime}
                                         onChange={(e) => handlePeriodChange(index, 'endTime', e.target.value)}
                                         aria-label={`End Time Period ${index + 1}`}
+                                        variant="bordered"
+                                        classNames={{ inputWrapper: "bg-white dark:bg-black" }}
                                     />
                                 </div>
                             </div>
@@ -238,27 +246,28 @@ const CreateDailyTimetable = () => {
     const renderStep3 = () => (
         <div className="space-y-6">
             <div>
-                <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Step 3: Assign Subjects & Teachers</h3>
-                <p className="text-sm text-gray-500 mb-4">Assign a subject and teacher for each period.</p>
+                <h3 className="text-lg font-semibold mb-4 text-foreground">Step 3: Assign Subjects & Teachers</h3>
+                <p className="text-sm text-default-500 mb-4">Assign a subject and teacher for each period.</p>
             </div>
             <div className="grid grid-cols-1 gap-4">
                 {formData.periods.map((period, index) => (
-                    <div key={index} className="p-4 border rounded-xl hover:shadow-md transition-shadow bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                    <div key={index} className="p-4 border rounded-xl hover:shadow-md transition-shadow bg-content1 border-default-200">
                         <div className="flex flex-wrap md:flex-nowrap justify-between items-center mb-4 gap-2">
                             <h4 className="font-semibold text-primary">Period {index + 1}</h4>
-                            <span className="text-xs bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-full font-medium text-gray-600 dark:text-gray-300">
+                            <span className="text-xs bg-default-100 px-3 py-1.5 rounded-full font-medium text-default-600">
                                 {period.startTime || '--:--'} - {period.endTime || '--:--'}
                             </span>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
-                                <label className="text-xs font-medium text-gray-500 mb-1.5 block">Subject</label>
+                                <label className="text-xs font-medium text-default-500 mb-1.5 block">Subject</label>
                                 <Select
                                     placeholder="Select Subject"
                                     aria-label={`Subject for Period ${index + 1}`}
                                     size="sm"
                                     selectedKeys={period.subjectId ? new Set([String(period.subjectId)]) : new Set()}
                                     onSelectionChange={(keys) => handlePeriodChange(index, 'subjectId', Array.from(keys)[0])}
+                                    variant="bordered"
                                 >
                                     {subjects.map(s => (
                                         <SelectItem key={String(s.id)} textValue={s.name}>
@@ -268,32 +277,34 @@ const CreateDailyTimetable = () => {
                                 </Select>
                             </div>
                             <div>
-                                <label className="text-xs font-medium text-gray-500 mb-1.5 block">Teacher</label>
+                                <label className="text-xs font-medium text-default-500 mb-1.5 block">Teacher</label>
                                 <Select
                                     placeholder="Assign Teacher"
                                     aria-label={`Teacher for Period ${index + 1}`}
                                     size="sm"
                                     selectedKeys={period.teacherId ? new Set([String(period.teacherId)]) : new Set()}
                                     onSelectionChange={(keys) => handlePeriodChange(index, 'teacherId', Array.from(keys)[0])}
+                                    variant="bordered"
                                 >
                                     {teachers.map(t => (
                                         <SelectItem key={String(t.id)} textValue={`${t.name} - ${t.staffProfile?.designation || t.staffProfile?.workingAs || t.designation || t.workingAs || 'Teacher'}`}>
                                             <div className="flex flex-col">
                                                 <span className="font-medium">{t.name}</span>
-                                                <span className="text-tiny text-gray-500">{t.staffProfile?.designation || t.staffProfile?.workingAs || t.designation || t.workingAs || 'Teacher'}</span>
+                                                <span className="text-tiny text-default-500">{t.staffProfile?.designation || t.staffProfile?.workingAs || t.designation || t.workingAs || 'Teacher'}</span>
                                             </div>
                                         </SelectItem>
                                     ))}
                                 </Select>
                             </div>
                             <div>
-                                <label className="text-xs font-medium text-gray-500 mb-1.5 block">Room (Optional)</label>
+                                <label className="text-xs font-medium text-default-500 mb-1.5 block">Room (Optional)</label>
                                 <Input
                                     placeholder="e.g. 101"
                                     size="sm"
                                     value={period.room}
                                     onChange={(e) => handlePeriodChange(index, 'room', e.target.value)}
                                     aria-label={`Room for Period ${index + 1}`}
+                                    variant="bordered"
                                 />
                             </div>
                         </div>
@@ -319,15 +330,15 @@ const CreateDailyTimetable = () => {
         >
             <div className="flex items-center gap-4 mb-6">
                 <Button isIconOnly variant="light" onPress={() => navigate('/academic/timetable')}>
-                    <Icon icon="mdi:arrow-left" className="text-2xl" />
+                    <Icon icon="mdi:arrow-left" className="text-2xl text-foreground" />
                 </Button>
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Create Daily Timetable</h1>
-                    <p className="text-sm text-gray-500">Configure schedule for a specific class and day</p>
+                    <h1 className="text-2xl font-bold text-foreground">Create Daily Timetable</h1>
+                    <p className="text-sm text-default-500">Configure schedule for a specific class and day</p>
                 </div>
             </div>
 
-            <Card className="min-h-[500px]">
+            <Card className="min-h-[500px] bg-content1 border border-default-200">
                 <CardBody className="p-8">
                     {error && (
                         <div className="mb-6 p-4 rounded-lg bg-danger-50 border border-danger-200 text-danger-700 flex items-start gap-3">
@@ -342,7 +353,7 @@ const CreateDailyTimetable = () => {
                     {step === 2 && renderStep2()}
                     {step === 3 && renderStep3()}
                 </CardBody>
-                <div className="p-6 border-t flex justify-end gap-3 bg-gray-50 dark:bg-gray-800/30">
+                <div className="p-6 border-t border-default-200 flex justify-end gap-3 bg-default-50/50">
                     <Button
                         variant="flat"
                         color="secondary"
@@ -361,7 +372,7 @@ const CreateDailyTimetable = () => {
                     ) : (
                         <Button
                             color="success"
-                            className="text-white bg-green-600"
+                            className="text-white"
                             onPress={handleSubmit}
                             isLoading={saving}
                         >

@@ -1,18 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { PageHeader } from '@/components/common';
+import { useSocket } from '@/context/SocketContext';
+import { transportService } from '@/services';
 import {
+    Button,
     Card,
     CardBody,
     CardHeader,
-    Button,
+    Chip,
     Select,
     SelectItem,
-    Chip,
     Spinner,
-    Switch,
+    Switch
 } from '@heroui/react';
 import { Icon } from '@iconify/react';
-import { useSocket } from '@/context/SocketContext';
-import { transportService } from '@/services';
+import React, { useCallback, useEffect, useState } from 'react';
 
 const DriverPanel = () => {
     const { socket, isConnected } = useSocket();
@@ -187,30 +188,30 @@ const DriverPanel = () => {
 
     return (
         <div className="p-6 space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold">Driver Panel</h1>
-                    <p className="text-default-500">Control bus tracking and trips</p>
-                </div>
-                <Chip
-                    color={isConnected ? 'success' : 'danger'}
-                    variant="flat"
-                    startContent={
-                        <Icon icon={isConnected ? 'mdi:wifi' : 'mdi:wifi-off'} width={16} />
-                    }
-                >
-                    {isConnected ? 'Connected' : 'Offline'}
-                </Chip>
-            </div>
+            <PageHeader
+                title="Driver Panel"
+                subtitle="Control bus tracking and trips"
+                action={
+                    <Chip
+                        color={isConnected ? 'success' : 'danger'}
+                        variant="flat"
+                        startContent={
+                            <Icon icon={isConnected ? 'mdi:wifi' : 'mdi:wifi-off'} width={16} />
+                        }
+                        classNames={{ content: "font-medium" }}
+                    >
+                        {isConnected ? 'Connected' : 'Offline'}
+                    </Chip>
+                }
+            />
 
             {error && (
-                <div className="p-4 bg-danger-50 text-danger rounded-lg flex items-center gap-2">
-                    <Icon icon="mdi:alert-circle" />
-                    {error}
+                <div className="p-4 bg-danger-50 text-danger rounded-lg border border-danger-200 flex items-center gap-2">
+                    <Icon icon="mdi:alert-circle" width={20} />
+                    <span className="flex-1">{error}</span>
                     <Button
                         size="sm"
                         variant="light"
-                        className="ml-auto"
                         onPress={() => setError(null)}
                     >
                         Dismiss
@@ -220,9 +221,9 @@ const DriverPanel = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Bus Selection */}
-                <Card>
-                    <CardHeader>
-                        <h3 className="font-semibold">Select Bus</h3>
+                <Card className="bg-content1 border border-default-200 shadow-sm">
+                    <CardHeader className="border-b border-default-100">
+                        <h3 className="font-semibold text-foreground">Select Bus</h3>
                     </CardHeader>
                     <CardBody className="space-y-4">
                         {loading ? (
@@ -235,6 +236,8 @@ const DriverPanel = () => {
                                     selectedKeys={selectedBus ? [selectedBus] : []}
                                     onSelectionChange={(keys) => setSelectedBus([...keys][0])}
                                     isDisabled={!!activeTrip}
+                                    variant="bordered"
+                                    labelPlacement="outside"
                                 >
                                     {buses.map((bus) => (
                                         <SelectItem key={bus.id} textValue={bus.busNumber}>
@@ -250,6 +253,8 @@ const DriverPanel = () => {
                                         selectedKeys={selectedRoute ? [selectedRoute] : []}
                                         onSelectionChange={(keys) => setSelectedRoute([...keys][0])}
                                         isDisabled={!!activeTrip}
+                                        variant="bordered"
+                                        labelPlacement="outside"
                                     >
                                         {routes.map((route) => (
                                             <SelectItem key={route.id} textValue={route.routeName}>
@@ -264,18 +269,19 @@ const DriverPanel = () => {
                 </Card>
 
                 {/* Trip Controls */}
-                <Card>
-                    <CardHeader>
-                        <h3 className="font-semibold">Trip Controls</h3>
+                <Card className="bg-content1 border border-default-200 shadow-sm">
+                    <CardHeader className="border-b border-default-100">
+                        <h3 className="font-semibold text-foreground">Trip Controls</h3>
                     </CardHeader>
                     <CardBody className="space-y-4">
-                        <div className="flex items-center justify-between p-4 bg-default-100 rounded-lg">
+                        <div className="flex items-center justify-between p-4 bg-default-50 rounded-lg border border-default-100">
                             <div>
-                                <p className="font-medium">Trip Status</p>
+                                <p className="font-medium text-foreground">Trip Status</p>
                                 <Chip
                                     color={activeTrip ? 'success' : 'warning'}
                                     variant="flat"
                                     className="mt-1"
+                                    classNames={{ content: "font-medium" }}
                                 >
                                     {activeTrip ? 'In Progress' : 'Not Started'}
                                 </Chip>
@@ -295,9 +301,9 @@ const DriverPanel = () => {
                             )}
                         </div>
 
-                        <div className="flex items-center justify-between p-4 bg-default-100 rounded-lg">
+                        <div className="flex items-center justify-between p-4 bg-default-50 rounded-lg border border-default-100">
                             <div>
-                                <p className="font-medium">Location Tracking</p>
+                                <p className="font-medium text-foreground">Location Tracking</p>
                                 <p className="text-sm text-default-500">
                                     {isTracking ? 'Sharing location' : 'Not sharing'}
                                 </p>
@@ -315,36 +321,36 @@ const DriverPanel = () => {
 
             {/* Current Location */}
             {currentLocation && (
-                <Card>
-                    <CardHeader>
+                <Card className="bg-content1 border border-default-200 shadow-sm">
+                    <CardHeader className="border-b border-default-100">
                         <div className="flex items-center gap-2">
-                            <Icon icon="mdi:map-marker" className="text-primary" />
-                            <h3 className="font-semibold">Current Location</h3>
+                            <Icon icon="mdi:map-marker" className="text-primary" width={20} />
+                            <h3 className="font-semibold text-foreground">Current Location</h3>
                         </div>
                     </CardHeader>
                     <CardBody>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="p-4 bg-default-100 rounded-lg text-center">
+                            <div className="p-4 bg-default-50 rounded-lg text-center border border-default-100">
                                 <p className="text-sm text-default-500">Latitude</p>
-                                <p className="font-mono font-medium">
+                                <p className="font-mono font-medium text-foreground">
                                     {currentLocation.lat.toFixed(6)}
                                 </p>
                             </div>
-                            <div className="p-4 bg-default-100 rounded-lg text-center">
+                            <div className="p-4 bg-default-50 rounded-lg text-center border border-default-100">
                                 <p className="text-sm text-default-500">Longitude</p>
-                                <p className="font-mono font-medium">
+                                <p className="font-mono font-medium text-foreground">
                                     {currentLocation.lng.toFixed(6)}
                                 </p>
                             </div>
-                            <div className="p-4 bg-default-100 rounded-lg text-center">
+                            <div className="p-4 bg-default-50 rounded-lg text-center border border-default-100">
                                 <p className="text-sm text-default-500">Speed</p>
-                                <p className="font-mono font-medium">
+                                <p className="font-mono font-medium text-foreground">
                                     {currentLocation.speed ?? 'N/A'} km/h
                                 </p>
                             </div>
-                            <div className="p-4 bg-default-100 rounded-lg text-center">
+                            <div className="p-4 bg-default-50 rounded-lg text-center border border-default-100">
                                 <p className="text-sm text-default-500">Accuracy</p>
-                                <p className="font-mono font-medium">
+                                <p className="font-mono font-medium text-foreground">
                                     {currentLocation.accuracy
                                         ? `${Math.round(currentLocation.accuracy)}m`
                                         : 'N/A'}
@@ -357,27 +363,27 @@ const DriverPanel = () => {
 
             {/* Selected Bus Info */}
             {selectedBusData && (
-                <Card>
-                    <CardHeader>
-                        <h3 className="font-semibold">Bus Information</h3>
+                <Card className="bg-content1 border border-default-200 shadow-sm">
+                    <CardHeader className="border-b border-default-100">
+                        <h3 className="font-semibold text-foreground">Bus Information</h3>
                     </CardHeader>
                     <CardBody>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div>
                                 <p className="text-sm text-default-500">Bus Number</p>
-                                <p className="font-medium">{selectedBusData.busNumber}</p>
+                                <p className="font-medium text-foreground">{selectedBusData.busNumber}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-default-500">Registration</p>
-                                <p className="font-medium">{selectedBusData.registrationNumber}</p>
+                                <p className="font-medium text-foreground">{selectedBusData.registrationNumber}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-default-500">Capacity</p>
-                                <p className="font-medium">{selectedBusData.capacity} seats</p>
+                                <p className="font-medium text-foreground">{selectedBusData.capacity} seats</p>
                             </div>
                             <div>
                                 <p className="text-sm text-default-500">Driver</p>
-                                <p className="font-medium">
+                                <p className="font-medium text-foreground">
                                     {selectedBusData.driver?.name || 'Not assigned'}
                                 </p>
                             </div>

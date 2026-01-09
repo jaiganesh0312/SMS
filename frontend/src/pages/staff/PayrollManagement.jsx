@@ -227,11 +227,11 @@ const PayrollManagement = () => {
     return (
         <div className="p-6 space-y-6">
             <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Payroll Management</h1>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">Manage salaries and generate monthly payrolls</p>
+                <h1 className="text-3xl font-bold text-foreground">Payroll Management</h1>
+                <p className="text-default-500 mt-1">Manage salaries and generate monthly payrolls</p>
             </div>
 
-            <Card className="p-4">
+            <Card className="bg-content1 border border-default-200 shadow-sm p-4">
                 <Tabs
                     aria-label="Payroll Options"
                     color="primary"
@@ -250,7 +250,7 @@ const PayrollManagement = () => {
                     >
                         <CardBody className="pt-6 space-y-6">
                             {/* Generation Form */}
-                            <form onSubmit={handleGenerateSubmit(onGeneratePayroll)} className="flex flex-col sm:flex-row gap-4 items-end bg-default-50 p-4 rounded-lg">
+                            <form onSubmit={handleGenerateSubmit(onGeneratePayroll)} className="flex flex-col sm:flex-row gap-4 items-end bg-default-50 p-4 rounded-lg border border-default-200">
                                 <Controller
                                     name="month"
                                     control={generateControl}
@@ -262,7 +262,8 @@ const PayrollManagement = () => {
                                             errorMessage={fieldState.error?.message}
                                             isInvalid={!!fieldState.error}
                                             {...field}
-                                            className="max-w-xs bg-white dark:bg-black"
+                                            variant="bordered"
+                                            className="max-w-xs"
                                         />
                                     )}
                                 />
@@ -277,7 +278,8 @@ const PayrollManagement = () => {
                                             errorMessage={fieldState.error?.message}
                                             isInvalid={!!fieldState.error}
                                             {...field}
-                                            className="max-w-xs bg-white dark:bg-black"
+                                            variant="bordered"
+                                            className="max-w-xs"
                                         />
                                     )}
                                 />
@@ -296,8 +298,11 @@ const PayrollManagement = () => {
 
                             {/* History Table */}
                             <div>
-                                <h3 className="text-lg font-semibold mb-4">Payroll History for {watchMonth}/{watchYear}</h3>
-                                <Table aria-label="Payroll History">
+                                <h3 className="text-lg font-semibold mb-4 text-foreground">Payroll History for {watchMonth}/{watchYear}</h3>
+                                <Table aria-label="Payroll History" classNames={{
+                                    wrapper: "bg-content1 border border-default-200 shadow-sm",
+                                    th: "bg-default-100 text-default-500 font-medium"
+                                }}>
                                     <TableHeader>
                                         <TableColumn>EMPLOYEE</TableColumn>
                                         <TableColumn>BASIC</TableColumn>
@@ -364,11 +369,12 @@ const PayrollManagement = () => {
                                             <Select
                                                 label="Select Staff Member"
                                                 placeholder="Search staff..."
-                                                isLoading={loadingStaff}
+                                                isAuthenticated={true} // Assuming authenticated if in this page
                                                 selectedKeys={field.value ? [field.value] : []}
                                                 onChange={(e) => handleStaffSelect(e.target.value)}
                                                 errorMessage={fieldState.error?.message}
                                                 isInvalid={!!fieldState.error}
+                                                variant="bordered"
                                             >
                                                 {staffList.map((s) => (
                                                     <SelectItem key={s.StaffProfile?.id} value={s.StaffProfile?.id} textValue={s.name}>
@@ -396,6 +402,7 @@ const PayrollManagement = () => {
                                                     startContent={<span className="text-default-400 text-small">₹</span>}
                                                     errorMessage={fieldState.error?.message}
                                                     isInvalid={!!fieldState.error}
+                                                    variant="bordered"
                                                     {...field}
                                                 />
                                             )}
@@ -416,12 +423,12 @@ const PayrollManagement = () => {
                                                     <Controller
                                                         name={`allowances.${index}.name`}
                                                         control={structureControl}
-                                                        render={({ field }) => <Input {...field} placeholder="Name (e.g. HRA)" size="sm" />}
+                                                        render={({ field }) => <Input {...field} placeholder="Name (e.g. HRA)" size="sm" variant="bordered" />}
                                                     />
                                                     <Controller
                                                         name={`allowances.${index}.amount`}
                                                         control={structureControl}
-                                                        render={({ field }) => <Input {...field} type="number" placeholder="Amount" size="sm" />}
+                                                        render={({ field }) => <Input {...field} type="number" placeholder="Amount" size="sm" variant="bordered" />}
                                                     />
                                                     <Button isIconOnly size="sm" color="danger" variant="light" onPress={() => removeAllowance(index)}>
                                                         <Icon icon="lucide:trash" />
@@ -446,12 +453,12 @@ const PayrollManagement = () => {
                                                     <Controller
                                                         name={`deductions.${index}.name`}
                                                         control={structureControl}
-                                                        render={({ field }) => <Input {...field} placeholder="Name (e.g. PF)" size="sm" />}
+                                                        render={({ field }) => <Input {...field} placeholder="Name (e.g. PF)" size="sm" variant="bordered" />}
                                                     />
                                                     <Controller
                                                         name={`deductions.${index}.amount`}
                                                         control={structureControl}
-                                                        render={({ field }) => <Input {...field} type="number" placeholder="Amount" size="sm" />}
+                                                        render={({ field }) => <Input {...field} type="number" placeholder="Amount" size="sm" variant="bordered" />}
                                                     />
                                                     <Button isIconOnly size="sm" color="danger" variant="light" onPress={() => removeDeduction(index)}>
                                                         <Icon icon="lucide:trash" />
@@ -476,7 +483,7 @@ const PayrollManagement = () => {
 
                             {/* Right Col: Summary */}
                             <div className="lg:col-span-1">
-                                <Card className="bg-default-50 sticky top-4">
+                                <Card className="bg-default-50 border border-default-200 sticky top-4">
                                     <CardBody className="space-y-4">
                                         <h3 className="text-lg font-bold">Estimated Salary</h3>
                                         <Divider />

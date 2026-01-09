@@ -139,25 +139,25 @@ const CreateStaff = () => {
                     <BreadcrumbItem href="/staff">Staff</BreadcrumbItem>
                     <BreadcrumbItem>Create Staff</BreadcrumbItem>
                 </Breadcrumbs>
-                <h1 className="text-3xl font-bold mt-2 text-gray-800">Onboard New Staff</h1>
-                <p className="text-gray-500">Complete the steps below to add a new staff member to the system.</p>
+                <h1 className="text-3xl font-bold mt-2 text-foreground">Onboard New Staff</h1>
+                <p className="text-default-500">Complete the steps below to add a new staff member to the system.</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {/* Stepper Sidebar */}
-                <Card className="lg:col-span-1 h-fit">
+                <Card className="lg:col-span-1 h-fit bg-content1 border border-default-200">
                     <CardBody className="py-6 px-4">
                         <div className="flex flex-col gap-6">
                             {STEPS.map((s, index) => (
-                                <div key={s.id} className={`flex items-center gap-3 ${step === s.id ? "text-primary" : step > s.id ? "text-success" : "text-gray-400"}`}>
+                                <div key={s.id} className={`flex items-center gap-3 ${step === s.id ? "text-primary" : step > s.id ? "text-success" : "text-default-400"}`}>
                                     <div className={`
                                         w-8 h-8 rounded-full flex items-center justify-center border-2 font-bold text-sm
-                                        ${step === s.id ? "border-primary bg-primary-50" : step > s.id ? "border-success bg-success-50" : "border-gray-200"}
+                                        ${step === s.id ? "border-primary bg-primary-50" : step > s.id ? "border-success bg-success-50" : "border-default-200"}
                                     `}>
                                         {step > s.id ? <Icon icon="lucide:check" /> : s.id}
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className={`text-sm font-semibold ${step === s.id ? "text-gray-800" : ""}`}>{s.title}</span>
+                                        <span className={`text-sm font-semibold ${step === s.id ? "text-foreground" : ""}`}>{s.title}</span>
                                         {step === s.id && <span className="text-xs text-primary">In Progress</span>}
                                     </div>
                                 </div>
@@ -168,9 +168,9 @@ const CreateStaff = () => {
 
                 {/* Form Area */}
                 <div className="lg:col-span-3">
-                    <Card className="min-h-[500px]">
-                        <CardHeader className="px-6 py-4 border-b">
-                            <h2 className="text-xl font-bold flex items-center gap-2">
+                    <Card className="min-h-[500px] bg-content1 border border-default-200">
+                        <CardHeader className="px-6 py-4 border-b border-default-200">
+                            <h2 className="text-xl font-bold flex items-center gap-2 text-foreground">
                                 <Icon icon={STEPS[step - 1].icon} />
                                 {STEPS[step - 1].title}
                             </h2>
@@ -228,9 +228,9 @@ const CreateStaff = () => {
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             {/* Allowances */}
-                                            <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50">
+                                            <div className="border border-default-200 rounded-lg p-4 bg-default-50">
                                                 <div className="flex justify-between items-center mb-4">
-                                                    <h4 className="font-bold flex items-center gap-2">
+                                                    <h4 className="font-bold flex items-center gap-2 text-foreground">
                                                         <Icon icon="lucide:plus-circle" className="text-success" />
                                                         Allowances
                                                     </h4>
@@ -244,14 +244,14 @@ const CreateStaff = () => {
                                                             <Button size="sm" isIconOnly color="danger" variant="light" onPress={() => handleItemRemove('allowances', i)}><Icon icon="lucide:trash" width={18} /></Button>
                                                         </div>
                                                     ))}
-                                                    {formData.allowances.length === 0 && <p className="text-sm text-gray-400 text-center py-4">No allowances added</p>}
+                                                    {formData.allowances.length === 0 && <p className="text-sm text-default-400 text-center py-4">No allowances added</p>}
                                                 </div>
                                             </div>
 
                                             {/* Deductions */}
-                                            <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50">
+                                            <div className="border border-default-200 rounded-lg p-4 bg-default-50">
                                                 <div className="flex justify-between items-center mb-4">
-                                                    <h4 className="font-bold flex items-center gap-2">
+                                                    <h4 className="font-bold flex items-center gap-2 text-foreground">
                                                         <Icon icon="lucide:minus-circle" className="text-danger" />
                                                         Deductions
                                                     </h4>
@@ -265,7 +265,7 @@ const CreateStaff = () => {
                                                             <Button size="sm" isIconOnly color="danger" variant="light" onPress={() => handleItemRemove('deductions', i)}><Icon icon="lucide:trash" width={18} /></Button>
                                                         </div>
                                                     ))}
-                                                    {formData.deductions.length === 0 && <p className="text-sm text-gray-400 text-center py-4">No deductions added</p>}
+                                                    {formData.deductions.length === 0 && <p className="text-sm text-default-400 text-center py-4">No deductions added</p>}
                                                 </div>
                                             </div>
                                         </div>
@@ -278,8 +278,8 @@ const CreateStaff = () => {
                                             <div className="w-16 h-16 bg-primary-100 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
                                                 <Icon icon="lucide:lock" width={32} />
                                             </div>
-                                            <h3 className="text-xl font-bold">Secure Account Setup</h3>
-                                            <p className="text-gray-500">Create login credentials for the new staff member.</p>
+                                            <h3 className="text-xl font-bold text-foreground">Secure Account Setup</h3>
+                                            <p className="text-default-500">Create login credentials for the new staff member.</p>
                                         </div>
 
                                         <div className="grid gap-2">
@@ -288,7 +288,7 @@ const CreateStaff = () => {
                                                 value={formData.email}
                                                 isDisabled
                                                 variant="faded"
-                                                startContent={<Icon icon="lucide:mail" className="text-gray-400" />}
+                                                startContent={<Icon icon="lucide:mail" className="text-default-400" />}
                                             />
                                             <Input
                                                 label="Set Password"
@@ -300,14 +300,14 @@ const CreateStaff = () => {
                                                 placeholder="Enter a strong password"
                                                 variant="bordered"
                                                 description="Password must be at least 6 characters long."
-                                                startContent={<Icon icon="lucide:key" className="text-gray-400" />}
+                                                startContent={<Icon icon="lucide:key" className="text-default-400" />}
                                             />
                                         </div>
                                     </div>
                                 )}
                             </motion.div>
                         </CardBody>
-                        <div className="px-6 py-4 border-t bg-gray-50 flex justify-between items-center rounded-b-xl">
+                        <div className="px-6 py-4 border-t border-default-200 bg-default-50 flex justify-between items-center rounded-b-xl">
                             <Button
                                 variant="light"
                                 onPress={step === 1 ? () => navigate('/staff') : handleBack}

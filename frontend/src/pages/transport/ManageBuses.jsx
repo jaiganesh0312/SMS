@@ -1,30 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import { PageHeader } from '@/components/common';
+import { staffService, transportService } from '@/services';
 import {
+    Button,
     Card,
     CardBody,
-    CardHeader,
-    Button,
-    Input,
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    useDisclosure,
     Chip,
-    Spinner,
+    Input,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
     Select,
     SelectItem,
+    Spinner,
+    Table,
+    TableBody,
+    TableCell,
+    TableColumn,
+    TableHeader,
+    TableRow,
+    useDisclosure
 } from '@heroui/react';
 import { Icon } from '@iconify/react';
-import { transportService } from '@/services';
-import { staffService } from '@/services';
+import React, { useEffect, useState } from 'react';
 
 const ManageBuses = () => {
     const [buses, setBuses] = useState([]);
@@ -136,24 +135,32 @@ const ManageBuses = () => {
 
     return (
         <div className="p-6 space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold">Manage Buses</h1>
-                    <p className="text-default-500">Add, edit, and manage school buses</p>
-                </div>
-                <Button color="primary" startContent={<Icon icon="mdi:plus" />} onPress={onOpen}>
-                    Add Bus
-                </Button>
-            </div>
+            <PageHeader
+                title="Manage Buses"
+                subtitle="Add, edit, and manage school buses"
+                action={
+                    <Button color="primary" startContent={<Icon icon="mdi:plus" />} onPress={onOpen}>
+                        Add Bus
+                    </Button>
+                }
+            />
 
-            <Card>
-                <CardBody>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
+                <CardBody className="p-0">
                     {loading ? (
                         <div className="flex justify-center py-8">
                             <Spinner size="lg" />
                         </div>
                     ) : (
-                        <Table aria-label="Buses table">
+                        <Table
+                            aria-label="Buses table"
+                            shadow="none"
+                            classNames={{
+                                wrapper: "shadow-none bg-content1",
+                                th: "bg-default-100 text-default-500 font-medium",
+                                td: "py-3"
+                            }}
+                        >
                             <TableHeader columns={columns}>
                                 {(column) => (
                                     <TableColumn key={column.key}>{column.label}</TableColumn>
@@ -161,25 +168,33 @@ const ManageBuses = () => {
                             </TableHeader>
                             <TableBody items={buses} emptyContent="No buses found">
                                 {(bus) => (
-                                    <TableRow key={bus.id}>
+                                    <TableRow key={bus.id} className="border-b border-default-100 last:border-0 hover:bg-default-50">
                                         <TableCell>
                                             <div className="flex items-center gap-2">
-                                                <Icon icon="mdi:bus" className="text-primary" width={20} />
-                                                <span className="font-medium">{bus.busNumber}</span>
+                                                <div className="p-2 bg-primary/10 rounded-lg">
+                                                    <Icon icon="mdi:bus" className="text-primary" width={20} />
+                                                </div>
+                                                <span className="font-medium text-foreground">{bus.busNumber}</span>
                                             </div>
                                         </TableCell>
-                                        <TableCell>{bus.registrationNumber}</TableCell>
+                                        <TableCell><span className="text-default-500">{bus.registrationNumber}</span></TableCell>
                                         <TableCell>
-                                            {bus.driver?.name || (
-                                                <span className="text-default-400">Not assigned</span>
+                                            {bus.driver?.name ? (
+                                                <div className="flex items-center gap-2">
+                                                    <Icon icon="mdi:account" className="text-default-400" />
+                                                    <span className="text-foreground">{bus.driver.name}</span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-default-400 italic">Not assigned</span>
                                             )}
                                         </TableCell>
-                                        <TableCell>{bus.capacity}</TableCell>
+                                        <TableCell><span className="text-default-500">{bus.capacity} seats</span></TableCell>
                                         <TableCell>
                                             <Chip
                                                 size="sm"
                                                 color={bus.isActive ? 'success' : 'danger'}
                                                 variant="flat"
+                                                classNames={{ content: "font-medium" }}
                                             >
                                                 {bus.isActive ? 'Active' : 'Inactive'}
                                             </Chip>
@@ -189,19 +204,20 @@ const ManageBuses = () => {
                                                 <Button
                                                     size="sm"
                                                     isIconOnly
-                                                    variant="flat"
+                                                    variant="light"
+                                                    color="default"
                                                     onPress={() => handleEdit(bus)}
                                                 >
-                                                    <Icon icon="mdi:pencil" />
+                                                    <Icon icon="mdi:pencil" width={20} />
                                                 </Button>
                                                 <Button
                                                     size="sm"
                                                     isIconOnly
-                                                    variant="flat"
+                                                    variant="light"
                                                     color="danger"
                                                     onPress={() => handleDelete(bus.id)}
                                                 >
-                                                    <Icon icon="mdi:delete" />
+                                                    <Icon icon="mdi:delete" width={20} />
                                                 </Button>
                                             </div>
                                         </TableCell>
@@ -214,29 +230,43 @@ const ManageBuses = () => {
             </Card>
 
             {/* Add/Edit Modal */}
-            <Modal isOpen={isOpen} onClose={handleCloseModal} size="lg">
+            {/* Add/Edit Modal */}
+            <Modal isOpen={isOpen} onClose={handleCloseModal} size="lg" classNames={{
+                base: "bg-content1 border border-default-200",
+                header: "border-b border-default-200",
+                footer: "border-t border-default-200"
+            }}>
                 <ModalContent>
-                    <ModalHeader>{editingBus ? 'Edit Bus' : 'Add New Bus'}</ModalHeader>
-                    <ModalBody className="space-y-4">
+                    <ModalHeader className="flex gap-2 items-center">
+                        <Icon icon={editingBus ? "mdi:pencil" : "mdi:plus-circle"} className="text-primary" />
+                        {editingBus ? 'Edit Bus' : 'Add New Bus'}
+                    </ModalHeader>
+                    <ModalBody className="space-y-4 py-6">
                         {error && (
-                            <div className="p-3 bg-danger-50 text-danger rounded-lg">{error}</div>
+                            <div className="p-3 bg-danger-50 text-danger rounded-lg border border-danger-200 text-sm">{error}</div>
                         )}
-                        <Input
-                            label="Bus Number"
-                            name="busNumber"
-                            placeholder="e.g., BUS-001"
-                            value={formData.busNumber}
-                            onChange={handleInputChange}
-                            isRequired
-                        />
-                        <Input
-                            label="Registration Number"
-                            name="registrationNumber"
-                            placeholder="e.g., KA-01-AB-1234"
-                            value={formData.registrationNumber}
-                            onChange={handleInputChange}
-                            isRequired
-                        />
+                        <div className="grid grid-cols-2 gap-4">
+                            <Input
+                                label="Bus Number"
+                                name="busNumber"
+                                placeholder="e.g., BUS-001"
+                                value={formData.busNumber}
+                                onChange={handleInputChange}
+                                isRequired
+                                variant="bordered"
+                                labelPlacement="outside"
+                            />
+                            <Input
+                                label="Registration Number"
+                                name="registrationNumber"
+                                placeholder="e.g., KA-01-AB-1234"
+                                value={formData.registrationNumber}
+                                onChange={handleInputChange}
+                                isRequired
+                                variant="bordered"
+                                labelPlacement="outside"
+                            />
+                        </div>
                         <Select
                             label="Driver (Optional)"
                             placeholder="Select a driver"
@@ -244,6 +274,8 @@ const ManageBuses = () => {
                             onSelectionChange={(keys) =>
                                 setFormData((prev) => ({ ...prev, driverId: [...keys][0] || '' }))
                             }
+                            variant="bordered"
+                            labelPlacement="outside"
                         >
                             {staff.map((s) => (
                                 <SelectItem key={s.id} textValue={s.User?.name || s.name}>
@@ -251,28 +283,34 @@ const ManageBuses = () => {
                                 </SelectItem>
                             ))}
                         </Select>
-                        <Input
-                            label="Device ID (Optional)"
-                            name="deviceId"
-                            placeholder="GPS device identifier"
-                            value={formData.deviceId}
-                            onChange={handleInputChange}
-                        />
-                        <Input
-                            label="Capacity"
-                            name="capacity"
-                            type="number"
-                            placeholder="Seating capacity"
-                            value={formData.capacity}
-                            onChange={handleInputChange}
-                        />
+                        <div className="grid grid-cols-2 gap-4">
+                            <Input
+                                label="Device ID (Optional)"
+                                name="deviceId"
+                                placeholder="GPS device identifier"
+                                value={formData.deviceId}
+                                onChange={handleInputChange}
+                                variant="bordered"
+                                labelPlacement="outside"
+                            />
+                            <Input
+                                label="Capacity"
+                                name="capacity"
+                                type="number"
+                                placeholder="Seating capacity"
+                                value={formData.capacity}
+                                onChange={handleInputChange}
+                                variant="bordered"
+                                labelPlacement="outside"
+                            />
+                        </div>
                     </ModalBody>
                     <ModalFooter>
-                        <Button variant="flat" onPress={handleCloseModal}>
+                        <Button variant="flat" color="default" onPress={handleCloseModal}>
                             Cancel
                         </Button>
-                        <Button color="primary" onPress={handleSubmit}>
-                            {editingBus ? 'Update' : 'Create'}
+                        <Button color="primary" onPress={handleSubmit} startContent={<Icon icon="mdi:check" />}>
+                            {editingBus ? 'Update Bus' : 'Create Bus'}
                         </Button>
                     </ModalFooter>
                 </ModalContent>

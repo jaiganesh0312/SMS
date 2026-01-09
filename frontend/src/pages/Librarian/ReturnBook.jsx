@@ -72,8 +72,8 @@ export default function ReturnBook() {
     };
 
     return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Return Book</h1>
+        <div className="p-6 space-y-6">
+            <h1 className="text-2xl font-bold text-foreground">Return Book</h1>
 
             <div className="flex gap-4 mb-6">
                 <Input
@@ -81,58 +81,82 @@ export default function ReturnBook() {
                     value={search}
                     onValueChange={setSearch}
                     className="max-w-md"
+                    variant="bordered"
+                    startContent={<Icon icon="mdi:magnify" className="text-default-400" />}
                 />
-                <Button color="primary" onPress={handleSearch}>Search</Button>
+                <Button color="primary" onPress={handleSearch} startContent={<Icon icon="mdi:magnify" />}>Search</Button>
             </div>
 
-            <Table aria-label="Issued Books">
-                <TableHeader>
-                    <TableColumn>BOOK</TableColumn>
-                    <TableColumn>ISSUED TO</TableColumn>
-                    <TableColumn>DUE DATE</TableColumn>
-                    <TableColumn>STATUS</TableColumn>
-                    <TableColumn>ACTION</TableColumn>
-                </TableHeader>
-                <TableBody emptyContent="No active issued books found">
-                    {transactions.map(tx => (
-                        <TableRow key={tx.id}>
-                            <TableCell>
-                                <p className="font-semibold">{tx.Book.title}</p>
-                                <p className="text-xs text-gray-500">{tx.Book.isbn}</p>
-                            </TableCell>
-                            <TableCell>
-                                <p>{tx.User?.name || tx.Student?.name}</p>
-                                <p className="text-xs text-gray-500">
-                                    {tx.User ? tx.User.role : `Student (${tx.Student?.admissionNumber})`}
-                                </p>
-                            </TableCell>
-                            <TableCell>
-                                <span className={new Date(tx.dueDate) < new Date() ? "text-red-500 font-bold" : ""}>
-                                    {new Date(tx.dueDate).toLocaleDateString()}
-                                </span>
-                            </TableCell>
-                            <TableCell><Chip size="sm" color="warning" variant="flat">{tx.status}</Chip></TableCell>
-                            <TableCell>
-                                <Button size="sm" color="success" onPress={() => onSelectReturn(tx)}>Return</Button>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
+                <CardBody className="p-0">
+                    <Table aria-label="Issued Books" shadow="none" classNames={{
+                        wrapper: "bg-content1 shadow-none",
+                        th: "bg-default-100 text-default-500 font-medium",
+                        td: "text-foreground group-hover:bg-default-50"
+                    }}>
+                        <TableHeader>
+                            <TableColumn>BOOK</TableColumn>
+                            <TableColumn>ISSUED TO</TableColumn>
+                            <TableColumn>DUE DATE</TableColumn>
+                            <TableColumn>STATUS</TableColumn>
+                            <TableColumn>ACTION</TableColumn>
+                        </TableHeader>
+                        <TableBody emptyContent="No active issued books found">
+                            {transactions.map(tx => (
+                                <TableRow key={tx.id} className="border-b border-default-100 last:border-none">
+                                    <TableCell>
+                                        <p className="font-semibold text-foreground">{tx.Book.title}</p>
+                                        <p className="text-xs text-default-500 font-mono">{tx.Book.isbn}</p>
+                                    </TableCell>
+                                    <TableCell>
+                                        <p className="text-foreground">{tx.User?.name || tx.Student?.name}</p>
+                                        <p className="text-xs text-default-500">
+                                            {tx.User ? tx.User.role : `Student (${tx.Student?.admissionNumber})`}
+                                        </p>
+                                    </TableCell>
+                                    <TableCell>
+                                        <span className={new Date(tx.dueDate) < new Date() ? "text-danger font-bold" : "text-foreground"}>
+                                            {new Date(tx.dueDate).toLocaleDateString()}
+                                        </span>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Chip size="sm" color="warning" variant="flat" className="bg-warning/20 text-warning-700">
+                                            {tx.status}
+                                        </Chip>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button size="sm" color="success" variant="flat" onPress={() => onSelectReturn(tx)}>Return</Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardBody>
+            </Card>
 
             {/* Return Confirmation Area - Simple inline or modal. using inline for speed */}
             {selectedTx && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-xl w-96">
-                        <h3 className="text-xl font-bold mb-4">Confirm Return</h3>
-                        <p><strong>Book:</strong> {selectedTx.Book.title}</p>
-                        <p><strong>Issued To:</strong> {selectedTx.User?.name || selectedTx.Student?.name}</p>
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-content1 p-6 rounded-lg shadow-xl w-96 border border-default-200">
+                        <h3 className="text-xl font-bold mb-4 text-foreground">Confirm Return</h3>
+                        <p className="text-default-700"><strong>Book:</strong> {selectedTx.Book.title}</p>
+                        <p className="text-default-700"><strong>Issued To:</strong> {selectedTx.User?.name || selectedTx.Student?.name}</p>
 
-                        <div className="mt-4">
-                            <Input type="number" label="Fine Amount" value={fine} onValueChange={setFine} />
-                        </div>
-                        <div className="mt-2">
-                            <Input label="Remarks" value={remarks} onValueChange={setRemarks} />
+                        <div className="mt-6 space-y-4">
+                            <Input
+                                type="number"
+                                label="Fine Amount"
+                                value={fine}
+                                onValueChange={setFine}
+                                variant="bordered"
+                                startContent={<span className="text-default-400 text-small">₹</span>}
+                            />
+                            <Input
+                                label="Remarks"
+                                value={remarks}
+                                onValueChange={setRemarks}
+                                variant="bordered"
+                            />
                         </div>
 
                         <div className="flex justify-end gap-2 mt-6">

@@ -11,6 +11,7 @@ import {
     ModalFooter,
     Input,
     Textarea,
+    Select,
     SelectItem,
     useDisclosure,
     Chip
@@ -77,13 +78,13 @@ export default function TeacherDashboard() {
 
     return (
         <motion.div
-            className="p-6 space-y-6"
+            className="p-4 md:p-6 space-y-4 md:space-y-6"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
             <motion.div variants={itemVariants} className="flex flex-col gap-2">
-                <h1 className="text-3xl font-bold text-foreground">
+                <h1 className="text-2xl md:text-3xl font-bold text-foreground">
                     Teacher Dashboard
                 </h1>
                 <p className="text-default-800">Welcome back, {user?.name}</p>
@@ -92,35 +93,42 @@ export default function TeacherDashboard() {
             {/* Class Teacher Widget */}
             {myClass && (
                 <motion.div className='p-2'>
-                    <Card className="shadow-md border-none bg-gradient-to-r from-primary-800 to-primary-600 text-white ">
-                        <CardBody className="p-6 relative">
+                    <Card className="shadow-md border-none bg-gradient-to-r from-primary-600 to-primary-900 text-white ">
+                        <CardBody className="p-6 relative overflow-hidden">
                             {/* Decorative background element */}
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                            <div className="absolute bottom-0 left-0 w-48 h-48 bg-secondary-500/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4"></div>
 
-                            <div className="flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
-                                <div className="flex items-center gap-6">
-                                    <div className="p-4 bg-white/20 backdrop-blur-md rounded-full shadow-inner border border-white/30">
-                                        <Icon icon="mdi:google-classroom" className="text-2xl text-white" />
+                            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 relative z-10">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+                                    <div className="p-3 md:p-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-inner border border-white/20">
+                                        <Icon icon="mdi:google-classroom" className="text-2xl md:text-3xl text-secondary-300" />
                                     </div>
                                     <div>
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <Chip size="sm" variant="solid" color='secondary'>CLASS TEACHER</Chip>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <Chip size="sm" variant="shadow" classNames={{ base: "bg-secondary-500 text-primary-900", content: "font-bold tracking-wide" }}>CLASS TEACHER</Chip>
                                         </div>
-                                        <h2 className="text-xl font-bold text-white tracking-tight">{myClass.name} - {myClass.section}</h2>
-                                        <p className="text-white/80 mt-1 font-medium">{myClass.Students ? myClass.Students.length : 0} Students Assigned</p>
+                                        <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">{myClass.name} - {myClass.section}</h2>
+                                        <p className="text-primary-100 mt-1 font-medium flex items-center gap-2">
+                                            <Icon icon="mdi:account-group" />
+                                            {myClass.Students ? myClass.Students.length : 0} Students Assigned
+                                        </p>
                                     </div>
                                 </div>
-                                <div className="flex gap-4">
+                                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full lg:w-auto">
                                     <Button
-                                        className="bg-white text-primary-900 border-none font-semibold shadow-lg"
+                                        className="bg-primary-700/50 hover:bg-primary-700 text-white border border-white/20 font-semibold shadow-lg backdrop-blur-sm w-full sm:w-auto"
                                         startContent={<Icon icon="mdi:account-school" className="text-xl" />}
                                         onPress={() => navigate('/teacher/my-students')}
+                                        size="sm"
                                     >
                                         My Students
                                     </Button>
                                     <Button
-                                        className="bg-secondary text-secondary-900 border-none font-semibold shadow-lg"
+                                        className="bg-secondary-500 text-primary-900 font-bold shadow-lg shadow-secondary-500/20 w-full sm:w-auto"
                                         startContent={<Icon icon="mdi:bullhorn" className="text-xl" />}
                                         onPress={onOpen}
+                                        size="sm"
                                     >
                                         Make Announcement
                                     </Button>
@@ -142,8 +150,8 @@ export default function TeacherDashboard() {
                             </div>
                         </div>
                     </CardHeader>
-                    <CardBody className="px-6 pb-6 pt-2">
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    <CardBody className="px-4 md:px-6 pb-4 md:pb-6 pt-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                             <Button
                                 className="w-full justify-start h-auto py-4 px-4 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/40 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800"
                                 onPress={() => navigate('/teacher/my-periods')}

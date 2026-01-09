@@ -68,8 +68,8 @@ const ComplaintList = ({ refreshTrigger }) => {
             case "info":
                 return (
                     <div>
-                        <p className="font-semibold text-small">{item.title}</p>
-                        <p className="text-tiny text-gray-500 truncate max-w-xs">{item.description}</p>
+                        <p className="font-semibold text-small text-foreground">{item.title}</p>
+                        <p className="text-tiny text-default-500 truncate max-w-xs">{item.description}</p>
                     </div>
                 );
             case "raisedBy":
@@ -82,19 +82,19 @@ const ComplaintList = ({ refreshTrigger }) => {
                 );
             case "priority":
                 return (
-                    <Chip size="sm" variant="flat" color={item.priority === 'HIGH' ? 'danger' : item.priority === 'MEDIUM' ? 'warning' : 'success'}>
+                    <Chip size="sm" variant="flat" color={item.priority === 'HIGH' ? 'danger' : item.priority === 'MEDIUM' ? 'warning' : 'success'} classNames={{ content: "font-medium" }}>
                         {item.priority}
                     </Chip>
                 );
             case "status":
                 return (
-                    <Chip size="sm" color={STATUS_COLOR_MAP[item.status] || "default"} variant="dot">
+                    <Chip size="sm" color={STATUS_COLOR_MAP[item.status] || "default"} variant="dot" classNames={{ content: "font-medium" }}>
                         {item.status?.replace('_', ' ')}
                     </Chip>
                 );
             case "date":
                 return (
-                    <div className="text-small text-gray-500">
+                    <div className="text-small text-default-500">
                         {item.createdAt ? format(new Date(item.createdAt), 'MMM d, yyyy') : '-'}
                     </div>
                 );
@@ -150,12 +150,16 @@ const ComplaintList = ({ refreshTrigger }) => {
     return (
         <div>
             <div className="mb-4 flex justify-between items-center">
-                <h3 className="text-lg font-bold">Complaint History</h3>
-                <Button size="sm" variant="light" startContent={<Icon icon="lucide:refresh-cw" />} onPress={fetchComplaints}>
+                <h3 className="text-lg font-bold text-foreground font-heading">Complaint History</h3>
+                <Button size="sm" color="primary" startContent={<Icon icon="lucide:refresh-cw" />} onPress={fetchComplaints}>
                     Refresh
                 </Button>
             </div>
-            <Table aria-label="Complaints Table">
+            <Table aria-label="Complaints Table" shadow="none" classNames={{
+                wrapper: "shadow-none bg-content1 border border-default-200",
+                th: "bg-default-100 text-default-500 font-medium",
+                td: "py-3"
+            }}>
                 <TableHeader columns={columns}>
                     {(column) => (
                         <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>

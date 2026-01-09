@@ -33,8 +33,8 @@ const PhotoViewer = ({ isOpen, onClose, imageUrl, title }) => {
             onClose={onClose}
             size="full"
             classNames={{
-                base: "bg-black/90 text-white",
-                closeButton: "text-white hover:bg-white/20"
+                base: "bg-black/95 text-white",
+                closeButton: "text-white hover:bg-white/20 transition-colors"
             }}
         >
             <ModalContent>

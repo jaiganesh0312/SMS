@@ -159,16 +159,16 @@ export default function LinkStudentToParent() {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm">
+                <Card className="bg-content1 border border-default-200 shadow-sm">
                     <CardHeader className="flex flex-col gap-4 px-6 pt-6">
-                        <div className="flex w-full gap-4 items-end">
+                        <div className="flex w-full flex-col sm:flex-row gap-4 items-stretch sm:items-end">
                             <Input
                                 label="Search Student"
                                 placeholder="Name or Admission No."
                                 value={searchQuery}
                                 onValueChange={setSearchQuery}
                                 startContent={<Icon icon="mdi:magnify" />}
-                                className="max-w-xs"
+                                className="w-full sm:max-w-xs"
                                 variant="bordered"
                             />
                             <Select
@@ -176,7 +176,7 @@ export default function LinkStudentToParent() {
                                 placeholder="All Classes"
                                 selectedKeys={[classFilter]}
                                 onChange={(e) => setClassFilter(e.target.value)}
-                                className="max-w-xs"
+                                className="w-full sm:max-w-xs"
                                 variant="bordered"
                             >
                                 <SelectItem key="all" value="all">All Classes</SelectItem>
@@ -186,12 +186,13 @@ export default function LinkStudentToParent() {
                                     </SelectItem>
                                 ))}
                             </Select>
-                            <div className="ml-auto">
+                            <div className="w-full sm:w-auto sm:ml-auto">
                                 <Button
                                     color="primary"
                                     isDisabled={selectedKeys.size === 0 && selectedKeys !== "all"}
                                     onPress={handleLinkStudents}
                                     startContent={<Icon icon="mdi:link-variant" />}
+                                    className="w-full sm:w-auto"
                                 >
                                     Link Selected ({selectedKeys === "all" ? filteredStudents.length : selectedKeys.size})
                                 </Button>
@@ -208,10 +209,10 @@ export default function LinkStudentToParent() {
                             removeWrapper
                         >
                             <TableHeader>
-                                <TableColumn>ADMISSION NO</TableColumn>
-                                <TableColumn>NAME</TableColumn>
-                                <TableColumn>CLASS</TableColumn>
-                                <TableColumn>GENDER</TableColumn>
+                                <TableColumn className="bg-default-100 text-default-500 font-semibold">ADMISSION NO</TableColumn>
+                                <TableColumn className="bg-default-100 text-default-500 font-semibold">NAME</TableColumn>
+                                <TableColumn className="bg-default-100 text-default-500 font-semibold">CLASS</TableColumn>
+                                <TableColumn className="bg-default-100 text-default-500 font-semibold hidden sm:table-cell">GENDER</TableColumn>
                             </TableHeader>
                             <TableBody emptyContent={"No unassigned students found"} isLoading={loading}>
                                 {filteredStudents.map((student) => (
@@ -230,7 +231,7 @@ export default function LinkStudentToParent() {
                                                 <span className="text-default-400">-</span>
                                             )}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell className="hidden sm:table-cell">
                                             <Chip size="sm" variant="flat" color={student.gender === 'Male' ? 'primary' : 'secondary'}>
                                                 {student.gender}
                                             </Chip>

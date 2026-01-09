@@ -127,24 +127,25 @@ export default function StudyMaterials() {
 
     return (
         <motion.div
-            className="space-y-6 p-6"
+            className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 max-w-7xl mx-auto"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Study Materials</h1>
-                    <p className="text-sm text-gray-500">Access and manage course contents</p>
+            <div className="flex flex-col gap-4">
+                <div className="text-center sm:text-left">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">Study Materials</h1>
+                    <p className="text-xs sm:text-sm text-default-500 mt-1">Access and manage course contents</p>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                     <Select
                         placeholder="Filter Class"
                         size="sm"
-                        className="w-40"
+                        className="w-full sm:flex-1 sm:max-w-[200px]"
                         selectedKeys={filterClass ? [filterClass] : []}
                         onChange={(e) => setFilterClass(e.target.value)}
+                        variant="bordered"
                     >
                         {classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name} - {c.section}</SelectItem>)}
                     </Select>
@@ -152,16 +153,24 @@ export default function StudyMaterials() {
                     <Select
                         placeholder="Filter Subject"
                         size="sm"
-                        className="w-40"
+                        className="w-full sm:flex-1 sm:max-w-[200px]"
                         selectedKeys={filterSubject ? [filterSubject] : []}
                         onChange={(e) => setFilterSubject(e.target.value)}
+                        variant="bordered"
                     >
                         {subjects.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                     </Select>
 
                     {isTeacherOrAdmin && (
-                        <Button color="primary" startContent={<Icon icon="mdi:folder-plus" />} onPress={onOpen}>
-                            New Section
+                        <Button
+                            color="primary"
+                            startContent={<Icon icon="mdi:folder-plus" />}
+                            onPress={onOpen}
+                            className="shadow-md shadow-primary/20 w-full sm:w-auto"
+                            size="sm"
+                        >
+                            <span className="hidden sm:inline">New Section</span>
+                            <span className="sm:hidden">New</span>
                         </Button>
                     )}
                 </div>
@@ -169,13 +178,13 @@ export default function StudyMaterials() {
 
             {loading ? (
                 <div className="flex justify-center py-10">
-                    <Spinner size="lg" />
+                    <Spinner size="lg" color="primary" />
                 </div>
             ) : sections.length === 0 ? (
-                <div className="text-center py-16 bg-gray-50 rounded-lg border border-dashed border-gray-300">
-                    <Icon icon="mdi:folder-open-outline" className="text-6xl text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900">No study material sections found</h3>
-                    <p className="text-gray-500 max-w-sm mx-auto mt-2">
+                <div className="text-center py-16 bg-content1 rounded-lg border border-dashed border-default-200">
+                    <Icon icon="mdi:folder-open-outline" className="text-6xl text-default-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-foreground">No study material sections found</h3>
+                    <p className="text-default-500 max-w-sm mx-auto mt-2">
                         {isTeacherOrAdmin
                             ? "Create a new section to start uploading videos and documents."
                             : "Your teachers haven't uploaded any materials for your class yet."}
@@ -187,48 +196,48 @@ export default function StudyMaterials() {
                     )}
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-y-3 sm:gap-4 md:gap-6">
                     {sections.map((section) => (
-                        <motion.div key={section.id} variants={itemVariants}>
+                        <motion.div key={section.id} className="w-full">
                             <Card
                                 isPressable
                                 onPress={() => navigate(`/study-materials/sections/${section.id}`)}
-                                className="h-full hover:scale-[1.02] transition-transform"
+                                className="h-full hover:scale-[1.02] transition-transform bg-content1 border border-default-200 shadow-sm hover:shadow-md w-full"
                             >
                                 <CardBody className="p-0 overflow-hidden relative group">
-                                    <div className="bg-gradient-to-br from-primary-500 to-primary-700 h-32 flex items-center justify-center p-6 text-white text-center">
-                                        <Icon icon="mdi:book-open-page-variant" className="text-5xl opacity-80" />
+                                    <div className="bg-primary/10 h-24 sm:h-32 flex items-center justify-center p-4 sm:p-6 text-primary text-center group-hover:bg-primary/20 transition-colors">
+                                        <Icon icon="mdi:book-open-page-variant" className="text-4xl sm:text-5xl opacity-80" />
                                     </div>
                                     {!section.isPublished && (
                                         <div className="absolute top-2 right-2">
-                                            <Chip size="sm" color="warning" variant="solid">Draft</Chip>
+                                            <Chip size="sm" color="warning" variant="solid" className="shadow-sm text-xs">Draft</Chip>
                                         </div>
                                     )}
-                                    <div className="p-4">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <Chip size="sm" variant="flat" color="secondary" className="mb-2">
+                                    <div className="p-3 sm:p-4">
+                                        <div className="flex items-center justify-between gap-2 mb-2">
+                                            <Chip size="sm" variant="flat" color="secondary" className="text-xs">
                                                 {section.Subject?.name}
                                             </Chip>
-                                            <span className="text-xs text-gray-500 font-medium border px-1.5 py-0.5 rounded">
+                                            <Chip size="sm" variant="bordered" className="text-xs border-default-300">
                                                 {section.Class?.name} {section.sectionId ? `- ${section.sectionId}` : ''}
-                                            </span>
+                                            </Chip>
                                         </div>
-                                        <h3 className="text-lg font-bold text-gray-800 line-clamp-1" title={section.title}>
+                                        <h3 className="text-base sm:text-lg font-bold text-foreground line-clamp-1 mb-1" title={section.title}>
                                             {section.title}
                                         </h3>
-                                        <p className="text-sm text-gray-500 line-clamp-2 mt-1 min-h-[40px]">
+                                        <p className="text-xs sm:text-sm text-default-500 line-clamp-2 min-h-[32px] sm:min-h-[40px]">
                                             {section.description || "No description provided"}
                                         </p>
                                     </div>
                                 </CardBody>
-                                <CardFooter className="px-4 py-3 bg-gray-50 border-t flex justify-between items-center text-xs text-gray-500">
+                                <CardFooter className="px-3 sm:px-4 py-2 sm:py-3 bg-default-50 border-t border-default-100 flex flex-wrap justify-between items-center text-xs text-default-500 gap-2">
                                     <div className="flex items-center gap-1">
-                                        <Icon icon="mdi:file-document-multiple-outline" />
-                                        <span>{section.materials?.length || 0} items</span>
+                                        <Icon icon="mdi:file-document-multiple-outline" className="text-sm" />
+                                        <span className="text-xs">{section.materials?.length || 0} items</span>
                                     </div>
-                                    <div className="flex items-center gap-1">
-                                        <Icon icon="mdi:account-circle-outline" />
-                                        <span>{section.creator?.name}</span>
+                                    <div className="flex items-center gap-1 truncate max-w-[140px]">
+                                        <Icon icon="mdi:account-circle-outline" className="text-sm flex-shrink-0" />
+                                        <span className="text-xs truncate">{section.creator?.name}</span>
                                     </div>
                                 </CardFooter>
                             </Card>
@@ -238,12 +247,17 @@ export default function StudyMaterials() {
             )}
 
             {/* Create Section Modal */}
-            <Modal isOpen={isOpen} onClose={onClose} size="2xl">
+            <Modal isOpen={isOpen} onClose={onClose} size="2xl" backdrop="blur" classNames={{
+                base: "bg-content1 border border-default-200",
+                header: "border-b border-default-200 text-foreground",
+                footer: "border-t border-default-200",
+                closeButton: "hover:bg-default-100 active:bg-default-200 text-default-500",
+            }}>
                 <ModalContent>
                     {(onClose) => (
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <ModalHeader>Create New Section</ModalHeader>
-                            <ModalBody>
+                            <ModalBody className="py-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="col-span-full">
                                         <Input
@@ -252,6 +266,7 @@ export default function StudyMaterials() {
                                             placeholder="e.g. Chapter 1: Laws of Motion"
                                             isInvalid={!!errors.title}
                                             errorMessage={errors.title?.message}
+                                            variant="bordered"
                                         />
                                     </div>
                                     <div className="col-span-full">
@@ -259,6 +274,7 @@ export default function StudyMaterials() {
                                             {...register('description')}
                                             label="Description"
                                             placeholder="What is this section about?"
+                                            variant="bordered"
                                         />
                                     </div>
 
@@ -269,6 +285,7 @@ export default function StudyMaterials() {
                                         onChange={(e) => setValue('classId', e.target.value)}
                                         isInvalid={!!errors.classId}
                                         errorMessage={errors.classId?.message}
+                                        variant="bordered"
                                     >
                                         {classes.map(c => (
                                             <SelectItem key={c.id} value={c.id}>
@@ -284,6 +301,7 @@ export default function StudyMaterials() {
                                         onChange={(e) => setValue('subjectId', e.target.value)}
                                         isInvalid={!!errors.subjectId}
                                         errorMessage={errors.subjectId?.message}
+                                        variant="bordered"
                                     >
                                         {subjects.map(s => (
                                             <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
@@ -295,8 +313,9 @@ export default function StudyMaterials() {
                                             {...register('sectionId')}
                                             label="Specific Section (Optional)"
                                             placeholder="e.g. A (Leave empty for all sections)"
+                                            variant="bordered"
                                         />
-                                        <p className="text-xs text-gray-500 mt-1">
+                                        <p className="text-xs text-default-400 mt-1">
                                             If specified, only students in this specific section will see this material.
                                         </p>
                                     </div>
@@ -306,7 +325,7 @@ export default function StudyMaterials() {
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Cancel
                                 </Button>
-                                <Button color="primary" type="submit">
+                                <Button color="primary" type="submit" className="shadow-md shadow-primary/20">
                                     Create Section
                                 </Button>
                             </ModalFooter>

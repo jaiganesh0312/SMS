@@ -23,7 +23,7 @@ router.use(protect);
 // Create section (Teachers and Admins only)
 router.post(
     "/sections",
-    restrictTo("TEACHER", "ADMIN", "SUPER_ADMIN"),
+    restrictTo("TEACHER", "SCHOOL_ADMIN", "SUPER_ADMIN"),
     studyMaterialController.createSection
 );
 
@@ -36,21 +36,21 @@ router.get("/sections/:id", studyMaterialController.getSectionById);
 // Update section
 router.put(
     "/sections/:id",
-    restrictTo("TEACHER", "ADMIN", "SUPER_ADMIN"),
+    restrictTo("TEACHER", "SCHOOL_ADMIN", "SUPER_ADMIN"),
     studyMaterialController.updateSection
 );
 
 // Delete section
 router.delete(
     "/sections/:id",
-    restrictTo("TEACHER", "ADMIN", "SUPER_ADMIN"),
+    restrictTo("TEACHER", "SCHOOL_ADMIN", "SUPER_ADMIN"),
     studyMaterialController.deleteSection
 );
 
 // Toggle section publish status
 router.patch(
     "/sections/:id/publish",
-    restrictTo("TEACHER", "ADMIN", "SUPER_ADMIN"),
+    restrictTo("TEACHER", "SCHOOL_ADMIN", "SUPER_ADMIN"),
     studyMaterialController.toggleSectionPublish
 );
 
@@ -61,7 +61,7 @@ router.patch(
 // Upload material to section
 router.post(
     "/sections/:sectionId/materials",
-    restrictTo("TEACHER", "ADMIN", "SUPER_ADMIN"),
+    restrictTo("TEACHER", "SCHOOL_ADMIN", "SUPER_ADMIN"),
     upload.single("file"),
     studyMaterialController.uploadMaterial
 );
@@ -72,21 +72,21 @@ router.get("/materials/:id", studyMaterialController.getMaterialById);
 // Update material
 router.put(
     "/materials/:id",
-    restrictTo("TEACHER", "ADMIN", "SUPER_ADMIN"),
+    restrictTo("TEACHER", "SCHOOL_ADMIN", "SUPER_ADMIN"),
     studyMaterialController.updateMaterial
 );
 
 // Delete material
 router.delete(
     "/materials/:id",
-    restrictTo("TEACHER", "ADMIN", "SUPER_ADMIN"),
+    restrictTo("TEACHER", "SCHOOL_ADMIN", "SUPER_ADMIN"),
     studyMaterialController.deleteMaterial
 );
 
 // Toggle material publish status
 router.patch(
     "/materials/:id/publish",
-    restrictTo("TEACHER", "ADMIN", "SUPER_ADMIN"),
+    restrictTo("TEACHER", "SCHOOL_ADMIN", "SUPER_ADMIN"),
     studyMaterialController.toggleMaterialPublish
 );
 

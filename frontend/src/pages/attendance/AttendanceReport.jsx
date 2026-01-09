@@ -3,6 +3,7 @@ import { Card, CardBody, Select, SelectItem, Input, Table, TableHeader, TableCol
 import { Icon } from "@iconify/react";
 import { academicService, attendanceService } from '@/services';
 import { motion } from "framer-motion";
+import { PageHeader } from '@/components/common';
 
 export default function AttendanceReport() {
     const [classes, setClasses] = useState([]);
@@ -117,126 +118,132 @@ export default function AttendanceReport() {
             animate="visible"
         >
             <motion.div variants={itemVariants}>
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Attendance Reports</h1>
-                        <p className="text-sm text-gray-500">View detailed attendance history</p>
-                    </div>
+                <PageHeader
+                    title="Attendance Reports"
+                    subtitle="View detailed attendance history"
+                    action={
+                        <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto items-end">
+                            <div className="flex bg-default-100 p-1 rounded-lg h-10 items-center">
+                                <Button
+                                    size="sm"
+                                    radius="sm"
+                                    variant={reportType === 'DAILY' ? 'solid' : 'light'}
+                                    color={reportType === 'DAILY' ? 'primary' : 'default'}
+                                    onPress={() => setReportType('DAILY')}
+                                    className={reportType === 'DAILY' ? "shadow-sm font-medium" : "text-default-500"}
+                                >
+                                    Daily
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    radius="sm"
+                                    variant={reportType === 'MONTHLY' ? 'solid' : 'light'}
+                                    color={reportType === 'MONTHLY' ? 'primary' : 'default'}
+                                    onPress={() => setReportType('MONTHLY')}
+                                    className={reportType === 'MONTHLY' ? "shadow-sm font-medium" : "text-default-500"}
+                                >
+                                    Monthly
+                                </Button>
+                            </div>
 
-                    <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto items-end">
-                        <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg h-10 items-center">
-                            <Button
+                            <Select
+                                className="min-w-[200px]"
+                                label="Select Class"
+                                placeholder="Choose a class"
+                                selectedKeys={selectedClass ? new Set([String(selectedClass)]) : new Set()}
+                                onSelectionChange={handleClassChange}
+                                startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
+                                variant="bordered"
                                 size="sm"
-                                radius="sm"
-                                variant={reportType === 'DAILY' ? 'solid' : 'light'}
-                                color={reportType === 'DAILY' ? 'primary' : 'default'}
-                                onPress={() => setReportType('DAILY')}
-                                className={reportType === 'DAILY' ? "shadow-sm" : ""}
                             >
-                                Daily
-                            </Button>
-                            <Button
-                                size="sm"
-                                radius="sm"
-                                variant={reportType === 'MONTHLY' ? 'solid' : 'light'}
-                                color={reportType === 'MONTHLY' ? 'primary' : 'default'}
-                                onPress={() => setReportType('MONTHLY')}
-                                className={reportType === 'MONTHLY' ? "shadow-sm" : ""}
-                            >
-                                Monthly
-                            </Button>
+                                {classes.map((cls) => (
+                                    <SelectItem key={String(cls.id)} textValue={`${cls.name} - ${cls.section}`}>
+                                        {cls.name} {cls.section ? `- ${cls.section}` : ''}
+                                    </SelectItem>
+                                ))}
+                            </Select>
+
+                            {reportType === 'MONTHLY' ? (
+                                <Input
+                                    type="month"
+                                    label="Select Month"
+                                    className="min-w-[200px]"
+                                    value={selectedMonth}
+                                    onChange={(e) => setSelectedMonth(e.target.value)}
+                                    variant="bordered"
+                                    size="sm"
+                                />
+                            ) : (
+                                <Input
+                                    type="date"
+                                    label="Select Date"
+                                    className="min-w-[200px]"
+                                    value={selectedDate}
+                                    onChange={(e) => setSelectedDate(e.target.value)}
+                                    variant="bordered"
+                                    size="sm"
+                                />
+                            )}
                         </div>
-
-                        <Select
-                            className="min-w-[200px]"
-                            label="Select Class"
-                            placeholder="Choose a class"
-                            selectedKeys={selectedClass ? new Set([String(selectedClass)]) : new Set()}
-                            onSelectionChange={handleClassChange}
-                            startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
-                        >
-                            {classes.map((cls) => (
-                                <SelectItem key={String(cls.id)} textValue={`${cls.name} - ${cls.section}`}>
-                                    {cls.name} {cls.section ? `- ${cls.section}` : ''}
-                                </SelectItem>
-                            ))}
-                        </Select>
-
-                        {reportType === 'MONTHLY' ? (
-                            <Input
-                                type="month"
-                                label="Select Month"
-                                className="min-w-[200px]"
-                                value={selectedMonth}
-                                onChange={(e) => setSelectedMonth(e.target.value)}
-                            />
-                        ) : (
-                            <Input
-                                type="date"
-                                label="Select Date"
-                                className="min-w-[200px]"
-                                value={selectedDate}
-                                onChange={(e) => setSelectedDate(e.target.value)}
-                            />
-                        )}
-                    </div>
-                </div>
+                    }
+                />
             </motion.div>
 
             {/* Stats Cards */}
             <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Card className="shadow-sm border-l-4 border-green-500">
+                <Card className="bg-content1 shadow-sm border-l-4 border-l-success border-y border-r border-default-200">
                     <CardBody className="flex flex-row items-center gap-4 p-4">
-                        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl">
-                            <Icon icon="mdi:check-circle" className="text-2xl text-green-600" />
+                        <div className="p-3 bg-success/10 rounded-xl">
+                            <Icon icon="mdi:check-circle" className="text-2xl text-success" />
                         </div>
                         <div>
-                            <p className="text-sm text-gray-500">Present</p>
-                            <p className="text-2xl font-bold">{stats.present}</p>
+                            <p className="text-sm text-default-500">Present</p>
+                            <p className="text-2xl font-bold text-foreground">{stats.present}</p>
                         </div>
                     </CardBody>
                 </Card>
-                <Card className="shadow-sm border-l-4 border-red-500">
+                <Card className="bg-content1 shadow-sm border-l-4 border-l-danger border-y border-r border-default-200">
                     <CardBody className="flex flex-row items-center gap-4 p-4">
-                        <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-xl">
-                            <Icon icon="mdi:close-circle" className="text-2xl text-red-600" />
+                        <div className="p-3 bg-danger/10 rounded-xl">
+                            <Icon icon="mdi:close-circle" className="text-2xl text-danger" />
                         </div>
                         <div>
-                            <p className="text-sm text-gray-500">Absent</p>
-                            <p className="text-2xl font-bold">{stats.absent}</p>
+                            <p className="text-sm text-default-500">Absent</p>
+                            <p className="text-2xl font-bold text-foreground">{stats.absent}</p>
                         </div>
                     </CardBody>
                 </Card>
-                <Card className="shadow-sm border-l-4 border-yellow-500">
+                <Card className="bg-content1 shadow-sm border-l-4 border-l-warning border-y border-r border-default-200">
                     <CardBody className="flex flex-row items-center gap-4 p-4">
-                        <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl">
-                            <Icon icon="mdi:clock-alert" className="text-2xl text-yellow-600" />
+                        <div className="p-3 bg-warning/10 rounded-xl">
+                            <Icon icon="mdi:clock-alert" className="text-2xl text-warning" />
                         </div>
                         <div>
-                            <p className="text-sm text-gray-500">Late</p>
-                            <p className="text-2xl font-bold">{stats.late}</p>
+                            <p className="text-sm text-default-500">Late</p>
+                            <p className="text-2xl font-bold text-foreground">{stats.late}</p>
                         </div>
                     </CardBody>
                 </Card>
-                <Card className="shadow-sm border-l-4 border-blue-500">
+                <Card className="bg-content1 shadow-sm border-l-4 border-l-primary border-y border-r border-default-200">
                     <CardBody className="flex flex-row items-center gap-4 p-4">
-                        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-                            <Icon icon="mdi:weather-sunset" className="text-2xl text-blue-600" />
+                        <div className="p-3 bg-primary/10 rounded-xl">
+                            <Icon icon="mdi:weather-sunset" className="text-2xl text-primary" />
                         </div>
                         <div>
-                            <p className="text-sm text-gray-500">Half Day</p>
-                            <p className="text-2xl font-bold">{stats.halfDay}</p>
+                            <p className="text-sm text-default-500">Half Day</p>
+                            <p className="text-2xl font-bold text-foreground">{stats.halfDay}</p>
                         </div>
                     </CardBody>
                 </Card>
             </motion.div>
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm">
+                <Card className="bg-content1 border border-default-200 shadow-sm">
                     <CardBody className="pb-4">
                         <Table
                             aria-label="Attendance Report Table"
                             removeWrapper
+                            classNames={{ th: "bg-default-100 text-default-500 font-medium" }}
                         >
                             <TableHeader>
                                 <TableColumn>DATE</TableColumn>
@@ -250,7 +257,7 @@ export default function AttendanceReport() {
                                 {reportData.map((record, index) => (
                                     <TableRow key={index}>
                                         <TableCell>
-                                            <span className="text-gray-900 dark:text-gray-300">
+                                            <span className="text-default-500">
                                                 {new Date(record.date).toLocaleDateString()}
                                             </span>
                                         </TableCell>

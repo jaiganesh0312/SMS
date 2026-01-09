@@ -35,33 +35,33 @@ export default function SystemAdminDashboard() {
             title: 'Registered Schools',
             value: stats.counts.schools,
             icon: 'mdi:domain',
-            color: 'text-violet-600 dark:text-violet-400',
-            bgColor: 'bg-violet-100 dark:bg-violet-900/30',
-            borderColor: 'border-l-violet-500'
+            color: 'text-primary-600 dark:text-primary-400',
+            bgColor: 'bg-primary-100 dark:bg-primary-500/20',
+            borderColor: 'border-l-primary-500'
         },
         {
             title: 'Total Revenue',
             value: `$${stats.counts.revenue}`,
             icon: 'mdi:currency-usd',
-            color: 'text-emerald-600 dark:text-emerald-400',
-            bgColor: 'bg-emerald-100 dark:bg-emerald-900/30',
-            borderColor: 'border-l-emerald-500'
+            color: 'text-success-600 dark:text-success-400',
+            bgColor: 'bg-success-100 dark:bg-success-500/20',
+            borderColor: 'border-l-success-500'
         },
         {
             title: 'Total Users',
             value: stats.counts.users,
             icon: 'mdi:account-group',
-            color: 'text-amber-600 dark:text-amber-400',
-            bgColor: 'bg-amber-100 dark:bg-amber-900/30',
-            borderColor: 'border-l-amber-500'
+            color: 'text-secondary-600 dark:text-secondary-400',
+            bgColor: 'bg-secondary-100 dark:bg-secondary-500/20',
+            borderColor: 'border-l-secondary-500'
         },
         {
             title: 'System Health',
             value: '99.9%',
             icon: 'mdi:heart-pulse',
-            color: 'text-cyan-600 dark:text-cyan-400',
-            bgColor: 'bg-cyan-100 dark:bg-cyan-900/30',
-            borderColor: 'border-l-cyan-500'
+            color: 'text-warning-600 dark:text-warning-400',
+            bgColor: 'bg-warning-100 dark:bg-warning-500/20',
+            borderColor: 'border-l-warning-500'
         },
     ];
 

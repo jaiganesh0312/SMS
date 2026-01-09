@@ -30,6 +30,7 @@ import { academicService, attendanceService } from '@/services';
 import { format } from 'date-fns';
 import { motion } from "framer-motion";
 import ConfirmModal from '@/components/common/ConfirmModal';
+import { PageHeader } from '@/components/common';
 
 const ATTENDANCE_STATUS = [
     { value: "PRESENT", label: "Present", color: "success", icon: "mdi:check-circle" },
@@ -228,65 +229,69 @@ export default function MarkAttendance() {
             animate="visible"
         >
             <motion.div variants={itemVariants}>
-                <div className="flex justify-between items-center">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Mark Student Attendance</h1>
-                        <p className="text-sm text-gray-500">Manage daily attendance for students</p>
-                    </div>
-                    <Link to="/admin/bulk-upload/attendance">
-                        <Button color="secondary" variant="flat" startContent={<Icon icon="mdi:cloud-upload" />}>
-                            Bulk Upload
-                        </Button>
-                    </Link>
-                </div>
+                <PageHeader
+                    title="Mark Student Attendance"
+                    subtitle="Manage daily attendance for students"
+                    action={
+                        <Link to="/admin/bulk-upload/attendance">
+                            <Button color="secondary" variant="flat" startContent={<Icon icon="mdi:cloud-upload" />}>
+                                Bulk Upload
+                            </Button>
+                        </Link>
+                    }
+                />
             </motion.div>
 
             <motion.div variants={itemVariants}>
-                <div className="flex gap-4 items-end bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                    <div className="w-1/3">
-                        <Select
-                            label="Select Class"
-                            placeholder="Choose a class"
-                            selectedKeys={selectedClass ? new Set([String(selectedClass)]) : new Set()}
-                            onSelectionChange={handleClassChange}
-                            startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
-                        >
-                            {classes.map((cls) => (
-                                <SelectItem key={String(cls.id)} textValue={`${cls.name} - ${cls.section}`}>
-                                    {cls.name} {cls.section ? `- ${cls.section}` : ''}
-                                </SelectItem>
-                            ))}
-                        </Select>
-                    </div>
-                    <div>
-                        <Input
-                            type="date"
-                            label="Date"
-                            value={selectedDate}
-                            onChange={(e) => setSelectedDate(e.target.value)}
-                        />
-                    </div>
-                </div>
+                <Card className="bg-content1 border border-default-200 shadow-sm">
+                    <CardBody className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-end p-4">
+                        <div className="w-full sm:w-1/2 md:w-1/3">
+                            <Select
+                                label="Select Class"
+                                placeholder="Choose a class"
+                                selectedKeys={selectedClass ? new Set([String(selectedClass)]) : new Set()}
+                                onSelectionChange={handleClassChange}
+                                startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
+                                variant="bordered"
+                            >
+                                {classes.map((cls) => (
+                                    <SelectItem key={String(cls.id)} textValue={`${cls.name} - ${cls.section}`}>
+                                        {cls.name} {cls.section ? `- ${cls.section}` : ''}
+                                    </SelectItem>
+                                ))}
+                            </Select>
+                        </div>
+                        <div className="w-full sm:w-auto">
+                            <Input
+                                type="date"
+                                label="Date"
+                                value={selectedDate}
+                                onChange={(e) => setSelectedDate(e.target.value)}
+                                variant="bordered"
+                            />
+                        </div>
+                    </CardBody>
+                </Card>
             </motion.div>
 
             {/* Summary Cards */}
             {selectedClass && (
-                <motion.div variants={itemVariants} className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                    <Card className="shadow-sm border-l-4 border-l-primary">
+                <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <Card className="bg-content1 shadow-sm border-l-4 border-l-primary border-y border-r border-default-200">
                         <CardBody className="p-4">
-                            <p className="text-small text-gray-500 uppercase font-semibold">Total Students</p>
-                            <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.TOTAL}</p>
+                            <p className="text-small text-default-500 uppercase font-bold">Total Students</p>
+                            <p className="text-2xl font-bold text-foreground">{stats.TOTAL}</p>
                         </CardBody>
                     </Card>
                     {ATTENDANCE_STATUS.map(status => (
-                        <Card key={status.value} className={`shadow-sm border-l-4 border-l-${status.color}`}>
+                        <Card key={status.value} className={`bg-content1 shadow-sm border-l-4 border-l-${status.color} border-y border-r border-default-200`}>
                             <CardBody className="p-4 flex flex-row justify-between items-center">
                                 <div>
-                                    <p className="text-small text-gray-500 uppercase font-semibold">{status.label}</p>
-                                    <p className={`text-2xl font-bold text-${status.color}-600`}>{stats[status.value]}</p>
+                                    <p className="text-small text-default-500 uppercase font-bold">{status.label}</p>
+                                    <p className={`text-2xl font-bold text-${status.color}`}>{stats[status.value]}</p>
                                 </div>
-                                <div className={`p-2 rounded-full bg-${status.color}-100 dark:bg-${status.color}-900/20`}>
-                                    <Icon icon={status.icon} width={24} className={`text-${status.color}-600`} />
+                                <div className={`p-2 rounded-full bg-${status.color}/10`}>
+                                    <Icon icon={status.icon} width={24} className={`text-${status.color}`} />
                                 </div>
                             </CardBody>
                         </Card>
@@ -296,17 +301,17 @@ export default function MarkAttendance() {
 
             {/* Pending Attendance Table */}
             {selectedClass && pendingStudents.length > 0 && (
-                <motion.div variants={itemVariants}>
-                    <Card className="shadow-sm border border-warning-200 dark:border-warning-900/50">
-                        <CardHeader className="flex flex-col md:flex-row justify-between items-center px-6 py-4 gap-4 bg-warning-50 dark:bg-warning-900/10">
-                            <div className='flex gap-2 items-center w-full md:w-auto'>
-                                <Icon icon="mdi:clock-outline" width={20} className='text-warning-600' />
-                                <span className='font-semibold text-warning-700 dark:text-warning-500'>Pending Attendance ({pendingStudents.length})</span>
+                <motion.div >
+                    <Card className="bg-content1 border border-warning-200 shadow-sm">
+                        <CardHeader className="flex flex-col gap-3 px-4 sm:px-6 py-4 bg-warning/10">
+                            <div className='flex gap-2 items-center w-full'>
+                                <Icon icon="mdi:clock-outline" width={20} className='text-warning' />
+                                <span className='font-semibold text-sm sm:text-base text-warning-700 dark:text-warning'>Pending Attendance ({pendingStudents.length})</span>
                             </div>
-                            <div className="flex gap-2 w-full md:w-auto justify-end">
+                            <div className="flex flex-col sm:flex-row gap-2 w-full sm:items-center">
                                 {(pendingSelected === "all" || pendingSelected.size > 0) && (
-                                    <div className="flex gap-1 mr-2 items-center">
-                                        <span className="text-tiny text-gray-500 mr-2">Mark Selected:</span>
+                                    <div className="flex gap-1 items-center flex-wrap">
+                                        <span className="text-tiny text-gray-500 mr-1">Mark Selected:</span>
                                         {ATTENDANCE_STATUS.map(status => (
                                             <Tooltip key={status.value} content={`As ${status.label}`}>
                                                 <Button
@@ -320,16 +325,19 @@ export default function MarkAttendance() {
                                                 </Button>
                                             </Tooltip>
                                         ))}
-                                        <Divider orientation="vertical" className="h-4 mx-2" />
+                                        <Divider orientation="vertical" className="h-4 mx-2 hidden sm:block" />
                                     </div>
                                 )}
                                 <Button
                                     color="primary"
+                                    size="sm"
                                     onPress={onSavePendingClick}
                                     isLoading={submitLoading}
                                     startContent={!submitLoading && <Icon icon="mdi:cloud-upload" width={18} />}
+                                    className="w-full sm:w-auto sm:ml-auto"
                                 >
-                                    Submit Attendance
+                                    <span className="hidden sm:inline">Submit Attendance</span>
+                                    <span className="sm:hidden">Submit</span>
                                 </Button>
                             </div>
                         </CardHeader>
@@ -339,7 +347,7 @@ export default function MarkAttendance() {
                             selectionMode="multiple"
                             selectedKeys={pendingSelected}
                             onSelectionChange={setPendingSelected}
-                            classNames={{ wrapper: "shadow-none" }}
+                            classNames={{ wrapper: "shadow-none bg-content1", th: "bg-warning/10 text-warning-700" }}
                         >
                             <TableHeader>
                                 <TableColumn>STUDENT</TableColumn>
@@ -359,10 +367,10 @@ export default function MarkAttendance() {
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                <span className="text-small text-gray-500">{student.admissionNumber}</span>
+                                                <span className="text-small text-default-500">{student.admissionNumber}</span>
                                             </TableCell>
                                             <TableCell>
-                                                <div className="w-40">
+                                                <div className="w-full sm:w-40">
                                                     <Select
                                                         aria-label="Select status"
                                                         size="sm"
@@ -370,12 +378,12 @@ export default function MarkAttendance() {
                                                         onChange={(e) => handlePendingStatusChange(student.id, e.target.value)}
                                                         color={statusConfig?.color || "default"}
                                                         variant="flat"
-                                                        startContent={<Icon icon={statusConfig?.icon} className={`text-${statusConfig?.color}-500`} width={16} />}
+                                                        startContent={<Icon icon={statusConfig?.icon} className={`text-${statusConfig?.color}`} width={16} />}
                                                     >
                                                         {ATTENDANCE_STATUS.map((s) => (
                                                             <SelectItem key={s.value} value={s.value} textValue={s.label}>
                                                                 <div className="flex items-center gap-2">
-                                                                    <Icon icon={s.icon} className={`text-${s.color}-500`} width={16} />
+                                                                    <Icon icon={s.icon} className={`text-${s.color}`} width={16} />
                                                                     {s.label}
                                                                 </div>
                                                             </SelectItem>
@@ -395,12 +403,12 @@ export default function MarkAttendance() {
             {/* Marked Attendance Table */}
             {selectedClass && markedRecords.length > 0 && (
                 <motion.div variants={itemVariants}>
-                    <Card className="shadow-sm">
+                    <Card className="bg-content1 border border-default-200 shadow-sm">
                         <CardHeader className="flex gap-2 items-center px-6 py-4">
-                            <Icon icon="mdi:checkbox-marked-circle-outline" width={20} className='text-success-600' />
-                            <span className='font-semibold'>Marked Attendance ({markedRecords.length})</span>
+                            <Icon icon="mdi:checkbox-marked-circle-outline" width={20} className='text-success' />
+                            <span className='font-semibold text-foreground'>Marked Attendance ({markedRecords.length})</span>
                         </CardHeader>
-                        <Table aria-label="Marked Attendance Table" shadow="none" classNames={{ wrapper: "shadow-none" }}>
+                        <Table aria-label="Marked Attendance Table" shadow="none" classNames={{ wrapper: "shadow-none bg-content1", th: "bg-default-100 text-default-500" }}>
                             <TableHeader>
                                 <TableColumn>STUDENT</TableColumn>
                                 <TableColumn>ROLL NO</TableColumn>
@@ -423,11 +431,11 @@ export default function MarkAttendance() {
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                <span className="text-small text-gray-500">{student?.rollNumber || "-"}</span>
+                                                <span className="text-small text-default-500">{student?.rollNumber || "-"}</span>
                                             </TableCell>
                                             <TableCell>
                                                 {isEditing ? (
-                                                    <div className="w-40">
+                                                    <div className="w-full sm:w-40">
                                                         <Select
                                                             aria-label="val"
                                                             size="sm"

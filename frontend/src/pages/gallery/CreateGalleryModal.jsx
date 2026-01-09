@@ -84,14 +84,19 @@ const CreateGalleryModal = ({ isOpen, onClose, onSuccess }) => {
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={resetForm} size="2xl">
+        <Modal isOpen={isOpen} onClose={resetForm} size="2xl" backdrop="blur" classNames={{
+            base: "bg-content1 border border-default-200",
+            header: "border-b border-default-200",
+            footer: "border-t border-default-200",
+            closeButton: "hover:bg-default-100 active:bg-default-200 text-default-500",
+        }}>
             <ModalContent>
                 {(onClose) => (
                     <>
-                        <ModalHeader>
+                        <ModalHeader className="text-foreground">
                             {step === 1 ? "Create New Album" : "Upload Photos"}
                         </ModalHeader>
-                        <ModalBody>
+                        <ModalBody className="py-6">
                             {step === 1 ? (
                                 <div className="space-y-4">
                                     <Input
@@ -101,6 +106,8 @@ const CreateGalleryModal = ({ isOpen, onClose, onSuccess }) => {
                                         value={galleryData.title}
                                         onChange={handleInputChange}
                                         isRequired
+                                        variant="bordered"
+                                        classNames={{ inputWrapper: "bg-transparent" }}
                                     />
                                     <Input
                                         type="date"
@@ -109,6 +116,8 @@ const CreateGalleryModal = ({ isOpen, onClose, onSuccess }) => {
                                         value={galleryData.eventDate}
                                         onChange={handleInputChange}
                                         isRequired
+                                        variant="bordered"
+                                        classNames={{ inputWrapper: "bg-transparent" }}
                                     />
                                     <Textarea
                                         label="Description"
@@ -116,39 +125,39 @@ const CreateGalleryModal = ({ isOpen, onClose, onSuccess }) => {
                                         name="description"
                                         value={galleryData.description}
                                         onChange={handleInputChange}
+                                        variant="bordered"
+                                        classNames={{ inputWrapper: "bg-transparent" }}
                                     />
                                 </div>
                             ) : (
                                 <div className="space-y-4 text-center">
-                                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8">
-                                        <Icon icon="lucide:image-plus" className="mx-auto text-4xl text-gray-400 mb-2" />
-                                        <p className="text-sm text-gray-500 mb-4">Click to select photos</p>
+                                    <div className="border-2 border-dashed border-default-300 rounded-lg p-8 bg-default-50 hover:bg-default-100 transition-colors relative cursor-pointer group">
+                                        <Icon icon="lucide:image-plus" className="mx-auto text-4xl text-default-400 mb-2 group-hover:text-primary transition-colors" />
+                                        <p className="text-sm text-default-500 mb-4">Click or drag to select photos</p>
                                         <input
                                             type="file"
                                             multiple
                                             accept="image/*"
                                             onChange={handleFileChange}
-                                            className="block w-full text-sm text-gray-500
-                                                file:mr-4 file:py-2 file:px-4
-                                                file:rounded-full file:border-0
-                                                file:text-sm file:font-semibold
-                                                file:bg-primary-50 file:text-primary-700
-                                                hover:file:bg-primary-100"
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                                         />
                                     </div>
                                     {files.length > 0 && (
-                                        <p className="text-success font-semibold">{files.length} images selected</p>
+                                        <div className="flex items-center justify-center gap-2 text-success font-medium bg-success/10 py-2 rounded-medium">
+                                            <Icon icon="lucide:check-circle" />
+                                            <span>{files.length} images selected</span>
+                                        </div>
                                     )}
                                 </div>
                             )}
                         </ModalBody>
                         <ModalFooter>
                             {step === 1 ? (
-                                <Button color="primary" onPress={handleCreateGallery} isLoading={loading}>
+                                <Button color="primary" onPress={handleCreateGallery} isLoading={loading} className="font-semibold shadow-md shadow-primary/20">
                                     Next: Upload Photos
                                 </Button>
                             ) : (
-                                <Button color="success" onPress={handleUploadImages} isLoading={loading} className="text-white">
+                                <Button color="success" onPress={handleUploadImages} isLoading={loading} className="text-white font-semibold shadow-md shadow-success/20">
                                     Upload & Finish
                                 </Button>
                             )}

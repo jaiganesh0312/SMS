@@ -136,16 +136,23 @@ export default function ManageBooks() {
     }
 
     return (
-        <div className="p-6">
-            <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                <h1 className="text-2xl font-bold">Manage Books</h1>
+        <div className="p-6 space-y-6">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-foreground">Manage Books</h1>
+                    <p className="text-default-500 text-sm">Add, edit, and organize library books</p>
+                </div>
                 <div className="flex gap-2 w-full md:w-auto">
                     <Input
                         placeholder="Search books..."
-                        startContent={<Icon icon="mdi:magnify" />}
+                        startContent={<Icon icon="mdi:magnify" className="text-default-400" />}
                         value={search}
                         onValueChange={setSearch}
                         className="w-full md:w-64"
+                        variant="bordered"
+                        classNames={{
+                            inputWrapper: "bg-content1"
+                        }}
                     />
                     <Button color="secondary" variant="flat" startContent={<Icon icon="mdi:upload" />} onPress={() => navigate('/admin/bulk-upload/library-books')}>
                         Bulk Upload
@@ -156,47 +163,72 @@ export default function ManageBooks() {
                 </div>
             </div>
 
-            <Table aria-label="Books Table">
-                <TableHeader>
-                    <TableColumn>TITLE</TableColumn>
-                    <TableColumn>AUTHOR</TableColumn>
-                    <TableColumn>ISBN</TableColumn>
-                    <TableColumn>SECTION</TableColumn>
-                    <TableColumn>AVAIL / TOTAL</TableColumn>
-                    <TableColumn>ACTIONS</TableColumn>
-                </TableHeader>
-                <TableBody emptyContent={"No books found."}>
-                    {books.map((book) => (
-                        <TableRow key={book.id}>
-                            <TableCell>{book.title}</TableCell>
-                            <TableCell>{book.author}</TableCell>
-                            <TableCell>{book.isbn}</TableCell>
-                            <TableCell>{book.LibrarySection?.name}</TableCell>
-                            <TableCell>{book.available} / {book.quantity}</TableCell>
-                            <TableCell>
-                                <div className="flex gap-2">
-                                    <Button isIconOnly size="sm" color="success" variant="light" onPress={() => navigate(`/library/book/${book.id}`)} title="View Details">
-                                        <Icon icon="mdi:eye" width={20} />
-                                    </Button>
-                                    <Button isIconOnly size="sm" color="primary" variant="light" onPress={() => handleEdit(book)}>
-                                        <Icon icon="mdi:pencil" width={20} />
-                                    </Button>
-                                    <Button isIconOnly size="sm" color="danger" variant="light" onPress={() => handleDelete(book.id)}>
-                                        <Icon icon="mdi:trash" width={20} />
-                                    </Button>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <Card className="bg-content1 border border-default-200 shadow-sm">
+                <CardBody className="p-0">
+                    <Table aria-label="Books Table" shadow="none" classNames={{
+                        wrapper: "bg-content1 shadow-none",
+                        th: "bg-default-100 text-default-500 font-medium",
+                        td: "text-foreground group-hover:bg-default-50"
+                    }}>
+                        <TableHeader>
+                            <TableColumn>TITLE</TableColumn>
+                            <TableColumn>AUTHOR</TableColumn>
+                            <TableColumn>ISBN</TableColumn>
+                            <TableColumn>SECTION</TableColumn>
+                            <TableColumn>AVAIL / TOTAL</TableColumn>
+                            <TableColumn>ACTIONS</TableColumn>
+                        </TableHeader>
+                        <TableBody emptyContent={"No books found."}>
+                            {books.map((book) => (
+                                <TableRow key={book.id} className="border-b border-default-100 last:border-none">
+                                    <TableCell className="font-medium">{book.title}</TableCell>
+                                    <TableCell>{book.author}</TableCell>
+                                    <TableCell className="text-default-500 font-mono text-xs">{book.isbn}</TableCell>
+                                    <TableCell>
+                                        <span className="text-primary font-medium">{book.LibrarySection?.name}</span>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-2">
+                                            <span className={`font-bold ${book.available > 0 ? 'text-success' : 'text-danger'}`}>{book.available}</span>
+                                            <span className="text-default-400">/</span>
+                                            <span className="text-default-500">{book.quantity}</span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex gap-2">
+                                            <Button isIconOnly size="sm" color="success" variant="light" onPress={() => navigate(`/library/book/${book.id}`)} title="View Details">
+                                                <Icon icon="mdi:eye" width={20} />
+                                            </Button>
+                                            <Button isIconOnly size="sm" color="primary" variant="light" onPress={() => handleEdit(book)}>
+                                                <Icon icon="mdi:pencil" width={20} />
+                                            </Button>
+                                            <Button isIconOnly size="sm" color="danger" variant="light" onPress={() => handleDelete(book.id)}>
+                                                <Icon icon="mdi:trash" width={20} />
+                                            </Button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardBody>
+            </Card>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl" classNames={{
+                base: "bg-content1 border border-default-200",
+                header: "border-b border-default-200",
+                footer: "border-t border-default-200"
+            }}>
                 <ModalContent>
                     {(onClose) => (
                         <form onSubmit={handleSubmit((data) => onSubmit(data, onClose))}>
-                            <ModalHeader className="flex flex-col gap-1">{currentBook ? "Edit Book" : "Add Book"}</ModalHeader>
-                            <ModalBody>
+                            <ModalHeader className="flex flex-col gap-1 text-foreground">
+                                <span className="flex items-center gap-2">
+                                    <Icon icon={currentBook ? "mdi:pencil" : "mdi:plus-circle"} className="text-primary" />
+                                    {currentBook ? "Edit Book" : "Add Book"}
+                                </span>
+                            </ModalHeader>
+                            <ModalBody className="py-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <Input
                                         label="Title"
@@ -206,6 +238,7 @@ export default function ManageBooks() {
                                         isInvalid={!!errors.title}
                                         errorMessage={errors.title?.message}
                                         isRequired
+                                        variant="bordered"
                                     />
                                     <Input
                                         label="Author"
@@ -215,12 +248,14 @@ export default function ManageBooks() {
                                         isInvalid={!!errors.author}
                                         errorMessage={errors.author?.message}
                                         isRequired
+                                        variant="bordered"
                                     />
                                     <Input
                                         label="ISBN"
                                         placeholder="e.g. 978-81-85986-17-3"
                                         startContent={<Icon icon="mdi:barcode" className="text-default-400" />}
                                         {...register("isbn")}
+                                        variant="bordered"
                                     />
                                     <Controller
                                         name="sectionId"
@@ -235,6 +270,7 @@ export default function ManageBooks() {
                                                 isInvalid={!!errors.sectionId}
                                                 errorMessage={errors.sectionId?.message}
                                                 isRequired
+                                                variant="bordered"
                                             >
                                                 {sections.map((s) => (
                                                     <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
@@ -247,12 +283,14 @@ export default function ManageBooks() {
                                         placeholder="e.g. Indian Thought Publications"
                                         startContent={<Icon icon="mdi:domain" className="text-default-400" />}
                                         {...register("publisher")}
+                                        variant="bordered"
                                     />
                                     <Input
                                         label="Category"
                                         placeholder="e.g. Fiction"
                                         startContent={<Icon icon="mdi:tag-text-outline" className="text-default-400" />}
                                         {...register("category")}
+                                        variant="bordered"
                                     />
                                     <Input
                                         type="number"
@@ -264,6 +302,7 @@ export default function ManageBooks() {
                                         errorMessage={errors.quantity?.message}
                                         isRequired
                                         min={1}
+                                        variant="bordered"
                                     />
                                 </div>
                                 <Input
@@ -271,6 +310,7 @@ export default function ManageBooks() {
                                     placeholder="e.g. A collection of short stories..."
                                     startContent={<Icon icon="mdi:text" className="text-default-400" />}
                                     {...register("description")}
+                                    variant="bordered"
                                 />
                             </ModalBody>
                             <ModalFooter>

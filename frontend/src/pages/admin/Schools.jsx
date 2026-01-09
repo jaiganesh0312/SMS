@@ -180,8 +180,8 @@ const Schools = () => {
         >
             <motion.div variants={itemVariants} className="flex justify-between items-end gap-3">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Schools Management</h1>
-                    <p className="text-gray-500 mt-1">Manage and monitor all registered schools in the system</p>
+                    <h1 className="text-3xl font-bold text-foreground">Schools Management</h1>
+                    <p className="text-default-500 mt-1">Manage and monitor all registered schools in the system</p>
                 </div>
                 <Button
                     color="primary"
@@ -193,7 +193,7 @@ const Schools = () => {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-                <Card className="shadow-sm">
+                <Card className="bg-content1 border border-default-200 shadow-sm">
                     <CardHeader className="p-4 flex flex-col sm:flex-row gap-3">
                         <Input
                             isClearable
@@ -203,6 +203,7 @@ const Schools = () => {
                             value={filterValue}
                             onClear={() => onSearchChange("")}
                             onValueChange={onSearchChange}
+                            variant="bordered"
                         />
                     </CardHeader>
                     <CardBody className="p-0">
@@ -211,6 +212,10 @@ const Schools = () => {
                             removeWrapper
                             className="px-4 pb-4"
                             selectionMode="none"
+                            classNames={{
+                                wrapper: "bg-content1 border border-default-200 shadow-sm",
+                                th: "bg-default-100 text-default-500 font-medium"
+                            }}
                         >
                             <TableHeader>
                                 <TableColumn key="name">SCHOOL</TableColumn>

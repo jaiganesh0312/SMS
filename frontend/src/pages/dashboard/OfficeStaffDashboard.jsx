@@ -87,7 +87,7 @@ export default function OfficeStaffDashboard() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {/* Collect Fees */}
-                        <Card className="shadow-sm border-l-4 border-l-success bg-content1 dark:bg-content1">
+                        <Card className="shadow-sm border-l-4 border-l-success-500 bg-content1 dark:bg-content1">
                             <CardBody className="p-5">
                                 <div className="flex justify-between items-start mb-4">
                                     <div className="p-3 bg-success-50 dark:bg-success-900/20 rounded-lg text-success-600 dark:text-success-400">
@@ -103,7 +103,7 @@ export default function OfficeStaffDashboard() {
                         </Card>
 
                         {/* Generate Receipt */}
-                        <Card className="shadow-sm border-l-4 border-l-primary bg-content1 dark:bg-content1">
+                        <Card className="shadow-sm border-l-4 border-l-primary-500 bg-content1 dark:bg-content1">
                             <CardBody className="p-5">
                                 <div className="flex justify-between items-start mb-4">
                                     <div className="p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg text-primary-600 dark:text-primary-400">
@@ -119,7 +119,7 @@ export default function OfficeStaffDashboard() {
                         </Card>
 
                         {/* Fee Statistics / Reports */}
-                        <Card className="shadow-sm border-l-4 border-l-secondary bg-content1 dark:bg-content1">
+                        <Card className="shadow-sm border-l-4 border-l-secondary-500 bg-content1 dark:bg-content1">
                             <CardBody className="p-5">
                                 <div className="flex justify-between items-start mb-4">
                                     <div className="p-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-lg text-secondary-600 dark:text-secondary-400">
@@ -135,7 +135,7 @@ export default function OfficeStaffDashboard() {
                         </Card>
 
                         {/* Fee Structures */}
-                        <Card className="shadow-sm border-l-4 border-l-warning bg-content1 dark:bg-content1">
+                        <Card className="shadow-sm border-l-4 border-l-warning-500 bg-content1 dark:bg-content1">
                             <CardBody className="p-5">
                                 <div className="flex justify-between items-start mb-4">
                                     <div className="p-3 bg-warning-50 dark:bg-warning-900/20 rounded-lg text-warning-600 dark:text-warning-400">

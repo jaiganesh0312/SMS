@@ -185,22 +185,21 @@ export default function CollectFees() {
                         className="space-y-6"
                     >
                         {/* Header */}
-
-
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Collect Fees</h1>
-                            <p className="text-sm text-gray-500 mt-1">Select a student to process payment</p>
+                            <h1 className="text-2xl font-bold text-foreground">Collect Fees</h1>
+                            <p className="text-sm text-default-500 mt-1">Select a student to process payment</p>
                         </div>
                         {/* Students Table */}
-                        <Card>
+                        <Card className="bg-content1 border border-default-200 shadow-sm">
                             <CardHeader>
 
                                 {/* Search Controls */}
-                                <div className="flex flex-col md:flex-row gap-3 mb-6 my-2 items-end">
+                                <div className="flex flex-col md:flex-row gap-3 mb-6 my-2 items-end w-full">
                                     <Select
                                         label="Class"
                                         placeholder="Select class"
                                         className="md:w-64"
+                                        variant="bordered"
                                         selectedKeys={selectedClass ? [String(selectedClass)] : []}
                                         onChange={(e) => {
                                             const val = e.target.value;
@@ -209,6 +208,7 @@ export default function CollectFees() {
                                                 handleSearch(val);
                                             }
                                         }}
+                                        startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
                                     >
                                         {classes.map(c => (
                                             <SelectItem key={String(c.id)} value={String(c.id)}>
@@ -221,9 +221,10 @@ export default function CollectFees() {
                                         placeholder="Search by student name..."
                                         label="Search"
                                         className="md:flex-1"
+                                        variant="bordered"
                                         value={searchQuery}
                                         onValueChange={setSearchQuery}
-                                        startContent={<Icon icon="mdi:magnify" className="text-gray-400" />}
+                                        startContent={<Icon icon="mdi:magnify" className="text-default-400" />}
                                     />
 
                                     <Button
@@ -237,7 +238,11 @@ export default function CollectFees() {
 
                                 </div>     </CardHeader>
                             <CardBody>
-                                <Table aria-label="Students" removeWrapper>
+                                <Table aria-label="Students" shadow="none" classNames={{
+                                    wrapper: "bg-content1 shadow-none",
+                                    th: "bg-default-100 text-default-500",
+                                    td: "text-foreground"
+                                }}>
                                     <TableHeader>
                                         <TableColumn>STUDENT</TableColumn>
                                         <TableColumn>ADMISSION NO</TableColumn>
@@ -247,7 +252,7 @@ export default function CollectFees() {
                                     </TableHeader>
                                     <TableBody
                                         emptyContent={
-                                            <div className="text-center py-16 text-gray-400">
+                                            <div className="text-center py-16 text-default-400">
                                                 <Icon icon="mdi:account-search" className="text-6xl mb-3 mx-auto opacity-30" />
                                                 <p className="font-medium">No students found</p>
                                                 <p className="text-xs mt-1">Select a class to view students</p>
@@ -270,7 +275,7 @@ export default function CollectFees() {
                                                     />
                                                 </TableCell>
                                                 <TableCell>
-                                                    <span className="font-mono text-sm text-gray-600 dark:text-gray-400">
+                                                    <span className="font-mono text-sm text-default-500">
                                                         {student.admissionNumber}
                                                     </span>
                                                 </TableCell>
@@ -294,7 +299,7 @@ export default function CollectFees() {
                                                             ₹{student.pendingAmount?.toLocaleString()}
                                                         </span>
                                                     ) : (
-                                                        <span className="text-gray-400">₹0</span>
+                                                        <span className="text-default-400">₹0</span>
                                                     )}
                                                 </TableCell>
                                                 <TableCell>
@@ -335,13 +340,13 @@ export default function CollectFees() {
                                 <Icon icon="mdi:arrow-left" className="text-xl" />
                             </Button>
                             <div className="flex-1">
-                                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Process Payment</h1>
-                                <p className="text-sm text-gray-500 mt-1">Collect fee for {selectedStudent?.firstName}</p>
+                                <h1 className="text-2xl font-bold text-foreground">Process Payment</h1>
+                                <p className="text-sm text-default-500 mt-1">Collect fee for {selectedStudent?.firstName}</p>
                             </div>
                         </div>
 
                         {/* Student Info Card */}
-                        <Card className="shadow-sm">
+                        <Card className="bg-content1 border border-default-200 shadow-sm">
                             <CardBody className="p-6">
                                 <div className="flex items-center justify-between">
                                     <User
@@ -354,8 +359,8 @@ export default function CollectFees() {
                                         }}
                                     />
                                     <div className="text-right">
-                                        <p className="text-sm text-gray-500">Class</p>
-                                        <p className="font-semibold">
+                                        <p className="text-sm text-default-500">Class</p>
+                                        <p className="font-semibold text-foreground">
                                             {classes.find(c => c.id == selectedClass)?.name}-{classes.find(c => c.id == selectedClass)?.section}
                                         </p>
                                     </div>
@@ -364,9 +369,9 @@ export default function CollectFees() {
                         </Card>
 
                         {/* Fee Details */}
-                        <Card className="shadow-sm">
+                        <Card className="bg-content1 border border-default-200 shadow-sm">
                             <CardHeader className="px-6 pt-6 pb-2">
-                                <h3 className="text-lg font-semibold">Fee Details</h3>
+                                <h3 className="text-lg font-semibold text-foreground">Fee Details</h3>
                             </CardHeader>
                             <CardBody>
                                 {loadingFees ? (
@@ -374,7 +379,11 @@ export default function CollectFees() {
                                         <Spinner />
                                     </div>
                                 ) : (
-                                    <Table aria-label="Fee Details" removeWrapper>
+                                    <Table aria-label="Fee Details" shadow="none" classNames={{
+                                        wrapper: "bg-content1 shadow-none",
+                                        th: "bg-default-100 text-default-500",
+                                        td: "text-foreground"
+                                    }}>
                                         <TableHeader>
                                             <TableColumn>FEE TYPE</TableColumn>
                                             <TableColumn>TOTAL</TableColumn>
@@ -411,9 +420,9 @@ export default function CollectFees() {
                         </Card>
 
                         {/* Payment Form */}
-                        <Card className="shadow-sm">
+                        <Card className="bg-content1 border border-default-200 shadow-sm">
                             <CardHeader className="px-6 pt-6 pb-2">
-                                <h3 className="text-lg font-semibold">Collect Payment</h3>
+                                <h3 className="text-lg font-semibold text-foreground">Collect Payment</h3>
                             </CardHeader>
                             <CardBody className="p-6">
                                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -425,10 +434,12 @@ export default function CollectFees() {
                                                 <Select
                                                     label="Select Fee"
                                                     placeholder="Choose fee to pay"
+                                                    variant="bordered"
                                                     selectedKeys={field.value ? [field.value] : []}
                                                     onChange={(e) => handleFeeSelection(e.target.value)}
                                                     isInvalid={!!errors.selectedFeeId}
                                                     errorMessage={errors.selectedFeeId?.message}
+                                                    startContent={<Icon icon="mdi:format-list-checks" className="text-default-400" />}
                                                 >
                                                     {pendingFees.filter(f => f.status !== 'PAID').map(fee => (
                                                         <SelectItem key={fee.feeStructureId} value={fee.feeStructureId} textValue={fee.feeName}>
@@ -448,7 +459,8 @@ export default function CollectFees() {
                                                     type="number"
                                                     label="Amount"
                                                     placeholder="0.00"
-                                                    startContent="₹"
+                                                    variant="bordered"
+                                                    startContent={<Icon icon="mdi:currency-rupee" className="text-default-400" />}
                                                     isInvalid={!!errors.paymentAmount}
                                                     errorMessage={errors.paymentAmount?.message}
                                                 />
@@ -461,10 +473,12 @@ export default function CollectFees() {
                                             render={({ field }) => (
                                                 <Select
                                                     label="Payment Method"
+                                                    variant="bordered"
                                                     selectedKeys={field.value ? [field.value] : []}
                                                     onChange={(e) => field.onChange(e.target.value)}
                                                     isInvalid={!!errors.paymentMethod}
                                                     errorMessage={errors.paymentMethod?.message}
+                                                    startContent={<Icon icon="mdi:cash" className="text-default-400" />}
                                                 >
                                                     <SelectItem key="CASH" value="CASH">Cash</SelectItem>
                                                     <SelectItem key="ONLINE" value="ONLINE">Online</SelectItem>
@@ -481,6 +495,8 @@ export default function CollectFees() {
                                                     {...field}
                                                     label="Remarks"
                                                     placeholder="Optional notes"
+                                                    variant="bordered"
+                                                    startContent={<Icon icon="mdi:note-text" className="text-default-400" />}
                                                 />
                                             )}
                                         />
