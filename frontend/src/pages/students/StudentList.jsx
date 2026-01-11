@@ -38,7 +38,7 @@ const studentSchema = z.object({
     admissionNumber: z.string().min(1, "Admission Number is required"),
     dob: z.string().min(1, "Date of Birth is required"),
     gender: z.enum(["Male", "Female", "Other"]),
-    classId: z.string().optional(),
+    sectionId: z.string().optional(),
 });
 
 export default function StudentList() {
@@ -54,7 +54,7 @@ export default function StudentList() {
     const [isDivisionsLoading, setIsDivisionsLoading] = useState(false);
 
     // All Classes (for filter/Edit) - kept for compatibility with existing bulk tools if needed
-    const [allClasses, setAllClasses] = useState([]);
+    const [allSections, setAllSections] = useState([]);
 
     // Add/Edit Student Modal
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -74,7 +74,7 @@ export default function StudentList() {
     } = useDisclosure();
 
     // State for updates
-    const [targetClassId, setTargetClassId] = useState("");
+    const [targetSectionId, setTargetSectionId] = useState("");
     const [studentToUpdate, setStudentToUpdate] = useState(null);
 
     // State for Photo Upload
@@ -93,13 +93,13 @@ export default function StudentList() {
     useEffect(() => {
         fetchStudents();
         fetchStandards();
-        fetchAllClasses();
+        fetchAllSections();
     }, [searchParams]);
 
     useEffect(() => {
         const classIdParam = searchParams.get('classId');
         if (classIdParam) {
-            setValue('classId', classIdParam);
+            setValue('sectionId', classIdParam);
         }
     }, [searchParams, setValue]);
 
@@ -129,11 +129,11 @@ export default function StudentList() {
         }
     };
 
-    const fetchAllClasses = async () => {
+    const fetchAllSections = async () => {
         try {
-            const response = await academicService.getAllClasses();
+            const response = await academicService.getAllSections();
             if (response.data?.success) {
-                setAllClasses(response.data.data?.classes || []);
+                setAllSections(response.data.data || []);
             }
         } catch (error) {
         }
@@ -142,7 +142,7 @@ export default function StudentList() {
     const handleStandardChange = async (std) => {
         setSelectedStandard(std);
         setDivisions([]);
-        setValue('classId', ''); // Reset classId
+        setValue('sectionId', ''); // Reset sectionId
         if (!std) return;
 
         setIsDivisionsLoading(true);
@@ -175,7 +175,7 @@ export default function StudentList() {
     };
 
     const handleBulkUpdate = async () => {
-        if (!targetClassId) return;
+        if (!targetSectionId) return;
 
         let idsToUpdate = [];
         if (studentToUpdate) {
@@ -191,7 +191,7 @@ export default function StudentList() {
         try {
             const response = await studentService.bulkUpdateStudents({
                 studentIds: idsToUpdate,
-                classId: targetClassId
+                sectionId: targetSectionId // Changed to sectionId
             });
 
             if (response.data?.success) {
@@ -199,7 +199,7 @@ export default function StudentList() {
                 fetchStudents();
                 setSelectedKeys(new Set([]));
                 setStudentToUpdate(null);
-                setTargetClassId("");
+                setTargetSectionId("");
                 onUpdateOpenChange(false);
             }
         } catch (error) {
@@ -209,9 +209,10 @@ export default function StudentList() {
 
     const openSingleUpdateModal = (studentId) => {
         setStudentToUpdate(studentId);
+        setStudentToUpdate(studentId);
         const student = students.find(s => s.id === studentId);
-        if (student && student.classId) setTargetClassId(student.classId);
-        else setTargetClassId("");
+        if (student && student.sectionId) setTargetSectionId(student.sectionId);
+        else setTargetSectionId("");
 
         onUpdateOpen();
     };
@@ -308,7 +309,7 @@ export default function StudentList() {
                                     color="warning"
                                     variant="flat"
                                     startContent={<Icon icon="mdi:arrow-up-bold-box-outline" />}
-                                    onPress={() => { setStudentToUpdate(null); setTargetClassId(""); onUpdateOpen(); }}
+                                    onPress={() => { setStudentToUpdate(null); setTargetSectionId(""); onUpdateOpen(); }}
                                 >
                                     Move / Promote ({selectedKeys === "all" ? students.length : selectedKeys.size})
                                 </Button>
@@ -386,7 +387,7 @@ export default function StudentList() {
                                             </Chip>
                                         </TableCell>
                                         <TableCell>
-                                            <span className="capitalize">{student.Class?.name}-{student.Class?.section}</span>
+                                            <span className="capitalize">{student.ClassSection?.Class?.name}-{student.ClassSection?.name}</span>
                                         </TableCell>
                                         <TableCell>
                                             {student.Parent ? (
@@ -505,9 +506,9 @@ export default function StudentList() {
                                         placeholder={selectedStandard ? "Select Division" : "Select Standard First"}
                                         variant="bordered"
                                         isDisabled={!selectedStandard || isDivisionsLoading}
-                                        {...register("classId")}
-                                        isInvalid={!!errors.classId}
-                                        errorMessage={errors.classId?.message}
+                                        {...register("sectionId")}
+                                        isInvalid={!!errors.sectionId}
+                                        errorMessage={errors.sectionId?.message}
                                     >
                                         {divisions.map((div) => (
                                             <SelectItem key={div.id} value={div.id}>{div.section}</SelectItem>
@@ -544,27 +545,27 @@ export default function StudentList() {
                                     }
                                 </p>
                                 <Select
-                                    items={allClasses}
+                                    items={allSections}
                                     label="Target Class"
                                     placeholder="Select a class"
-                                    selectedKeys={targetClassId ? [targetClassId] : []}
-                                    onChange={(e) => setTargetClassId(e.target.value)}
+                                    selectedKeys={targetSectionId ? [targetSectionId] : []}
+                                    onChange={(e) => setTargetSectionId(e.target.value)}
                                     renderValue={(items) => {
                                         return items.map((item) => (
                                             <div key={item.key} className="flex gap-2 items-center">
-                                                <span>{item.data.name} - {item.data.section}</span>
+                                                <span>{item.data.Class?.name} - {item.data.name}</span>
                                             </div>
                                         ));
                                     }}
                                 >
-                                    {(cls) => <SelectItem key={cls.id} value={cls.id} textValue={`${cls.name}-${cls.section}`}>{`${cls.name} - ${cls.section}`}</SelectItem>}
+                                    {(sec) => <SelectItem key={sec.id} value={sec.id} textValue={`${sec.Class?.name}-${sec.name}`}>{`${sec.Class?.name} - ${sec.name}`}</SelectItem>}
                                 </Select>
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Cancel
                                 </Button>
-                                <Button color="primary" onPress={handleBulkUpdate} isDisabled={!targetClassId}>
+                                <Button color="primary" onPress={handleBulkUpdate} isDisabled={!targetSectionId}>
                                     {studentToUpdate ? "Update" : "Move Students"}
                                 </Button>
                             </ModalFooter>

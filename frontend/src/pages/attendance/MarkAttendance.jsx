@@ -40,8 +40,8 @@ const ATTENDANCE_STATUS = [
 ];
 
 export default function MarkAttendance() {
-    const [classes, setClasses] = useState([]);
-    const [selectedClass, setSelectedClass] = useState('');
+    const [sections, setSections] = useState([]);
+    const [selectedSection, setSelectedSection] = useState('');
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
     // Split Data
@@ -60,23 +60,23 @@ export default function MarkAttendance() {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
     useEffect(() => {
-        fetchClasses();
+        fetchSections();
     }, []);
 
     useEffect(() => {
-        if (selectedClass && selectedDate) {
+        if (selectedSection && selectedDate) {
             fetchData();
         } else {
             setPendingStudents([]);
             setMarkedRecords([]);
         }
-    }, [selectedClass, selectedDate]);
+    }, [selectedSection, selectedDate]);
 
-    const fetchClasses = async () => {
+    const fetchSections = async () => {
         try {
-            const response = await academicService.getAllClasses();
+            const response = await academicService.getAllSections();
             if (response.data?.success) {
-                setClasses(response.data.data?.classes || []);
+                setSections(response.data.data || []);
             }
         } catch (error) {
         }
@@ -87,7 +87,7 @@ export default function MarkAttendance() {
         setPendingSelected(new Set([]));
         setPendingAttendance({});
         try {
-            const response = await attendanceService.getAttendance({ classId: selectedClass, date: selectedDate });
+            const response = await attendanceService.getAttendance({ sectionId: selectedSection, date: selectedDate });
             if (response.data?.success) {
                 const { marked, pending } = response.data.data;
                 setMarkedRecords(marked || []);
@@ -108,8 +108,9 @@ export default function MarkAttendance() {
     };
 
     const handleClassChange = (keys) => {
-        const classId = Array.from(keys)[0];
-        setSelectedClass(classId);
+        // Renaming handler internally but keeping prop name if Select expects it
+        const sectionId = Array.from(keys)[0];
+        setSelectedSection(sectionId);
     };
 
     // --- Handlers for Pending Table ---
@@ -172,7 +173,7 @@ export default function MarkAttendance() {
             if (attendanceData.length === 0) return;
 
             const payload = {
-                classId: selectedClass,
+                sectionId: selectedSection,
                 date: selectedDate,
                 attendance: attendanceData
             };
@@ -249,14 +250,14 @@ export default function MarkAttendance() {
                             <Select
                                 label="Select Class"
                                 placeholder="Choose a class"
-                                selectedKeys={selectedClass ? new Set([String(selectedClass)]) : new Set()}
+                                selectedKeys={selectedSection ? new Set([String(selectedSection)]) : new Set()}
                                 onSelectionChange={handleClassChange}
                                 startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
                                 variant="bordered"
                             >
-                                {classes.map((cls) => (
-                                    <SelectItem key={String(cls.id)} textValue={`${cls.name} - ${cls.section}`}>
-                                        {cls.name} {cls.section ? `- ${cls.section}` : ''}
+                                {sections.map((sec) => (
+                                    <SelectItem key={String(sec.id)} value={String(sec.id)}>
+                                        {`${sec.Class?.name} - ${sec.name}`}
                                     </SelectItem>
                                 ))}
                             </Select>
@@ -275,7 +276,7 @@ export default function MarkAttendance() {
             </motion.div>
 
             {/* Summary Cards */}
-            {selectedClass && (
+            {selectedSection && (
                 <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                     <Card className="bg-content1 shadow-sm border-l-4 border-l-primary border-y border-r border-default-200">
                         <CardBody className="p-4">
@@ -300,7 +301,7 @@ export default function MarkAttendance() {
             )}
 
             {/* Pending Attendance Table */}
-            {selectedClass && pendingStudents.length > 0 && (
+            {selectedSection && pendingStudents.length > 0 && (
                 <motion.div >
                     <Card className="bg-content1 border border-warning-200 shadow-sm">
                         <CardHeader className="flex flex-col gap-3 px-4 sm:px-6 py-4 bg-warning/10">
@@ -347,7 +348,6 @@ export default function MarkAttendance() {
                             selectionMode="multiple"
                             selectedKeys={pendingSelected}
                             onSelectionChange={setPendingSelected}
-                            classNames={{ wrapper: "shadow-none bg-content1", th: "bg-warning/10 text-warning-700" }}
                         >
                             <TableHeader>
                                 <TableColumn>STUDENT</TableColumn>
@@ -401,8 +401,8 @@ export default function MarkAttendance() {
             )}
 
             {/* Marked Attendance Table */}
-            {selectedClass && markedRecords.length > 0 && (
-                <motion.div variants={itemVariants}>
+            {selectedSection && markedRecords.length > 0 && (
+                <motion.div>
                     <Card className="bg-content1 border border-default-200 shadow-sm">
                         <CardHeader className="flex gap-2 items-center px-6 py-4">
                             <Icon icon="mdi:checkbox-marked-circle-outline" width={20} className='text-success' />

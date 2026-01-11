@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
@@ -21,7 +21,9 @@ import {
     ModalBody,
     ModalFooter,
     useDisclosure,
-    Chip
+    Chip,
+    Select,
+    SelectItem
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { academicService } from '@/services';
@@ -30,46 +32,57 @@ import { motion } from "framer-motion";
 const subjectSchema = z.object({
     name: z.string().min(1, "Subject name is required"),
     code: z.string().min(1, "Subject code is required"),
+    classId: z.string().min(1, "Class is required"),
 });
 
 export default function Subjects() {
     const [subjects, setSubjects] = useState([]);
+    const [classes, setClasses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    const { register, handleSubmit, reset, control, formState: { errors } } = useForm({
         resolver: zodResolver(subjectSchema)
     });
 
     const [searchParams] = useSearchParams();
 
-    const fetchSubjects = async () => {
+    const fetchData = async () => {
         try {
             const params = Object.fromEntries(searchParams.entries());
-            const response = await academicService.getAllSubjects(params);
-            if (response.data?.success) {
-                // Backend returns { data: { subjects: [...] } }
-                setSubjects(response.data.data?.subjects || []);
+            const [subjectsRes, classesRes] = await Promise.all([
+                academicService.getAllSubjects(params),
+                academicService.getAllClasses()
+            ]);
+
+            if (subjectsRes.data?.success) {
+                setSubjects(subjectsRes.data.data?.subjects || []);
             }
+            if (classesRes.data?.success) {
+                setClasses(classesRes.data.data?.classes || []);
+            }
+
         } catch (error) {
+            console.error("Failed to fetch data", error);
         } finally {
             setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchSubjects();
+        fetchData();
     }, [searchParams]);
 
     const onSubmit = async (data) => {
         try {
             const response = await academicService.createSubject(data);
             if (response.data?.success) {
-                fetchSubjects();
+                fetchData();
                 onClose();
                 reset();
             }
         } catch (error) {
+            console.error("Failed to create subject", error);
         }
     };
 
@@ -131,6 +144,7 @@ export default function Subjects() {
                             <TableHeader>
                                 <TableColumn>NAME</TableColumn>
                                 <TableColumn>CODE</TableColumn>
+                                <TableColumn>CLASS</TableColumn>
                                 <TableColumn>ACTIONS</TableColumn>
                             </TableHeader>
                             <TableBody emptyContent={"No subjects found"} isLoading={isLoading}>
@@ -139,6 +153,9 @@ export default function Subjects() {
                                         <TableCell className="font-medium">{subject.name}</TableCell>
                                         <TableCell>
                                             <Chip size="sm" variant="dot" color="primary">{subject.code}</Chip>
+                                        </TableCell>
+                                        <TableCell>
+                                            {subject.Class ? subject.Class.name : 'N/A'}
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex gap-2">
@@ -165,6 +182,27 @@ export default function Subjects() {
                             <ModalHeader>Add New Subject</ModalHeader>
                             <ModalBody>
                                 <div className="grid gap-3">
+                                    <Controller
+                                        name="classId"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select
+                                                label="Class"
+                                                placeholder="Select a class"
+                                                variant="bordered"
+                                                selectedKeys={field.value ? [field.value] : []}
+                                                onSelectionChange={(keys) => field.onChange(Array.from(keys)[0])}
+                                                isInvalid={!!errors.classId}
+                                                errorMessage={errors.classId?.message}
+                                            >
+                                                {classes.map((cls) => (
+                                                    <SelectItem key={cls.id} value={cls.id}>
+                                                        {cls.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </Select>
+                                        )}
+                                    />
                                     <Input
                                         {...register('name')}
                                         label="Subject Name"

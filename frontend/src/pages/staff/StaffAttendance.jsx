@@ -236,23 +236,21 @@ const StaffAttendance = () => {
                 title="Staff Attendance"
                 subtitle="Manage daily attendance for all employees"
                 action={
-                    <div className="flex gap-4 items-center bg-content1 p-2 rounded-xl shadow-sm border border-default-200">
-                        <Controller
-                            name="date"
-                            control={control}
-                            render={({ field }) => (
-                                <Input
-                                    type="date"
-                                    label="Date"
-                                    labelPlacement='outside-left'
-                                    startContent={<Icon icon="lucide:calendar" className="text-default-500" width={20} />}
-                                    className="bg-transparent border-none focus:ring-0 text-foreground outline-none w-48"
-                                    classNames={{ inputWrapper: "shadow-none bg-transparent hover:bg-transparent" }}
-                                    {...field}
-                                />
-                            )}
-                        />
-                    </div>
+                    <Controller
+                        name="date"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                type="date"
+                                label="Date"
+                                labelPlacement='outside-left'
+                                startContent={<Icon icon="lucide:calendar" className="text-default-500" width={20} />}
+                                className="bg-transparent border-none focus:ring-0 text-foreground outline-none w-48"
+                                classNames={{ inputWrapper: "shadow-none bg-transparent hover:bg-transparent" }}
+                                {...field}
+                            />
+                        )}
+                    />
                 }
             />
 
@@ -265,7 +263,7 @@ const StaffAttendance = () => {
                     </CardBody>
                 </Card>
                 {ATTENDANCE_STATUS.map(status => (
-                    <Card key={status.value} className={`shadow-sm border-l-4 border-l-${status.color} bg-content1 border-y border-r border-default-200`}>
+                    <Card key={status.value} className={`shadow-sm border-l-4 border-l-${status.color} bg-content1 border-y border-r border-y-default-200 border-r-default-200`}>
                         <CardBody className="p-4 flex flex-row justify-between items-center">
                             <div>
                                 <p className="text-small text-default-500 uppercase font-bold">{status.label}</p>

@@ -6,8 +6,8 @@ import { motion } from "framer-motion";
 import { PageHeader } from '@/components/common';
 
 export default function AttendanceReport() {
-    const [classes, setClasses] = useState([]);
-    const [selectedClass, setSelectedClass] = useState('');
+    const [sections, setSections] = useState([]);
+    const [selectedSection, setSelectedSection] = useState('');
     const [reportType, setReportType] = useState('MONTHLY'); // 'MONTHLY' or 'DAILY'
     const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7)); // YYYY-MM
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]); // YYYY-MM-DD
@@ -16,20 +16,20 @@ export default function AttendanceReport() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        fetchClasses();
+        fetchSections();
     }, []);
 
     useEffect(() => {
-        if (selectedClass) {
+        if (selectedSection) {
             fetchReport();
         }
-    }, [selectedClass, selectedMonth, selectedDate, reportType]);
+    }, [selectedSection, selectedMonth, selectedDate, reportType]);
 
-    const fetchClasses = async () => {
+    const fetchSections = async () => {
         try {
-            const response = await academicService.getAllClasses();
+            const response = await academicService.getAllSections();
             if (response.data?.success) {
-                setClasses(response.data.data?.classes || []);
+                setSections(response.data.data || []);
             }
         } catch (error) {
         }
@@ -38,7 +38,7 @@ export default function AttendanceReport() {
     const fetchReport = async () => {
         setLoading(true);
         try {
-            const params = { classId: selectedClass };
+            const params = { sectionId: selectedSection };
 
             if (reportType === 'DAILY') {
                 params.date = selectedDate;
@@ -83,8 +83,8 @@ export default function AttendanceReport() {
     };
 
     const handleClassChange = (keys) => {
-        const classId = Array.from(keys)[0];
-        setSelectedClass(classId);
+        const sectionId = Array.from(keys)[0];
+        setSelectedSection(sectionId);
     };
 
     const getStatusColor = (status) => {
@@ -150,15 +150,15 @@ export default function AttendanceReport() {
                                 className="min-w-[200px]"
                                 label="Select Class"
                                 placeholder="Choose a class"
-                                selectedKeys={selectedClass ? new Set([String(selectedClass)]) : new Set()}
+                                selectedKeys={selectedSection ? new Set([String(selectedSection)]) : new Set()}
                                 onSelectionChange={handleClassChange}
                                 startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
                                 variant="bordered"
                                 size="sm"
                             >
-                                {classes.map((cls) => (
-                                    <SelectItem key={String(cls.id)} textValue={`${cls.name} - ${cls.section}`}>
-                                        {cls.name} {cls.section ? `- ${cls.section}` : ''}
+                                {sections.map((sec) => (
+                                    <SelectItem key={String(sec.id)} textValue={`${sec.Class?.name} - ${sec.name}`}>
+                                        {sec.Class?.name} - {sec.name}
                                     </SelectItem>
                                 ))}
                             </Select>
@@ -191,7 +191,7 @@ export default function AttendanceReport() {
 
             {/* Stats Cards */}
             <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Card className="bg-content1 shadow-sm border-l-4 border-l-success border-y border-r border-default-200">
+                <Card className="bg-content1 shadow-sm border-l-4 border-l-success border-y border-r border-y-default-200 border-r-default-200">
                     <CardBody className="flex flex-row items-center gap-4 p-4">
                         <div className="p-3 bg-success/10 rounded-xl">
                             <Icon icon="mdi:check-circle" className="text-2xl text-success" />
@@ -202,7 +202,7 @@ export default function AttendanceReport() {
                         </div>
                     </CardBody>
                 </Card>
-                <Card className="bg-content1 shadow-sm border-l-4 border-l-danger border-y border-r border-default-200">
+                <Card className="bg-content1 shadow-sm border-l-4 border-l-danger border-y border-r border-y-default-200 border-r-default-200">
                     <CardBody className="flex flex-row items-center gap-4 p-4">
                         <div className="p-3 bg-danger/10 rounded-xl">
                             <Icon icon="mdi:close-circle" className="text-2xl text-danger" />
@@ -213,7 +213,7 @@ export default function AttendanceReport() {
                         </div>
                     </CardBody>
                 </Card>
-                <Card className="bg-content1 shadow-sm border-l-4 border-l-warning border-y border-r border-default-200">
+                <Card className="bg-content1 shadow-sm border-l-4 border-l-warning border-y border-r border-y-default-200 border-r-default-200">
                     <CardBody className="flex flex-row items-center gap-4 p-4">
                         <div className="p-3 bg-warning/10 rounded-xl">
                             <Icon icon="mdi:clock-alert" className="text-2xl text-warning" />
@@ -224,7 +224,7 @@ export default function AttendanceReport() {
                         </div>
                     </CardBody>
                 </Card>
-                <Card className="bg-content1 shadow-sm border-l-4 border-l-primary border-y border-r border-default-200">
+                <Card className="bg-content1 shadow-sm border-l-4 border-l-primary border-y border-r border-y-default-200 border-r-default-200">
                     <CardBody className="flex flex-row items-center gap-4 p-4">
                         <div className="p-3 bg-primary/10 rounded-xl">
                             <Icon icon="mdi:weather-sunset" className="text-2xl text-primary" />

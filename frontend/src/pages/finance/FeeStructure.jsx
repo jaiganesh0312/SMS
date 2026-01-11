@@ -253,7 +253,7 @@ export default function FeeStructure() {
                                         >
                                             {classes.map((cls) => (
                                                 <SelectItem key={cls.id} value={cls.id}>
-                                                    {cls.name} - {cls.section}
+                                                    {cls.name}
                                                 </SelectItem>
                                             ))}
                                         </Select>

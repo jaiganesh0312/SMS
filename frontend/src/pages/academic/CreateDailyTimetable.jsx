@@ -12,14 +12,14 @@ const CreateDailyTimetable = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [classes, setClasses] = useState([]);
+    const [sections, setSections] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const [teachers, setTeachers] = useState([]);
     const [step, setStep] = useState(1);
     const [error, setError] = useState(null); // New error state
 
     const [formData, setFormData] = useState({
-        classId: '',
+        sectionId: '',
         day: '',
         periodCount: '',
         schoolStartTime: '08:00',
@@ -35,15 +35,15 @@ const CreateDailyTimetable = () => {
         setLoading(true);
         setError(null);
         try {
-            const [classesRes, subjectsRes, staffRes] = await Promise.all([
-                academicService.getAllClasses(),
+            const [sectionsRes, subjectsRes, staffRes] = await Promise.all([
+                academicService.getAllSections(),
                 academicService.getAllSubjects(),
                 staffService.getAllStaff()
             ]);
 
-            if (classesRes?.data?.success) {
-                const classData = classesRes.data.data?.classes;
-                setClasses(Array.isArray(classData) ? classData : []);
+            if (sectionsRes?.data?.success) {
+                const sectionData = sectionsRes.data.data;
+                setSections(Array.isArray(sectionData) ? sectionData : []);
             }
 
             if (subjectsRes?.data?.success) {
@@ -120,7 +120,7 @@ const CreateDailyTimetable = () => {
         try {
             // Transform data to match backend expectation
             const payload = {
-                classId: formData.classId,
+                sectionId: formData.sectionId,
                 dayOfWeek: formData.day, // Backend expects dayOfWeek
                 periods: formData.periods.map(p => ({
                     subjectId: p.subjectId,
@@ -154,16 +154,16 @@ const CreateDailyTimetable = () => {
                 <h3 className="text-lg font-semibold mb-4 text-foreground">Step 1: Basic Configuration</h3>
             </div>
             <div>
-                <label className="text-sm font-medium mb-1.5 block text-default-700">Class</label>
+                <label className="text-sm font-medium mb-1.5 block text-default-700">Class/Section</label>
                 <Select
-                    placeholder="Select Class"
-                    onSelectionChange={(keys) => handleSelectionChange('classId', keys)}
-                    selectedKeys={formData.classId ? new Set([formData.classId]) : new Set()}
+                    placeholder="Select Class & Section"
+                    onSelectionChange={(keys) => handleSelectionChange('sectionId', keys)}
+                    selectedKeys={formData.sectionId ? new Set([formData.sectionId]) : new Set()}
                     variant="bordered"
                 >
-                    {classes.map(c => (
-                        <SelectItem key={String(c.id)} textValue={`${c.name} - ${c.section}`}>
-                            {c.name} - {c.section}
+                    {sections.map(s => (
+                        <SelectItem key={String(s.id)} textValue={`${s.Class?.name} - ${s.name}`}>
+                            {s.Class?.name} - {s.name}
                         </SelectItem>
                     ))}
                 </Select>
@@ -365,7 +365,7 @@ const CreateDailyTimetable = () => {
                         <Button
                             color="primary"
                             onPress={() => setStep(prev => prev + 1)}
-                            isDisabled={step === 1 && (!formData.classId || !formData.day || !formData.periodCount)}
+                            isDisabled={step === 1 && (!formData.sectionId || !formData.day || !formData.periodCount)}
                         >
                             Next
                         </Button>

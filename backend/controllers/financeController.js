@@ -81,19 +81,19 @@ exports.getFeeStatistics = async (req, res) => {
         // Get all classes for the school
         const classes = await Class.findAll({
             where: { schoolId },
-            attributes: ['id', 'name', 'section']
+            attributes: ['id', 'name']
         });
 
         // Get all fee structures for the school
         const feeStructures = await FeeStructure.findAll({
             where: { schoolId },
-            include: [{ model: Class, attributes: ['id', 'name', 'section'] }]
+            include: [{ model: Class, attributes: ['id', 'name'] }]
         });
 
         // Get all students with their class
         const students = await Student.findAll({
             where: { schoolId },
-            include: [{ model: Class, attributes: ['id', 'name', 'section'] }]
+            include: [{ model: Class, attributes: ['id', 'name'] }]
         });
 
         // Calculate statistics by class
@@ -123,7 +123,7 @@ exports.getFeeStatistics = async (req, res) => {
 
             return {
                 classId: classItem.id,
-                className: `${classItem.name} - ${classItem.section}`,
+                className: `${classItem.name}`,
                 studentCount,
                 totalFees: totalCollectible,
                 collectedAmount: totalCollected,
@@ -233,7 +233,7 @@ exports.getClassFeeStatus = async (req, res) => {
             data: {
                 classDetails: {
                     id: classDetails.id,
-                    name: `${classDetails.name} - ${classDetails.section}`,
+                    name: `${classDetails.name}`,
                     totalFeePerStudent
                 },
                 students: studentPaymentStatus
@@ -257,7 +257,8 @@ exports.getStudentFeeDetails = async (req, res) => {
         const student = await Student.findOne({
             where: { id: studentId, schoolId },
             include: [
-                { model: Class, attributes: ['id', 'name', 'section'] },
+                { model: Class, attributes: ['id', 'name'] },
+                { model: require('../models').ClassSection, attributes: ['id', 'name'] },
                 {
                     model: Parent, attributes: ['guardianName', 'id'],
                     include: [{ model: User, attributes: ['phone', 'email'] }]
@@ -324,7 +325,7 @@ exports.getStudentFeeDetails = async (req, res) => {
                     id: student.id,
                     name: student.name,
                     admissionNumber: student.admissionNumber,
-                    class: student.Class ? `${student.Class.name} - ${student.Class.section}` : 'N/A',
+                    class: student.Class ? `${student.Class.name} ${student.ClassSection ? '- ' + student.ClassSection.name : ''}` : 'N/A',
                     guardianName: student.Parent?.guardianName || 'N/A', // Send guardian info
                     contact: student.Parent?.User?.phone || 'N/A'
                 },
@@ -525,7 +526,8 @@ exports.generateFeeReceipt = async (req, res) => {
                     model: Student,
                     attributes: ['name', 'admissionNumber', 'profilePicture', 'parentId', 'classId'],
                     include: [
-                        { model: Class, attributes: ['name', 'section'] },
+                        { model: Class, attributes: ['name'] },
+                        { model: require('../models').ClassSection, attributes: ['name'] },
                         {
                             model: Parent,
                             attributes: ['guardianName', 'id'],

@@ -22,19 +22,6 @@ const Class = sequelize.define(
       allowNull: false,
       comment: "e.g., 10, XII, Nursery",
     },
-    section: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      comment: "e.g., A, B, Red",
-    },
-    classTeacherId: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: "users",
-        key: "id",
-      },
-    },
   },
   {
     tableName: "classes",
@@ -43,7 +30,7 @@ const Class = sequelize.define(
     indexes: [
       {
         unique: true,
-        fields: ["schoolId", "name", "section"],
+        fields: ["schoolId", "name"],
         where: {
           deletedAt: null
         }

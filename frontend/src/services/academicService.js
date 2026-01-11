@@ -16,6 +16,23 @@ const createClass = async (data) => {
   }
 };
 
+/**
+ * Create a new section
+ * @param {Object} data - Section data
+ * @param {string} data.classId - Class ID
+ * @param {string} data.name - Section name
+ * @param {string} data.classTeacherId - Class Teacher ID (optional)
+ * @returns {Promise<Object>} Response
+ */
+const createSection = async (data) => {
+  try {
+    const response = await api.post('/academics/sections', data);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 
 /**
  * Get all classes
@@ -129,6 +146,19 @@ const getDivisions = async (standard) => {
 };
 
 /**
+ * Get all sections
+ * @returns {Promise<Object>} Response
+ */
+const getAllSections = async () => {
+  try {
+    const response = await api.get('/academics/sections');
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+/**
  * Get all teachers (for dropdowns)
  * @returns {Promise<Object>} Response
  */
@@ -142,14 +172,14 @@ const getTeachers = async () => {
 };
 
 /**
- * Assign class teacher
- * @param {string} classId 
- * @param {string} teacherId 
- * @returns {Promise<Object>} Response
- */
-const assignClassTeacher = async (classId, teacherId) => {
+  * Assign class teacher (to a section)
+  * @param {string} sectionId 
+  * @param {string} teacherId 
+  * @returns {Promise<Object>} Response
+  */
+const assignClassTeacher = async (sectionId, teacherId) => {
   try {
-    const response = await api.patch(`/academics/classes/${classId}/teacher`, { teacherId });
+    const response = await api.patch(`/academics/sections/${sectionId}/teacher`, { teacherId });
     return response;
   } catch (error) {
     return error.response;
@@ -158,6 +188,7 @@ const assignClassTeacher = async (classId, teacherId) => {
 
 const academicService = {
   createClass,
+  createSection,
   getAllClasses,
   createSubject,
   getAllSubjects,
@@ -167,6 +198,7 @@ const academicService = {
   getStandards,
   getDivisions,
   getTeachers,
+  getAllSections,
   assignClassTeacher
 };
 

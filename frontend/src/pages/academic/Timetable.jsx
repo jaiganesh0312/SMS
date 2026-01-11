@@ -13,7 +13,7 @@ const Timetable = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [timetable, setTimetable] = useState([]);
-    const [classes, setClasses] = useState([]);
+    const [sections, setSections] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const [teachers, setTeachers] = useState([]);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -21,7 +21,7 @@ const Timetable = () => {
 
     // Single Entry Form Data
     const [formData, setFormData] = useState({
-        classId: '',
+        sectionId: '',
         subjectId: '',
         teacherId: '',
         day: '',
@@ -39,9 +39,9 @@ const Timetable = () => {
     const fetchInitialData = async () => {
         setLoading(true);
         try {
-            const [timetableRes, classesRes, subjectsRes, staffRes] = await Promise.all([
+            const [timetableRes, sectionsRes, subjectsRes, staffRes] = await Promise.all([
                 academicService.getTimetable(),
-                academicService.getAllClasses(),
+                academicService.getAllSections(),
                 academicService.getAllSubjects(),
                 staffService.getAllStaff()
             ]);
@@ -51,9 +51,9 @@ const Timetable = () => {
                 setTimetable(Array.isArray(timetableData) ? timetableData : []);
             }
 
-            if (classesRes?.data?.success) {
-                const classData = classesRes.data.data?.classes;
-                setClasses(Array.isArray(classData) ? classData : []);
+            if (sectionsRes?.data?.success) {
+                const sectionData = sectionsRes.data.data;
+                setSections(Array.isArray(sectionData) ? sectionData : []);
             }
 
             if (subjectsRes?.data?.success) {
@@ -98,7 +98,7 @@ const Timetable = () => {
                 setIsCreateModalOpen(false);
                 fetchInitialData();
                 setFormData({
-                    classId: '',
+                    sectionId: '',
                     subjectId: '',
                     teacherId: '',
                     day: '',
@@ -181,7 +181,7 @@ const Timetable = () => {
                                     <thead className="border-b border-default-200 bg-default-100 text-default-500">
                                         <tr>
                                             <th className="p-3 font-semibold">Day</th>
-                                            <th className="p-3 font-semibold">Class</th>
+                                            <th className="p-3 font-semibold">Class/Section</th>
                                             <th className="p-3 font-semibold">Subject</th>
                                             <th className="p-3 font-semibold">Time</th>
                                             <th className="p-3 font-semibold hidden lg:table-cell">Teacher</th>
@@ -192,7 +192,9 @@ const Timetable = () => {
                                         {timetable.map((entry) => (
                                             <tr key={entry.id} className="hover:bg-default-50 transition-colors">
                                                 <td className="p-3 font-medium">{entry.day || entry.dayOfWeek || '-'}</td>
-                                                <td className="p-3">{entry.Class?.name} - {entry.Class?.section}</td>
+                                                <td className="p-3">
+                                                    {entry.ClassSection?.Class?.name} - {entry.ClassSection?.name}
+                                                </td>
                                                 <td className="p-3">{entry.Subject?.name || entry.Subject?.code}</td>
                                                 <td className="p-3">{entry.startTime} - {entry.endTime}</td>
                                                 <td className="p-3 hidden lg:table-cell">
@@ -252,22 +254,22 @@ const Timetable = () => {
                             <ModalBody>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="text-sm font-medium mb-1 block text-default-700">Class</label>
+                                        <label className="text-sm font-medium mb-1 block text-default-700">Class/Section</label>
                                         <Select
-                                            placeholder="Select Class"
-                                            aria-label="Select Class"
-                                            onSelectionChange={(keys) => handleSelectionChange('classId', keys)}
-                                            selectedKeys={formData.classId ? new Set([String(formData.classId)]) : new Set()}
+                                            placeholder="Select Class & Section"
+                                            aria-label="Select Class & Section"
+                                            onSelectionChange={(keys) => handleSelectionChange('sectionId', keys)}
+                                            selectedKeys={formData.sectionId ? new Set([String(formData.sectionId)]) : new Set()}
                                             variant="bordered"
                                         >
-                                            {classes?.map(c => (
-                                                <SelectItem key={String(c.id)} textValue={`${c.name} - ${c.section}`}>
-                                                    {c.name} - {c.section}
+                                            {sections?.map(s => (
+                                                <SelectItem key={String(s.id)} textValue={`${s.Class?.name} - ${s.name}`}>
+                                                    {s.Class?.name} - {s.name}
                                                 </SelectItem>
                                             ))}
                                         </Select>
                                         <div className="text-xs text-default-400 mt-1">
-                                            {classes.length === 0 ? "No classes found" : `${classes.length} classes available`}
+                                            {sections.length === 0 ? "No sections found" : `${sections.length} sections available`}
                                         </div>
                                     </div>
                                     <div>

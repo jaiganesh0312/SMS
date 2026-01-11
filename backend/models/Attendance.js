@@ -18,41 +18,41 @@ const Attendance = sequelize.define(
       },
     },
     studentId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-            model: "students",
-            key: "id"
-        }
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: "students",
+        key: "id"
+      }
     },
-    classId: { // Optional but good for querying
-        type: DataTypes.UUID,
-        allowNull: true,
-        references: {
-            model: "classes",
-            key: "id"
-        }
+    sectionId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: "class_sections",
+        key: "id"
+      }
     },
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
     status: {
-        type: DataTypes.ENUM("PRESENT", "ABSENT", "LATE", "HALF_DAY"),
-        allowNull: false,
-        defaultValue: "ABSENT"
+      type: DataTypes.ENUM("PRESENT", "ABSENT", "LATE", "HALF_DAY"),
+      allowNull: false,
+      defaultValue: "ABSENT"
     },
     recordedBy: {
-        type: DataTypes.UUID,
-        allowNull: true, // If auto-marked or system
-        references: {
-            model: "users",
-            key: "id"
-        }
+      type: DataTypes.UUID,
+      allowNull: true, // If auto-marked or system
+      references: {
+        model: "users",
+        key: "id"
+      }
     },
     isLocked: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   },
   {
@@ -60,13 +60,13 @@ const Attendance = sequelize.define(
     timestamps: true,
     paranoid: true,
     indexes: [
-        {
-            unique: true,
-            fields: ["schoolId", "studentId", "date"],
-            where: {
-                deletedAt: null
-            }
+      {
+        unique: true,
+        fields: ["schoolId", "studentId", "date"],
+        where: {
+          deletedAt: null
         }
+      }
     ]
   }
 );

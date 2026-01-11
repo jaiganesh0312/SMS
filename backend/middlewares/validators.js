@@ -32,7 +32,12 @@ exports.loginValidator = [
 
 exports.createClassValidator = [
   body("name").notEmpty().withMessage("Class name is required"),
-  body("section").notEmpty().withMessage("Section is required"),
+  validate,
+];
+
+exports.createSectionValidator = [
+  body("classId").isUUID().withMessage("Valid Class ID required"),
+  body("name").notEmpty().withMessage("Section name is required"),
   validate,
 ];
 
@@ -44,6 +49,7 @@ exports.createSubjectValidator = [
 
 exports.createTimetableValidator = [
   body("classId").isUUID().withMessage("Valid Class ID required"),
+  body("sectionId").isUUID().withMessage("Valid Section ID required"),
   body("subjectId").isUUID().withMessage("Valid Subject ID required"),
   body("teacherId").isUUID().withMessage("Valid Teacher ID required"),
   body("dayOfWeek")
@@ -65,7 +71,7 @@ exports.createTimetableValidator = [
 ];
 
 exports.markAttendanceValidator = [
-  body("classId").isUUID().withMessage("Class ID is required"),
+  body("sectionId").isUUID().withMessage("Section ID is required"),
   body("date").isISO8601().toDate().withMessage("Valid date is required"),
   // Check either 'students' OR 'attendance' is present and is an array
   body()

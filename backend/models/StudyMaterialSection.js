@@ -34,9 +34,13 @@ const StudyMaterialSection = sequelize.define(
             },
         },
         sectionId: {
-            type: DataTypes.STRING,
+            type: DataTypes.UUID,
             allowNull: true,
-            comment: "Section like A, B, C or null for all sections",
+            references: {
+                model: "class_sections",
+                key: "id",
+            },
+            comment: "Specific section ID or null for all sections",
         },
         subjectId: {
             type: DataTypes.UUID,

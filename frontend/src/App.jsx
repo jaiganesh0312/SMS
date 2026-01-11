@@ -99,6 +99,8 @@ import {
 
 // Study Material Pages
 import StudyMaterials from '@/pages/study/StudyMaterials';
+import StudyMaterialClasses from '@/pages/study/StudyMaterialClasses';
+import StudyMaterialClassSections from '@/pages/study/StudyMaterialClassSections';
 import SectionDetails from '@/pages/study/SectionDetails';
 import VideoPlayer from '@/pages/study/VideoPlayer';
 
@@ -208,7 +210,9 @@ function App() {
               <Route path="transport/trip-history" element={<ProtectedRoute><TripHistory /></ProtectedRoute>} />
 
               {/* Study Materials Routes */}
-              <Route path="study-materials" element={<ProtectedRoute><StudyMaterials /></ProtectedRoute>} />
+              <Route path="study-materials" element={<ProtectedRoute><StudyMaterialClasses /></ProtectedRoute>} />
+              <Route path="study-materials/class/:classId" element={<ProtectedRoute><StudyMaterialClassSections /></ProtectedRoute>} />
+              <Route path="study-materials/section/:sectionId" element={<ProtectedRoute><StudyMaterials /></ProtectedRoute>} />
               <Route path="study-materials/sections/:id" element={<ProtectedRoute><SectionDetails /></ProtectedRoute>} />
               <Route path="study-materials/video/:id" element={<ProtectedRoute><VideoPlayer /></ProtectedRoute>} />
 

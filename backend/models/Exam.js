@@ -18,12 +18,20 @@ const Exam = sequelize.define(
       },
     },
     classId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-            model: "classes",
-            key: "id"
-        }
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: "classes",
+        key: "id"
+      }
+    },
+    sectionId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: "class_sections",
+        key: "id"
+      }
     },
     name: {
       type: DataTypes.STRING,
@@ -31,20 +39,20 @@ const Exam = sequelize.define(
       comment: "e.g., Mid-Term, Final, Unit Test 1",
     },
     type: {
-        type: DataTypes.ENUM("UNIT_TEST", "HALF_YEARLY", "FINAL", "OTHER"),
-        defaultValue: "UNIT_TEST"
+      type: DataTypes.ENUM("UNIT_TEST", "HALF_YEARLY", "FINAL", "OTHER"),
+      defaultValue: "UNIT_TEST"
     },
     startDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
+      type: DataTypes.DATEONLY,
+      allowNull: false
     },
     endDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
+      type: DataTypes.DATEONLY,
+      allowNull: false
     },
     isActive: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
     }
   },
   {

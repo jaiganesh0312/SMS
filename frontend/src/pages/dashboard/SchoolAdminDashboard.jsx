@@ -175,7 +175,7 @@ export default function SchoolAdminDashboard() {
                                             <TableCell>
                                                 {student.Class ? (
                                                     <Chip size="sm" variant="flat" color="secondary" classNames={{ content: "font-medium" }}>
-                                                        {student.Class.name}-{student.Class.section}
+                                                        {student.Class.name}-{student.ClassSection.name}
                                                     </Chip>
                                                 ) : '-'}
                                             </TableCell>

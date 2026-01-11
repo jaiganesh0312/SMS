@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ import { motion } from "framer-motion";
 const examSchema = z.object({
     name: z.string().min(3, "Exam name must be at least 3 characters"),
     classId: z.string().min(1, "Class is required"),
+    sectionId: z.string().optional().nullable(),
     type: z.enum(["UNIT_TEST", "HALF_YEARLY", "FINAL", "OTHER"], {
         errorMap: () => ({ message: "Invalid exam type" })
     }),
@@ -32,30 +33,65 @@ const examSchema = z.object({
 export default function CreateExam() {
     const navigate = useNavigate();
     const [classes, setClasses] = useState([]);
+    const [sections, setSections] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+    const { register, handleSubmit, formState: { errors }, control, watch, setValue } = useForm({
         resolver: zodResolver(examSchema),
         defaultValues: {
-            type: "UNIT_TEST"
+            type: "UNIT_TEST",
+            sectionId: null
         }
     });
+
+    const selectedClassId = watch("classId");
 
     useEffect(() => {
         fetchOptions();
     }, []);
+
+    useEffect(() => {
+        if (selectedClassId) {
+            fetchSections(selectedClassId);
+        } else {
+            setSections([]);
+        }
+    }, [selectedClassId]);
 
     const fetchOptions = async () => {
         try {
             const classRes = await academicService.getAllClasses();
             if (classRes.data?.success) setClasses(classRes.data.data.classes);
         } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const fetchSections = async (classId) => {
+        // We need to fetch sections for this class. 
+        // Assuming we can filter sections by classId or get divisions by standard name if class object has name.
+        const selectedClass = classes.find(c => c.id === classId);
+        if (selectedClass) {
+            try {
+                // Using getDivisions which usually takes a standard name (e.g. "10")
+                // Or if we have an endpoint for sections by classId.
+                // Looking at available services: getDivisions(standard).
+                const res = await academicService.getDivisions(selectedClass.name);
+                if (res.data?.success) {
+                    setSections(res.data.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch sections", error);
+            }
         }
     };
 
     const onSubmit = async (data) => {
         setIsLoading(true);
         try {
+            // Transform empty sectionId to null if needed, or backend handles it (allowNull: true)
+            if (!data.sectionId) delete data.sectionId;
+
             const response = await examService.createExam(data);
             if (response.data?.success) {
                 navigate('/exams');
@@ -124,45 +160,79 @@ export default function CreateExam() {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <Select
-                                    label="Class"
-                                    placeholder='Select Class'
-                                    {...register('classId')}
-                                    variant="bordered"
-                                    isInvalid={!!errors.classId}
-                                    errorMessage={errors.classId?.message}
-                                    startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
-                                    classNames={{
-                                        label: "text-default-500",
-                                        value: "text-foreground",
-                                    }}
-                                >
-                                    {classes.map((cls) => (
-                                        <SelectItem key={cls.id} value={cls.id} textValue={`${cls.name}-${cls.section}`}>
-                                            {`${cls.name}-${cls.section}`}
-                                        </SelectItem>
-                                    ))}
-                                </Select>
+                                <Controller
+                                    name="classId"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select
+                                            label="Class"
+                                            placeholder='Select Class'
+                                            variant="bordered"
+                                            selectedKeys={field.value ? [field.value] : []}
+                                            onSelectionChange={(keys) => {
+                                                field.onChange(Array.from(keys)[0]);
+                                                setValue("sectionId", ""); // Reset section on class change
+                                            }}
+                                            isInvalid={!!errors.classId}
+                                            errorMessage={errors.classId?.message}
+                                            startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
+                                        >
+                                            {classes.map((cls) => (
+                                                <SelectItem key={cls.id} value={cls.id} textValue={cls.name}>
+                                                    {cls.name}
+                                                </SelectItem>
+                                            ))}
+                                        </Select>
+                                    )}
+                                />
 
-                                <Select
-                                    label="Exam Type"
-                                    {...register('type')}
-                                    placeholder='Select Exam Type'
-                                    variant="bordered"
-                                    isInvalid={!!errors.type}
-                                    errorMessage={errors.type?.message}
-                                    defaultSelectedKeys={["UNIT_TEST"]}
-                                    startContent={<Icon icon="mdi:shape-outline" className="text-default-400" />}
-                                    classNames={{
-                                        label: "text-default-500",
-                                        value: "text-foreground",
-                                    }}
-                                >
-                                    <SelectItem key="UNIT_TEST" value="UNIT_TEST">Unit Test</SelectItem>
-                                    <SelectItem key="HALF_YEARLY" value="HALF_YEARLY">Half Yearly</SelectItem>
-                                    <SelectItem key="FINAL" value="FINAL">Final</SelectItem>
-                                    <SelectItem key="OTHER" value="OTHER">Other</SelectItem>
-                                </Select>
+                                <Controller
+                                    name="sectionId"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select
+                                            label="Section (Optional)"
+                                            placeholder='Select Section'
+                                            variant="bordered"
+                                            isDisabled={!selectedClassId || sections.length === 0}
+                                            selectedKeys={field.value ? [field.value] : []}
+                                            onSelectionChange={(keys) => field.onChange(Array.from(keys)[0])}
+                                            isInvalid={!!errors.sectionId}
+                                            errorMessage={errors.sectionId?.message}
+                                            startContent={<Icon icon="mdi:google-classroom" className="text-default-400" />}
+                                        >
+                                            {sections.map((sec) => (
+                                                <SelectItem key={sec.id} value={sec.id} textValue={sec.name}>
+                                                    {sec.name}
+                                                </SelectItem>
+                                            ))}
+                                        </Select>
+                                    )}
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <Controller
+                                    name="type"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select
+                                            label="Exam Type"
+                                            placeholder='Select Exam Type'
+                                            variant="bordered"
+                                            selectedKeys={field.value ? [field.value] : ["UNIT_TEST"]}
+                                            onSelectionChange={(keys) => field.onChange(Array.from(keys)[0])}
+                                            isInvalid={!!errors.type}
+                                            errorMessage={errors.type?.message}
+                                            startContent={<Icon icon="mdi:shape-outline" className="text-default-400" />}
+                                        >
+                                            <SelectItem key="UNIT_TEST" value="UNIT_TEST">Unit Test</SelectItem>
+                                            <SelectItem key="HALF_YEARLY" value="HALF_YEARLY">Half Yearly</SelectItem>
+                                            <SelectItem key="FINAL" value="FINAL">Final</SelectItem>
+                                            <SelectItem key="OTHER" value="OTHER">Other</SelectItem>
+                                        </Select>
+                                    )}
+                                />
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

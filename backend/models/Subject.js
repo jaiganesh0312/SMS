@@ -21,6 +21,14 @@ const Subject = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    classId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: "classes",
+        key: "id",
+      },
+    },
     code: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -31,13 +39,13 @@ const Subject = sequelize.define(
     timestamps: true,
     paranoid: true,
     indexes: [
-        {
-            unique: true,
-            fields: ["schoolId", "code"],
-            where: {
-                deletedAt: null
-            }
+      {
+        unique: true,
+        fields: ["schoolId", "code"],
+        where: {
+          deletedAt: null
         }
+      }
     ]
   }
 );

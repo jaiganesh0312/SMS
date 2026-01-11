@@ -9,6 +9,7 @@ const {
   Class,
   Exam,
   School,
+  ClassSection,
 } = require("../models");
 const bcrypt = require("bcryptjs");
 const { sendParentAccountEmail } = require("../services/emailService");
@@ -140,7 +141,7 @@ exports.getMyChildren = async (req, res) => {
 
     const students = await Student.findAll({
       where: { parentId: parent.id },
-      include: [{ model: Class, include: ["School"] }],
+      include: [{ model: Class, include: ["School"] }, { model: ClassSection }],
     });
 
     // Enhance each student with aggregated data
@@ -208,7 +209,7 @@ exports.getChildDashboard = async (req, res) => {
     // 1. Verify Ownership
     const student = await Student.findOne({
       where: { id: studentId, parentId: parent.id },
-      include: [{ model: Class }],
+      include: [{ model: Class }, { model: ClassSection }],
     });
 
     if (!student) {

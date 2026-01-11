@@ -132,7 +132,7 @@ export default function MyPeriods() {
                                             <div className="flex justify-between items-center text-sm text-default-500">
                                                 <div className="flex items-center gap-2">
                                                     <Icon icon="mdi:google-classroom" />
-                                                    <span>{period.Class?.name} - {period.Class?.section}</span>
+                                                    <span>{period.ClassSection?.Class?.name} - {period.ClassSection?.name}</span>
                                                 </div>
                                                 {period.classroom && (
                                                     <div className="flex items-center gap-1">

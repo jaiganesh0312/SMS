@@ -1,6 +1,6 @@
 import api from '@/config/axiosConfig';
 
-const uploadFile = async (url, file) => {
+const uploadFile = async (url, file, setProgress) => {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -9,6 +9,10 @@ const uploadFile = async (url, file) => {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
+            onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setProgress(percentCompleted);
+            },
         });
         return response;
     } catch (error) {
@@ -16,12 +20,12 @@ const uploadFile = async (url, file) => {
     }
 };
 
-const uploadStudents = (file) => uploadFile('/upload/students', file);
-const uploadAttendance = (file) => uploadFile('/upload/attendance', file);
-const uploadExams = (file) => uploadFile('/upload/exams', file);
-const uploadResults = (file) => uploadFile('/upload/results', file);
-const uploadLibrarySections = (file) => uploadFile('/upload/library-sections', file);
-const uploadBooks = (file) => uploadFile('/upload/books', file);
+const uploadStudents = (file, setProgress) => uploadFile('/upload/students', file, setProgress);
+const uploadAttendance = (file, setProgress) => uploadFile('/upload/attendance', file, setProgress);
+const uploadExams = (file, setProgress) => uploadFile('/upload/exams', file, setProgress);
+const uploadResults = (file, setProgress) => uploadFile('/upload/results', file, setProgress);
+const uploadLibrarySections = (file, setProgress) => uploadFile('/upload/library-sections', file, setProgress);
+const uploadBooks = (file, setProgress) => uploadFile('/upload/books', file, setProgress);
 
 const bulkUploadService = {
     uploadStudents,

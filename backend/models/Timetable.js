@@ -17,11 +17,12 @@ const Timetable = sequelize.define(
         key: "id",
       },
     },
-    classId: {
+
+    sectionId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: "classes",
+        model: "class_sections",
         key: "id",
       },
     },

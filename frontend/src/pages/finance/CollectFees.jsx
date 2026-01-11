@@ -212,7 +212,7 @@ export default function CollectFees() {
                                     >
                                         {classes.map(c => (
                                             <SelectItem key={String(c.id)} value={String(c.id)}>
-                                                {`${c.name}-${c.section}`}
+                                                {c.name}
                                             </SelectItem>
                                         ))}
                                     </Select>

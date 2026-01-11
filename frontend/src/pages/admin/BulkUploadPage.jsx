@@ -76,7 +76,8 @@ export default function BulkUploadPage() {
 
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
-    const [response, setResponse] = useState(null);
+    const [result, setResult] = useState(null);
+    const [progress, setProgress] = useState(0);
 
     if (!config) return <div>Invalid Upload Type</div>;
 
@@ -99,12 +100,12 @@ export default function BulkUploadPage() {
 
         setUploading(true);
         try {
-            const response = await config.handler(file);
+            const response = await config.handler(file, setProgress);
             if (response.data?.success) {
-                setResponse(response.data.data);
+                setResult(response.data.data);
             } else {
                 // Handle generic server error structure if different
-                setResponse({
+                setResult({
                     total: 0,
                     success: 0,
                     failed: 0,
@@ -112,14 +113,10 @@ export default function BulkUploadPage() {
                 });
             }
         } catch (error) {
-            setResponse({
-                success: false,
-                message: "An unexpected error occurred.",
-                details: error.message || null
-            });
+            console.error("Upload error:", error);
+            setResult({ error: "An unexpected error occurred." });
         } finally {
             setUploading(false);
-            // setProgress(0); // Keep progress at 100% after success/failure, reset on new file selection
         }
     };
 
@@ -226,31 +223,69 @@ export default function BulkUploadPage() {
                 </CardBody>
             </Card>
 
-            {/* Response Section */}
-            {response && (
-                <Card className={`border shadow-sm ${response.success ? 'bg-success-50 border-success-200' : 'bg-danger-50 border-danger-200'}`}>
-                    <CardBody className="p-6">
-                        <div className="flex items-start gap-4">
-                            <Icon
-                                icon={response.success ? "mdi:check-circle" : "mdi:alert-circle"}
-                                className={`text-3xl mt-0.5 ${response.success ? 'text-success-600' : 'text-danger-600'}`}
-                            />
-                            <div>
-                                <h4 className={`text-lg font-bold mb-1 ${response.success ? 'text-success-800' : 'text-danger-800'}`}>
-                                    {response.success ? 'Upload Successful' : 'Upload Failed'}
-                                </h4>
-                                <p className={response.success ? 'text-success-700' : 'text-danger-700'}>
-                                    {response.message}
-                                </p>
-                                {response.details && (
-                                    <div className="mt-4 p-3 bg-white/50 rounded-lg text-sm font-mono overflow-auto max-h-40">
-                                        <pre>{JSON.stringify(response.details, null, 2)}</pre>
-                                    </div>
-                                )}
+            {result && (
+                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
+                    <Card className={result.failed > 0 ? "border-danger" : "border-success"}>
+                        <CardHeader className="flex gap-3">
+                            <div className="w-8 h-8 bg-default/10 rounded-full flex items-center justify-center">
+                                <span className="font-bold text-default-600">3</span>
                             </div>
-                        </div>
-                    </CardBody>
-                </Card>
+                            <div className="flex flex-col">
+                                <p className="text-md font-bold">Processing Results</p>
+                            </div>
+                        </CardHeader>
+                        <CardBody>
+                            <div className="grid grid-cols-3 gap-4 mb-6">
+                                <div className="p-4 bg-default-50 rounded-lg text-center">
+                                    <p className="text-sm text-default-500">Total Records</p>
+                                    <p className="text-2xl font-bold">{result.total || 0}</p>
+                                </div>
+                                <div className="p-4 bg-success-50 rounded-lg text-center">
+                                    <p className="text-sm text-success-600">Successful</p>
+                                    <p className="text-2xl font-bold text-success-700">{result.success || 0}</p>
+                                </div>
+                                <div className="p-4 bg-danger-50 rounded-lg text-center">
+                                    <p className="text-sm text-danger-600">Failed</p>
+                                    <p className="text-2xl font-bold text-danger-700">{result.failed || 0}</p>
+                                </div>
+                            </div>
+
+                            {result.errors && result.errors.length > 0 && (
+                                <div className="space-y-2">
+                                    <p className="font-bold text-danger">Error Details:</p>
+                                    <Table aria-label="Error Table" color="danger">
+                                        <TableHeader>
+                                            <TableColumn>ROW</TableColumn>
+                                            <TableColumn>ERROR MESSAGE</TableColumn>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {result.errors.map((err, idx) => (
+                                                <TableRow key={idx}>
+                                                    <TableCell>{err.row}</TableCell>
+                                                    <TableCell>{err.message}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            )}
+
+                            {result.error && (
+                                <div className="bg-danger-50 p-4 rounded-lg text-danger">
+                                    {result.error}
+                                </div>
+                            )}
+
+                            {!result.error && result.success > 0 && result.failed === 0 && (
+                                <div className="bg-success-50 p-4 rounded-lg text-success flex items-center gap-2">
+                                    <Icon icon="mdi:check-circle" className="text-xl" />
+                                    All records processed successfully!
+                                </div>
+                            )}
+                        </CardBody>
+                    </Card>
+                </div>
+
             )}
         </div>
     );

@@ -4,10 +4,10 @@ const { Op } = require("sequelize");
 exports.markAttendance = async (req, res) => {
     try {
         // Expecting array of objects: [{ studentId, status, date }]
-        // OR bulk for a class: { classId, date, students: [{ studentId, status }] }
+        // OR bulk for a section: { sectionId, date, students: [{ studentId, status }] }
 
         // Implementing Bulk for Class which is most common
-        const { classId, date, students, attendance } = req.body;
+        const { sectionId, date, students, attendance } = req.body;
         const studentList = students || attendance;
         const schoolId = req.user.schoolId;
         const recordedBy = req.user.id;
@@ -25,7 +25,7 @@ exports.markAttendance = async (req, res) => {
 
         const records = studentList.map(s => ({
             schoolId,
-            classId,
+            sectionId,
             studentId: s.studentId,
             date,
             status: s.status,
@@ -52,22 +52,22 @@ exports.markAttendance = async (req, res) => {
 
 exports.getAttendance = async (req, res) => {
     try {
-        const { classId, date } = req.query;
+        const { sectionId, date } = req.query;
         const schoolId = req.user.schoolId;
 
-        if (!classId || !date) {
-            return res.status(400).json({ success: false, message: "Class ID and Date are required" });
+        if (!sectionId || !date) {
+            return res.status(400).json({ success: false, message: "Section ID and Date are required" });
         }
 
-        // 1. Fetch all students in the class
+        // 1. Fetch all students in the section
         const students = await Student.findAll({
-            where: { classId, schoolId },
+            where: { sectionId, schoolId },
             order: [['name', 'ASC']]
         });
 
         // 2. Fetch existing attendance for the date
         const attendanceRecords = await Attendance.findAll({
-            where: { classId, schoolId, date },
+            where: { sectionId, schoolId, date },
             include: [
                 {
                     model: Student,
@@ -119,11 +119,11 @@ exports.updateAttendance = async (req, res) => {
 
 exports.getAttendanceReport = async (req, res) => {
     try {
-        const { classId, date, studentId, startDate, endDate } = req.query;
+        const { sectionId, date, studentId, startDate, endDate } = req.query;
         const schoolId = req.user.schoolId;
 
         const where = { schoolId };
-        if (classId) where.classId = classId;
+        if (sectionId) where.sectionId = sectionId;
         if (studentId) where.studentId = studentId;
 
         if (date) {

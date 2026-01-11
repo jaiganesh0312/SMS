@@ -1,4 +1,4 @@
-const { Class, Student, User, School, Announcement, Timetable, Subject, sequelize } = require('../models');
+const { Class, ClassSection, Student, User, School, Announcement, Timetable, Subject, sequelize } = require('../models');
 const { Op } = require('sequelize');
 
 // Get My Class (Teacher's assigned classes)
@@ -6,9 +6,20 @@ exports.getMyClass = async (req, res) => {
     try {
         const { id: teacherId, schoolId } = req.user;
 
-        const myClass = await Class.findOne({
-            where: { classTeacherId: teacherId, schoolId },
+        const mySection = await ClassSection.findOne({
+            where: { classTeacherId: teacherId }, // removed schoolId from where because ClassSection might not have schoolId directly if it relies on Class? 
+            // Wait, ClassSection definition didn't have schoolId. It has classId.
+            // But we can filter by including Class with schoolId. 
+            // OR I should have added schoolId to ClassSection for easier querying?
+            // "ClassSection" model definition in Step 22 did NOT have schoolId.
+            // So accessing schoolId requires include Class.
+
             include: [
+                {
+                    model: Class,
+                    where: { schoolId }, // Filter by school here
+                    attributes: ['id', 'name']
+                },
                 {
                     model: Student,
                     attributes: ['id', 'name', 'admissionNumber', 'gender']
@@ -16,17 +27,18 @@ exports.getMyClass = async (req, res) => {
             ]
         });
 
-        if (!myClass) {
+        if (!mySection) {
             return res.status(404).json({
                 success: false,
                 message: "No class assigned to you as a Class Teacher"
             });
         }
 
+
         res.status(200).json({
             success: true,
             message: "Class details fetched successfully",
-            data: myClass
+            data: mySection
         });
     } catch (error) {
         res.status(500).json({
@@ -41,11 +53,11 @@ exports.getMyStudents = async (req, res) => {
     try {
         const { id: teacherId, schoolId } = req.user;
 
-        const myClass = await Class.findOne({
-            where: { classTeacherId: teacherId, schoolId }
+        const mySection = await ClassSection.findOne({
+            where: { classTeacherId: teacherId }
         });
 
-        if (!myClass) {
+        if (!mySection) {
             return res.status(404).json({
                 success: false,
                 message: "You are not assigned as a Class Teacher to any class."
@@ -53,7 +65,7 @@ exports.getMyStudents = async (req, res) => {
         }
 
         const students = await Student.findAll({
-            where: { classId: myClass.id, schoolId },
+            where: { sectionId: mySection.id, schoolId },
             order: [['name', 'ASC']]
         });
 
@@ -80,6 +92,7 @@ exports.getIDCardData = async (req, res) => {
         const student = await Student.findByPk(studentId, {
             include: [
                 { model: Class, as: 'Class' },
+                { model: ClassSection, as: 'ClassSection' }, // Added Include
                 { model: School, as: 'School' }
             ]
         });
@@ -91,7 +104,7 @@ exports.getIDCardData = async (req, res) => {
         // Access Control
         if (role === 'TEACHER') {
             // Check if teacher is the class teacher
-            if (!student.Class || student.Class.classTeacherId !== userId) {
+            if (!student.ClassSection || student.ClassSection.classTeacherId !== userId) { // Use ClassSection check
                 return res.status(403).json({ success: false, message: "You can only generate ID cards for your own class." });
             }
         } else if (role === 'PARENT') {
@@ -113,7 +126,7 @@ exports.getIDCardData = async (req, res) => {
             schoolLogo: student.School.logo, // Assuming logo exists
             studentName: student.name,
             admissionNumber: student.admissionNumber,
-            class: student.Class ? `${student.Class.name} - ${student.Class.section}` : 'N/A',
+            class: student.Class && student.ClassSection ? `${student.Class.name} - ${student.ClassSection.name}` : (student.Class ? student.Class.name : 'N/A'),
             dob: student.dob,
             bloodGroup: student.bloodGroup || 'N/A', // Assuming bloodGroup might be added later
             fatherName: student.fatherName || 'Parent', // You might want to fetch Parent name
@@ -142,9 +155,16 @@ exports.getMyPeriods = async (req, res) => {
         const periods = await Timetable.findAll({
             where: { teacherId, schoolId },
             include: [
+
                 {
-                    model: Class,
-                    attributes: ['id', 'name', 'section']
+                    model: ClassSection,
+                    attributes: ['id', 'name'],
+                    include: [
+                        {
+                            model: Class,
+                            attributes: ['id', 'name']
+                        }
+                    ]
                 },
                 {
                     model: Subject,
@@ -172,21 +192,22 @@ exports.getMyClassTimetable = async (req, res) => {
     try {
         const { id: teacherId, schoolId } = req.user;
 
-        // 1. Find the class managed by this teacher
-        const myClass = await Class.findOne({
-            where: { classTeacherId: teacherId, schoolId }
+        // 1. Find the class (section) managed by this teacher
+        const mySection = await ClassSection.findOne({
+            where: { classTeacherId: teacherId },
+            include: [{ model: Class, where: { schoolId } }]
         });
 
-        if (!myClass) {
+        if (!mySection) {
             return res.status(404).json({
                 success: false,
                 message: "You are not assigned as a Class Teacher to any class."
             });
         }
 
-        // 2. Fetch timetable for this class
+        // 2. Fetch timetable for this section
         const timetable = await Timetable.findAll({
-            where: { classId: myClass.id, schoolId },
+            where: { sectionId: mySection.id, schoolId },
             include: [
                 {
                     model: Subject,
@@ -204,7 +225,7 @@ exports.getMyClassTimetable = async (req, res) => {
             success: true,
             message: "Class timetable fetched successfully",
             data: {
-                classDetails: myClass,
+                classDetails: mySection,
                 timetable
             }
         });

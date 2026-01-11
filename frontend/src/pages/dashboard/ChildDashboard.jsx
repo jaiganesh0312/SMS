@@ -187,7 +187,7 @@ export default function ChildDashboard() {
                             <span className="hidden sm:inline">|</span>
                             <span className="flex items-center gap-1">
                                 <Icon icon="mdi:google-classroom" />
-                                Class {student.Class?.name} - {student.Class?.section}
+                                Class {student.Class?.name} - {student.ClassSection?.name}
                             </span>
                         </div>
                     </div>
@@ -542,22 +542,22 @@ export default function ChildDashboard() {
                                                     </div>
                                                 </CardHeader>
                                                 <CardBody className="p-0">
-                                                    <Table aria-label={`${exam.examName} results`} removeWrapper classNames={{ th: "bg-transparent text-default-500", td: "text-foreground", base: "p-4" }}>
+                                                    <Table aria-label={`${exam.examName} results`}>
                                                         <TableHeader>
                                                             <TableColumn>SUBJECT</TableColumn>
-                                                            <TableColumn className="hidden sm:table-cell">SUBJECT CODE</TableColumn>
+                                                            <TableColumn> SUBJECT CODE</TableColumn>
                                                             <TableColumn>OBTAINED MARKS</TableColumn>
-                                                            <TableColumn className="hidden md:table-cell">MAX MARKS</TableColumn>
+                                                            <TableColumn>MAX MARKS</TableColumn>
                                                             <TableColumn>PERCENTAGE</TableColumn>
-                                                            <TableColumn className="hidden sm:table-cell">GRADE</TableColumn>
+                                                            <TableColumn>GRADE</TableColumn>
                                                         </TableHeader>
                                                         <TableBody>
                                                             {exam.subjects && exam.subjects.map((subject, subIdx) => (
                                                                 <TableRow key={subject.subjectId || subIdx} className="border-b border-default-50 last:border-0">
                                                                     <TableCell className="font-medium">{subject.subjectName}</TableCell>
-                                                                    <TableCell className="text-sm text-default-500 hidden sm:table-cell">{subject.subjectCode}</TableCell>
+                                                                    <TableCell className="text-sm text-default-500">{subject.subjectCode}</TableCell>
                                                                     <TableCell className="font-semibold">{subject.marksObtained}</TableCell>
-                                                                    <TableCell className="hidden md:table-cell">{subject.maxMarks}</TableCell>
+                                                                    <TableCell>{subject.maxMarks}</TableCell>
                                                                     <TableCell>
                                                                         <Chip
                                                                             size="sm"
@@ -568,7 +568,7 @@ export default function ChildDashboard() {
                                                                             {subject.percentage}%
                                                                         </Chip>
                                                                     </TableCell>
-                                                                    <TableCell className="hidden sm:table-cell">
+                                                                    <TableCell>
                                                                         <span className="font-semibold">
                                                                             {subject.grade || (
                                                                                 parseFloat(subject.percentage) >= 90 ? 'A+' :

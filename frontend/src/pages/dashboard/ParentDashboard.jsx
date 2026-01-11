@@ -269,7 +269,7 @@ export default function ParentDashboard() {
                                                     <div className="flex justify-between items-center text-sm p-2 bg-default-50 dark:bg-default-100/10 rounded-lg">
                                                         <span className="text-default-500">Class</span>
                                                         <Chip size="sm" color="primary" variant="flat" classNames={{ content: "font-medium" }}>
-                                                            {child.Class ? `${child.Class.name} - ${child.Class.section}` : "N/A"}
+                                                            {child.Class ? `${child.Class.name} - ${child.ClassSection.name}` : "N/A"}
                                                         </Chip>
                                                     </div>
 

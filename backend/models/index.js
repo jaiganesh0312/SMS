@@ -5,6 +5,7 @@ const User = require("./User");
 const Parent = require("./Parent");
 const Student = require("./Student");
 const Class = require("./Class");
+const ClassSection = require("./ClassSection");
 const Subject = require("./Subject");
 const Timetable = require("./Timetable");
 const Attendance = require("./Attendance");
@@ -48,7 +49,11 @@ School.hasMany(Student, { foreignKey: "schoolId" });
 Student.belongsTo(School, { foreignKey: "schoolId" });
 
 School.hasMany(Class, { foreignKey: "schoolId" });
+School.hasMany(Class, { foreignKey: "schoolId" });
 Class.belongsTo(School, { foreignKey: "schoolId" });
+
+School.hasMany(ClassSection, { foreignKey: "schoolId" });
+ClassSection.belongsTo(School, { foreignKey: "schoolId" });
 
 School.hasMany(Subject, { foreignKey: "schoolId" });
 Subject.belongsTo(School, { foreignKey: "schoolId" });
@@ -90,10 +95,17 @@ Student.belongsTo(Parent, { foreignKey: "parentId" });
 
 // Academic Associations
 Class.hasMany(Timetable, { foreignKey: "classId" });
+Class.hasMany(Timetable, { foreignKey: "classId" });
 Timetable.belongsTo(Class, { foreignKey: "classId" });
+
+ClassSection.hasMany(Timetable, { foreignKey: "sectionId" });
+Timetable.belongsTo(ClassSection, { foreignKey: "sectionId" });
 
 Subject.hasMany(Timetable, { foreignKey: "subjectId" });
 Timetable.belongsTo(Subject, { foreignKey: "subjectId" });
+
+Class.hasMany(Subject, { foreignKey: "classId" });
+Subject.belongsTo(Class, { foreignKey: "classId" });
 
 User.hasMany(Timetable, { foreignKey: "teacherId" }); // User as Teacher
 Timetable.belongsTo(User, { foreignKey: "teacherId" });
@@ -102,12 +114,17 @@ Timetable.belongsTo(User, { foreignKey: "teacherId" });
 Student.hasMany(Attendance, { foreignKey: "studentId" });
 Attendance.belongsTo(Student, { foreignKey: "studentId" });
 
-Class.hasMany(Attendance, { foreignKey: "classId" }); // Optional link
-Attendance.belongsTo(Class, { foreignKey: "classId" });
+ClassSection.hasMany(Attendance, { foreignKey: "sectionId" });
+Attendance.belongsTo(ClassSection, { foreignKey: "sectionId" });
 
 // Exam Associations
 Class.hasMany(Exam, { foreignKey: "classId" });
 Exam.belongsTo(Class, { foreignKey: "classId" });
+
+// Exams might be specific to a section? Usually exams are for the whole class, but results are per student (who is in a section).
+// If exams need to be per section, add:
+ClassSection.hasMany(Exam, { foreignKey: "sectionId" });
+Exam.belongsTo(ClassSection, { foreignKey: "sectionId" });
 
 Exam.hasMany(ExamResult, { foreignKey: "examId" });
 ExamResult.belongsTo(Exam, { foreignKey: "examId" });
@@ -119,7 +136,11 @@ Subject.hasMany(ExamResult, { foreignKey: "subjectId" });
 ExamResult.belongsTo(Subject, { foreignKey: "subjectId" });
 
 Student.belongsTo(Class, { foreignKey: "classId" });
+Student.belongsTo(Class, { foreignKey: "classId" });
 Class.hasMany(Student, { foreignKey: "classId" });
+
+Student.belongsTo(ClassSection, { foreignKey: "sectionId" });
+ClassSection.hasMany(Student, { foreignKey: "sectionId" });
 
 // Finance Associations
 Class.hasMany(FeeStructure, { foreignKey: "classId" });
@@ -160,8 +181,13 @@ Class.hasMany(Announcement, { foreignKey: "classId" });
 Announcement.belongsTo(Class, { foreignKey: "classId", as: "class" });
 
 // Class Teacher Association
-Class.belongsTo(User, { foreignKey: "classTeacherId", as: "classTeacher" });
-User.hasOne(Class, { foreignKey: "classTeacherId", as: "classTeacherOf" });
+// Class Teacher (Now on ClassSection)
+ClassSection.belongsTo(User, { foreignKey: "classTeacherId", as: "classTeacher" });
+User.hasMany(ClassSection, { foreignKey: "classTeacherId", as: "classTeacherOf" });
+
+// Class -> Sections logic
+Class.hasMany(ClassSection, { foreignKey: "classId" });
+ClassSection.belongsTo(Class, { foreignKey: "classId" });
 
 // Complaint Associations
 School.hasMany(Complaint, { foreignKey: "schoolId" });
@@ -265,7 +291,11 @@ School.hasMany(StudyMaterialSection, { foreignKey: "schoolId" });
 StudyMaterialSection.belongsTo(School, { foreignKey: "schoolId" });
 
 Class.hasMany(StudyMaterialSection, { foreignKey: "classId" });
+Class.hasMany(StudyMaterialSection, { foreignKey: "classId" });
 StudyMaterialSection.belongsTo(Class, { foreignKey: "classId" });
+
+ClassSection.hasMany(StudyMaterialSection, { foreignKey: "sectionId" });
+StudyMaterialSection.belongsTo(ClassSection, { foreignKey: "sectionId" });
 
 Subject.hasMany(StudyMaterialSection, { foreignKey: "subjectId" });
 StudyMaterialSection.belongsTo(Subject, { foreignKey: "subjectId" });
@@ -292,6 +322,7 @@ module.exports = {
   Student,
   StaffProfile,
   Class,
+  ClassSection,
   Subject,
   Timetable,
   Attendance,

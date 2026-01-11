@@ -321,7 +321,7 @@ const generateReportCardTemplate = (student, exam, results, school, rank, totalS
                             </div>
                             <div class="info-item">
                                 <span class="info-label">Class:</span>
-                                <span class="info-value">${student.Class ? `${student.Class.name} - ${student.Class.section}` : 'N/A'}</span>
+                                <span class="info-value">${student.Class ? `${student.Class.name} - ${student.ClassSection.name}` : 'N/A'}</span>
                             </div>
                             <div class="info-item">
                                 <span class="info-label">Date of Birth:</span>

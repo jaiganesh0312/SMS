@@ -2,6 +2,9 @@ const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 const { sequelize } = require("../config/database");
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 const seedAdmin = async () => {
     try {
         await sequelize.authenticate();
@@ -25,8 +28,9 @@ const seedAdmin = async () => {
 
         process.exit(0);
     } catch (error) {
+        console.error("Failed to seed admin:", error);
         process.exit(1);
     }
 };
 
-seedAdmin();
+module.exports = seedAdmin;

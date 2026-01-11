@@ -178,7 +178,7 @@ export default function SectionDetails() {
                                 <Icon icon="mdi:arrow-left" className="text-lg sm:text-xl" />
                             </Button>
                             <Chip size="sm" color="primary" variant="flat" className="text-xs">{section.Subject?.name}</Chip>
-                            <Chip size="sm" variant="bordered" className="border-default-300 text-default-600 text-xs">{section.Class?.name} {section.sectionId || ''}</Chip>
+                            <Chip size="sm" variant="bordered" className="border-default-300 text-default-600 text-xs">{section.Class?.name} {section.ClassSection?.name || ''}</Chip>
                         </div>
                         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-2">{section.title}</h1>
                         <p className="text-sm sm:text-base text-default-500 max-w-2xl">{section.description}</p>

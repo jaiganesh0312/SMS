@@ -70,10 +70,10 @@ exports.getAllSections = async (req, res) => {
                 where.classId = student.classId;
                 where.isPublished = true;
                 // Filter by section if student has one
-                if (student.section) {
+                if (student.sectionId) {
                     where[Op.or] = [
                         { sectionId: null },
-                        { sectionId: student.section }
+                        { sectionId: student.sectionId }
                     ];
                 }
             }
@@ -93,7 +93,8 @@ exports.getAllSections = async (req, res) => {
         const sections = await StudyMaterialSection.findAll({
             where,
             include: [
-                { model: Class, attributes: ['id', 'name', 'section'] },
+                { model: Class, attributes: ['id', 'name'] },
+                { model: require('../models').ClassSection, attributes: ['id', 'name'] }, // Add ClassSection include
                 { model: Subject, attributes: ['id', 'name'] },
                 { model: User, as: 'creator', attributes: ['id', 'name'] },
                 {
@@ -127,7 +128,8 @@ exports.getSectionById = async (req, res) => {
         const section = await StudyMaterialSection.findOne({
             where: { id, schoolId },
             include: [
-                { model: Class, attributes: ['id', 'name', 'section'] },
+                { model: Class, attributes: ['id', 'name'] },
+                { model: require('../models').ClassSection, attributes: ['id', 'name'] },
                 { model: Subject, attributes: ['id', 'name'] },
                 { model: User, as: 'creator', attributes: ['id', 'name'] },
                 {
@@ -367,7 +369,8 @@ exports.getMaterialById = async (req, res) => {
                     model: StudyMaterialSection,
                     as: 'section',
                     include: [
-                        { model: Class, attributes: ['id', 'name', 'section'] },
+                        { model: Class, attributes: ['id', 'name'] },
+                        { model: require('../models').ClassSection, attributes: ['id', 'name'] },
                         { model: Subject, attributes: ['id', 'name'] }
                     ]
                 }

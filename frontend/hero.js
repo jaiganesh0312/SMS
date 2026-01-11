@@ -31,7 +31,7 @@ export default heroui({
                     "800": "#2c2824",
                     "900": "#1c1a17",
                     "foreground": "#24282C",
-                    "DEFAULT": "#5c554c"
+                    "DEFAULT": "#b2aeaa"
                 },
                 "primary": {
                     "50": "#e8eef5",

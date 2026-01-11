@@ -1,4 +1,4 @@
-const { Class, Subject, Timetable } = require("../models");
+const { Class, ClassSection, Subject, Timetable } = require("../models");
 const { Op } = require("sequelize");
 const { sequelize } = require("../config/database");
 
@@ -6,15 +6,39 @@ const { sequelize } = require("../config/database");
 // --- Classes ---
 exports.createClass = async (req, res) => {
   try {
-    const { name, section, classTeacherId } = req.body;
-    const schoolId = req.user.schoolId; // Assumes protect middleware
+    const { name } = req.body;
+    const schoolId = req.user.schoolId;
 
-    const newClass = await Class.create({ schoolId, name, section, classTeacherId });
+    const newClass = await Class.create({ schoolId, name });
 
     res.status(201).json({
       success: true,
       message: "Class created successfully",
       data: { class: newClass },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.createSection = async (req, res) => {
+  try {
+    const { classId, name, classTeacherId } = req.body;
+    // Verify class exists? database FK will handle it, but good to be safe.
+
+    const newSection = await ClassSection.create({
+      classId,
+      name,
+      classTeacherId
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Section created successfully",
+      data: { section: newSection },
     });
   } catch (error) {
     res.status(500).json({
@@ -49,12 +73,19 @@ exports.getStandards = async (req, res) => {
 
 exports.getDivisions = async (req, res) => {
   try {
-    const { standard } = req.params;
+    const { standard } = req.params; // standard is the Class Name (e.g. "10")
     const schoolId = req.user.schoolId;
 
-    const divisions = await Class.findAll({
-      where: { schoolId, name: standard },
-      attributes: ['id', 'section', 'classTeacherId'],
+    // Find the Class first
+    const classObj = await Class.findOne({ where: { schoolId, name: standard } });
+
+    if (!classObj) {
+      return res.status(200).json({ success: true, message: "Class not found", data: [] });
+    }
+
+    const divisions = await ClassSection.findAll({
+      where: { classId: classObj.id },
+      attributes: ['id', 'name', 'classTeacherId'],
       include: [
         {
           model: require('../models').User,
@@ -62,7 +93,7 @@ exports.getDivisions = async (req, res) => {
           attributes: ['id', 'name']
         }
       ],
-      order: [['section', 'ASC']]
+      order: [['name', 'ASC']]
     });
 
     res.status(200).json({
@@ -80,23 +111,56 @@ exports.getDivisions = async (req, res) => {
 
 exports.assignClassTeacher = async (req, res) => {
   try {
-    const { classId } = req.params;
+    const { sectionId } = req.params; // Changed from classId to sectionId
     const { teacherId } = req.body;
-    const schoolId = req.user.schoolId;
+    // const schoolId = req.user.schoolId; // Not strictly needed for update if ID is unique UUID, but good for security.
 
-    const classToUpdate = await Class.findOne({ where: { id: classId, schoolId } });
+    const sectionToUpdate = await ClassSection.findByPk(sectionId);
 
-    if (!classToUpdate) {
-      return res.status(404).json({ success: false, message: "Class not found" });
+    if (!sectionToUpdate) {
+      return res.status(404).json({ success: false, message: "Section not found" });
     }
 
-    classToUpdate.classTeacherId = teacherId;
-    await classToUpdate.save();
+    sectionToUpdate.classTeacherId = teacherId;
+    await sectionToUpdate.save();
 
     res.status(200).json({
       success: true,
       message: "Class teacher assigned successfully",
-      data: classToUpdate
+      data: sectionToUpdate
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.getAllSections = async (req, res) => {
+  try {
+    let schoolId = req.user.schoolId;
+    if (req.user.role === 'SUPER_ADMIN' && req.query.schoolId) {
+      schoolId = req.query.schoolId;
+    }
+
+    const { Class } = require("../models");
+
+    const sections = await ClassSection.findAll({
+      include: [
+        {
+          model: Class,
+          where: { schoolId },
+          attributes: ['id', 'name']
+        }
+      ],
+      order: [[Class, 'name', 'ASC'], ['name', 'ASC']]
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Sections fetched successfully",
+      data: sections
     });
   } catch (error) {
     res.status(500).json({
@@ -188,10 +252,14 @@ exports.getTeachers = async (req, res) => {
 // --- Subjects ---
 exports.createSubject = async (req, res) => {
   try {
-    const { name, code } = req.body;
+    const { name, code, classId } = req.body;
     const schoolId = req.user.schoolId;
 
-    const newSubject = await Subject.create({ schoolId, name, code });
+    if (!classId) {
+      return res.status(400).json({ success: false, message: "Class ID is required" });
+    }
+
+    const newSubject = await Subject.create({ schoolId, name, code, classId });
 
     res.status(201).json({
       success: true,
@@ -209,7 +277,7 @@ exports.createSubject = async (req, res) => {
 exports.getAllSubjects = async (req, res) => {
   try {
     let schoolId = req.user.schoolId;
-    const { schoolId: querySchoolId } = req.query;
+    const { schoolId: querySchoolId, classId } = req.query;
 
     if (req.user.role === 'SUPER_ADMIN' && querySchoolId) {
       schoolId = querySchoolId;
@@ -219,8 +287,14 @@ exports.getAllSubjects = async (req, res) => {
     if (schoolId) {
       where.schoolId = schoolId;
     }
+    if (classId) {
+      where.classId = classId;
+    }
 
-    const subjects = await Subject.findAll({ where });
+    const subjects = await Subject.findAll({
+      where,
+      include: [{ model: Class, attributes: ['name'] }]
+    });
 
     res.status(200).json({
       success: true,
@@ -240,7 +314,7 @@ exports.getAllSubjects = async (req, res) => {
 // --- Timetable ---
 exports.createTimetableEntry = async (req, res) => {
   try {
-    const { classId, subjectId, teacherId, dayOfWeek, startTime, endTime, room } = req.body;
+    const { sectionId, subjectId, teacherId, dayOfWeek, startTime, endTime, room } = req.body;
     let schoolId = req.user.schoolId;
 
     // Handle Super Admin case
@@ -261,7 +335,7 @@ exports.createTimetableEntry = async (req, res) => {
     // Doing logic here or service level. For MVP Controller is fine.
 
     const newEntry = await Timetable.create({
-      schoolId, classId, subjectId, teacherId, dayOfWeek, startTime, endTime, classroom: room
+      schoolId, sectionId, subjectId, teacherId, dayOfWeek, startTime, endTime, classroom: room
     });
 
     res.status(201).json({
@@ -280,7 +354,7 @@ exports.createTimetableEntry = async (req, res) => {
 exports.createDailyTimetable = async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
-    const { classId, dayOfWeek, periods } = req.body;
+    const { sectionId, dayOfWeek, periods } = req.body;
     let schoolId = req.user.schoolId;
 
     if (req.user.role === "SUPER_ADMIN") {
@@ -291,9 +365,9 @@ exports.createDailyTimetable = async (req, res) => {
       }
     }
 
-    if (!classId || !dayOfWeek || !periods || !Array.isArray(periods)) {
+    if (!sectionId || !dayOfWeek || !periods || !Array.isArray(periods)) {
       await transaction.rollback();
-      return res.status(400).json({ success: false, message: "Invalid input. classId, dayOfWeek and periods (array) are required." });
+      return res.status(400).json({ success: false, message: "Invalid input. sectionId, dayOfWeek and periods (array) are required." });
     }
 
     // Normalize dayOfWeek to Title Case (e.g., "THURSDAY" -> "Thursday")
@@ -330,10 +404,14 @@ exports.createDailyTimetable = async (req, res) => {
           schoolId,
           dayOfWeek: formattedDay,
           teacherId: { [Op.in]: teacherIds },
-          classId: { [Op.ne]: classId } // Exclude the current class (since we are replacing its schedule anyway)
+          sectionId: { [Op.ne]: sectionId } // Exclude the current section (since we are replacing its schedule anyway)
         },
         include: [
-          { model: Class, attributes: ['name', 'section'] },
+          {
+            model: ClassSection,
+            attributes: ['name'],
+            include: [{ model: Class, attributes: ['name'] }]
+          },
           { model: require('../models').User, attributes: ['name'] } // To get Teacher Name
         ],
         transaction
@@ -362,7 +440,7 @@ exports.createDailyTimetable = async (req, res) => {
           if (newStart < bookEnd && newEnd > bookStart) {
             await transaction.rollback();
             const teacherName = booking.User ? booking.User.name : "Teacher";
-            const className = booking.Class ? `${booking.Class.name}-${booking.Class.section}` : "another class";
+            const className = booking.ClassSection ? `${booking.ClassSection.Class.name}-${booking.ClassSection.name}` : "another class";
             return res.status(409).json({
               success: false,
               message: `Conflict: ${teacherName} is already assigned to ${className} from ${booking.startTime.slice(0, 5)} to ${booking.endTime.slice(0, 5)}.`
@@ -373,11 +451,11 @@ exports.createDailyTimetable = async (req, res) => {
     }
 
 
-    // 1. Delete existing entries for this class and day (After conflict check passes!)
+    // 1. Delete existing entries for this section and day (After conflict check passes!)
     await Timetable.destroy({
       where: {
         schoolId,
-        classId,
+        sectionId,
         dayOfWeek: formattedDay
       },
       transaction
@@ -386,7 +464,7 @@ exports.createDailyTimetable = async (req, res) => {
     // 2. Prepare new entries
     const newEntries = periods.map(period => ({
       schoolId,
-      classId,
+      sectionId,
       dayOfWeek: formattedDay,
       subjectId: period.subjectId,
       teacherId: period.teacherId, // Required by model
@@ -420,7 +498,7 @@ exports.createDailyTimetable = async (req, res) => {
 exports.getTimetable = async (req, res) => {
   try {
     let schoolId = req.user.schoolId;
-    const { classId, teacherId, schoolId: querySchoolId } = req.query;
+    const { sectionId, teacherId, schoolId: querySchoolId } = req.query;
 
     if (req.user.role === 'SUPER_ADMIN' && querySchoolId) {
       schoolId = querySchoolId;
@@ -430,12 +508,20 @@ exports.getTimetable = async (req, res) => {
     if (schoolId) {
       where.schoolId = schoolId;
     }
-    if (classId) where.classId = classId;
+    if (sectionId) where.sectionId = sectionId;
     if (teacherId) where.teacherId = teacherId;
 
     const timetable = await Timetable.findAll({
       where,
-      include: ["Class", "Subject", "User"]
+      include: [
+        {
+          model: ClassSection,
+          attributes: ['name'],
+          include: [{ model: Class, attributes: ['name'] }]
+        },
+        "Subject",
+        "User"
+      ]
     });
 
     res.status(200).json({

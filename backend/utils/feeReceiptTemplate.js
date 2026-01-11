@@ -260,7 +260,7 @@ const generateFeeReceiptTemplate = (payment, student, feeStructure, school, host
                                 <div style="font-weight: 700; color: #2c3e50; margin-bottom: 8px; font-size: 11px; text-transform: uppercase;">Received From</div>
                                 <div class="info-row"><span class="label">Student Name</span><span class="value">${student.name}</span></div>
                                 <div class="info-row"><span class="label">Admission No</span><span class="value">${student.admissionNumber}</span></div>
-                                <div class="info-row"><span class="label">Class</span><span class="value">${student.Class ? `${student.Class.name}-${student.Class.section}` : 'N/A'}</span></div>
+                                <div class="info-row"><span class="label">Class</span><span class="value">${student.Class ? `${student.Class.name} ${student.ClassSection ? '- ' + student.ClassSection.name : ''}` : 'N/A'}</span></div>
                                 <div class="info-row"><span class="label">Guardian</span><span class="value">${student.Parent ? student.Parent.guardianName : 'N/A'}</span></div>
                             </div>
                         </div>

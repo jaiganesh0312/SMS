@@ -1,4 +1,4 @@
-const { Student, Parent, Class, School, User } = require("../models");
+const { Student, Parent, Class, ClassSection, School, User } = require("../models");
 const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
@@ -30,6 +30,7 @@ exports.createStudent = async (req, res) => {
       gender,
       parentId: parentId || null,
       classId: classId || null,
+      sectionId: req.body.sectionId || null,
     });
 
     // Link to class if specific
@@ -79,7 +80,11 @@ exports.getAllStudents = async (req, res) => {
       where,
       include: [
         { model: Parent, attributes: ["guardianName", "occupation"] },
-        { model: Class, attributes: ["name", "section"] },
+        {
+          model: ClassSection,
+          attributes: ["name"],
+          include: [{ model: Class, attributes: ["name"] }]
+        },
       ],
       order: [["createdAt", "DESC"]],
     });
@@ -130,14 +135,18 @@ exports.updateStudent = async (req, res) => {
 
 exports.bulkUpdateStudents = async (req, res) => {
   try {
-    const { studentIds, classId, parentId, updates } = req.body; // Added parentId
+    const { studentIds, sectionId, parentId } = req.body; // Added parentId
     const schoolId = req.user.schoolId;
+
+    const section = await ClassSection.findByPk(sectionId);
+    const classId = section.classId;
 
     let updatedCount = 0;
 
-    if (studentIds && studentIds.length > 0 && (classId || parentId)) {
+    if (studentIds && studentIds.length > 0 && (sectionId || parentId)) {
       // Bulk update fields
       const updatePayload = {};
+      if (sectionId) updatePayload.sectionId = sectionId;
       if (classId) updatePayload.classId = classId;
       if (parentId) updatePayload.parentId = parentId;
 
@@ -228,7 +237,8 @@ exports.generateIDCard = async (req, res) => {
     const student = await Student.findOne({
       where: { id, schoolId },
       include: [
-        { model: Class, attributes: ['name', 'section'] },
+        { model: Class, attributes: ['name'] },
+        { model: ClassSection, attributes: ['name'] },
         {
           model: Parent,
           attributes: ['guardianName', 'userId'],

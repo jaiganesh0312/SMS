@@ -21,10 +21,11 @@ import {
     Pagination
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
-import { studyMaterialService, academicService } from '@/services'; // You might need to add studyMaterialService to index.js
-import { useNavigate } from 'react-router-dom';
+import { studyMaterialService, academicService } from '@/services';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { useAuth } from '@/context/AuthContext';
+import { PageHeader } from '@/components/common';
 
 const sectionSchema = z.object({
     title: z.string().min(1, "Title is required"),
@@ -35,48 +36,81 @@ const sectionSchema = z.object({
     isPublished: z.boolean().default(false)
 });
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
+
+const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 }
+};
+
 export default function StudyMaterials() {
+    const { sectionId } = useParams();
     const navigate = useNavigate();
     const { user } = useAuth();
     const isTeacherOrAdmin = ['TEACHER', 'SCHOOL_ADMIN', 'SUPER_ADMIN'].includes(user?.role);
 
     const [sections, setSections] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [classes, setClasses] = useState([]);
     const [subjects, setSubjects] = useState([]);
-    const [filterClass, setFilterClass] = useState('');
     const [filterSubject, setFilterSubject] = useState('');
+    const [currentSection, setCurrentSection] = useState(null); // Metadata for the current section (division)
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm({
+    // We need to fetch classId and section metadata. 
+    // Since we don't have a direct "getSectionById" service handy that returns full details easily without context,
+    // we might fetch all sections or rely on what we have.
+    // For creating new material section, we need classId.
+
+    // Simplification: We will fetch all class/section info or just rely on what we have.
+    // Ideally update `academicService` to get specific section details.
+
+    const [allClasses, setAllClasses] = useState([]); // Needed for form
+
+    const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm({
         resolver: zodResolver(sectionSchema),
         defaultValues: {
             title: '',
             description: '',
-            isPublished: true
+            isPublished: true,
+            sectionId: sectionId // Pre-fill sectionId
         }
     });
 
     useEffect(() => {
         fetchInitialData();
         fetchSections();
-    }, []);
+    }, [sectionId]); // Re-fetch if sectionId changes
 
     useEffect(() => {
         fetchSections();
-    }, [filterClass, filterSubject]);
+    }, [filterSubject]);
 
     const fetchInitialData = async () => {
         try {
-            const [classesRes, subjectsRes] = await Promise.all([
+            const [classesRes, subjectsRes, sectionsRes] = await Promise.all([
                 academicService.getAllClasses(),
-                academicService.getAllSubjects()
+                academicService.getAllSubjects(),
+                academicService.getAllSections() // To find current section details
             ]);
 
-            if (classesRes.data?.success) setClasses(classesRes.data.data?.classes || []);
+            if (classesRes.data?.success) setAllClasses(classesRes.data.data?.classes || []);
             if (subjectsRes.data?.success) setSubjects(subjectsRes.data.data?.subjects || []);
+
+            if (sectionsRes.data?.success && sectionId) {
+                const foundSection = (sectionsRes.data.data || []).find(s => s.id === sectionId);
+                if (foundSection) {
+                    setCurrentSection(foundSection);
+                    // Pre-fill form if found
+                    setValue('classId', foundSection.classId);
+                    setValue('sectionId', foundSection.id); // Explicitly set specific section
+                }
+            }
         } catch (error) {
+            console.error(error);
         }
     };
 
@@ -84,7 +118,10 @@ export default function StudyMaterials() {
         setLoading(true);
         try {
             const filters = {};
-            if (filterClass) filters.classId = filterClass;
+            if (sectionId) filters.sectionId = sectionId; // This might need backend support to filter strictly by sectionId column in StudyMaterialSection
+            // The existing backend `getAllSections` (studyMaterialService) filters by `classId` and `sectionId`.
+            // If we pass `sectionId` it should return materials for that section.
+
             if (filterSubject) filters.subjectId = filterSubject;
 
             const response = await studyMaterialService.getAllSections(filters);
@@ -92,6 +129,7 @@ export default function StudyMaterials() {
                 setSections(response.data.sections);
             }
         } catch (error) {
+            console.error(error);
         } finally {
             setLoading(false);
         }
@@ -99,57 +137,42 @@ export default function StudyMaterials() {
 
     const onSubmit = async (data) => {
         try {
-            // Handle "all" sectionId
             const payload = { ...data };
-            if (!payload.sectionId || payload.sectionId === 'all') {
-                payload.sectionId = null;
-            }
+            // Ensure we are creating for this specific section
+            if (sectionId) payload.sectionId = sectionId;
 
             const response = await studyMaterialService.createSection(payload);
             if (response.success) {
                 fetchSections();
                 onClose();
                 reset();
+                // Reset form with correct defaults again
+                if (currentSection) {
+                    setValue('classId', currentSection.classId);
+                    setValue('sectionId', currentSection.id);
+                }
             }
         } catch (error) {
+            console.error(error);
         }
     };
 
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
-    };
-
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: { y: 0, opacity: 1 }
-    };
-
     return (
-        <motion.div
-            className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 max-w-7xl mx-auto"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-        >
+        <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 max-w-7xl mx-auto">
             <div className="flex flex-col gap-4">
-                <div className="text-center sm:text-left">
-                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">Study Materials</h1>
-                    <p className="text-xs sm:text-sm text-default-500 mt-1">Access and manage course contents</p>
+                <div className="flex flex-col gap-2">
+                    <Link to={currentSection ? `/study-materials/class/${currentSection.classId}` : "/study-materials"} className="text-default-500 hover:text-primary text-sm flex items-center gap-1 w-fit">
+                        <Icon icon="mdi:arrow-left" /> Back to Sections
+                    </Link>
+                    <div className="text-center sm:text-left">
+                        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
+                            {currentSection ? `Study Materials - ${currentSection.Class?.name} ${currentSection.name}` : "Study Materials"}
+                        </h1>
+                        <p className="text-xs sm:text-sm text-default-500 mt-1">Access and manage course contents</p>
+                    </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                    <Select
-                        placeholder="Filter Class"
-                        size="sm"
-                        className="w-full sm:flex-1 sm:max-w-[200px]"
-                        selectedKeys={filterClass ? [filterClass] : []}
-                        onChange={(e) => setFilterClass(e.target.value)}
-                        variant="bordered"
-                    >
-                        {classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name} - {c.section}</SelectItem>)}
-                    </Select>
-
                     <Select
                         placeholder="Filter Subject"
                         size="sm"
@@ -169,7 +192,7 @@ export default function StudyMaterials() {
                             className="shadow-md shadow-primary/20 w-full sm:w-auto"
                             size="sm"
                         >
-                            <span className="hidden sm:inline">New Section</span>
+                            <span className="hidden sm:inline">New Chapter</span>
                             <span className="sm:hidden">New</span>
                         </Button>
                     )}
@@ -196,9 +219,14 @@ export default function StudyMaterials() {
                     )}
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-y-3 sm:gap-4 md:gap-6">
+                <motion.div
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-y-3 sm:gap-4 md:gap-6"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
                     {sections.map((section) => (
-                        <motion.div key={section.id} className="w-full">
+                        <motion.div key={section.id} variants={itemVariants} className="w-full">
                             <Card
                                 isPressable
                                 onPress={() => navigate(`/study-materials/sections/${section.id}`)}
@@ -219,7 +247,7 @@ export default function StudyMaterials() {
                                                 {section.Subject?.name}
                                             </Chip>
                                             <Chip size="sm" variant="bordered" className="text-xs border-default-300">
-                                                {section.Class?.name} {section.sectionId ? `- ${section.sectionId}` : ''}
+                                                {section.Class?.name} {section.ClassSection ? `- ${section.ClassSection.name}` : ''}
                                             </Chip>
                                         </div>
                                         <h3 className="text-base sm:text-lg font-bold text-foreground line-clamp-1 mb-1" title={section.title}>
@@ -243,7 +271,7 @@ export default function StudyMaterials() {
                             </Card>
                         </motion.div>
                     ))}
-                </div>
+                </motion.div>
             )}
 
             {/* Create Section Modal */}
@@ -287,7 +315,7 @@ export default function StudyMaterials() {
                                         errorMessage={errors.classId?.message}
                                         variant="bordered"
                                     >
-                                        {classes.map(c => (
+                                        {allClasses.map(c => (
                                             <SelectItem key={c.id} value={c.id}>
                                                 {c.name} {c.section && `(${c.section})`}
                                             </SelectItem>
@@ -333,6 +361,6 @@ export default function StudyMaterials() {
                     )}
                 </ModalContent>
             </Modal>
-        </motion.div>
+        </div>
     );
 }

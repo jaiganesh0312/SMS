@@ -363,18 +363,13 @@ export default function AddExamResult() {
             </motion.div>
 
             {selectedExam && students.length > 0 && (
-                <motion.div variants={itemVariants}>
+                <motion.div>
                     <Card className="shadow-sm bg-content1 border border-default-200 dark:border-default-100">
                         <CardBody className="p-0">
                             <Table
                                 aria-label="Student marks table"
                                 shadow="none"
-                                removeWrapper
-                                classNames={{
-                                    th: "bg-default-50 text-default-500 h-10",
-                                    td: "text-foreground py-3 border-b border-default-100",
-                                    tr: "hover:bg-default-50/50"
-                                }}
+
                             >
                                 <TableHeader>
                                     <TableColumn>STUDENT NAME</TableColumn>

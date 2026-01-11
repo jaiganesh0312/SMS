@@ -37,7 +37,7 @@ export default function SystemAdminDashboard() {
             icon: 'mdi:domain',
             color: 'text-primary-600 dark:text-primary-400',
             bgColor: 'bg-primary-100 dark:bg-primary-500/20',
-            borderColor: 'border-l-primary-500'
+            borderColor: 'border-l-blue'
         },
         {
             title: 'Total Revenue',
@@ -45,7 +45,7 @@ export default function SystemAdminDashboard() {
             icon: 'mdi:currency-usd',
             color: 'text-success-600 dark:text-success-400',
             bgColor: 'bg-success-100 dark:bg-success-500/20',
-            borderColor: 'border-l-success-500'
+            borderColor: 'border-l-success'
         },
         {
             title: 'Total Users',
@@ -53,7 +53,7 @@ export default function SystemAdminDashboard() {
             icon: 'mdi:account-group',
             color: 'text-secondary-600 dark:text-secondary-400',
             bgColor: 'bg-secondary-100 dark:bg-secondary-500/20',
-            borderColor: 'border-l-secondary-500'
+            borderColor: 'border-l-secondary'
         },
         {
             title: 'System Health',
@@ -61,7 +61,7 @@ export default function SystemAdminDashboard() {
             icon: 'mdi:heart-pulse',
             color: 'text-warning-600 dark:text-warning-400',
             bgColor: 'bg-warning-100 dark:bg-warning-500/20',
-            borderColor: 'border-l-warning-500'
+            borderColor: 'border-l-warning'
         },
     ];
 
@@ -102,7 +102,7 @@ export default function SystemAdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {statCards.map((stat, index) => (
                     <motion.div key={index} variants={itemVariants}>
-                        <Card className={`border-l-4 ${stat.borderColor} shadow-sm bg-content1 dark:bg-content1 border-y border-r border-default-200 dark:border-default-100`}>
+                        <Card className={`border-l-4 ${stat.borderColor} shadow-sm bg-content1 dark:bg-content1 dark:border-default-100`}>
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between">
                                     <div>
@@ -166,7 +166,7 @@ export default function SystemAdminDashboard() {
                             </div>
                             <Chip size="sm" variant="flat" color="secondary">Schools</Chip>
                         </CardHeader>
-                        <CardBody className="px-0 pb-4">
+                        <CardBody className="px-2 pb-4">
                             <Table aria-label="Recent Schools" removeWrapper classNames={{ th: "bg-default-100 text-default-500", td: "border-b border-default-100" }}>
                                 <TableHeader>
                                     <TableColumn>SCHOOL NAME</TableColumn>

@@ -35,13 +35,13 @@ import { motion } from "framer-motion";
 
 const standardSchema = z.object({
     name: z.string().min(1, "Standard name is required"),
-    section: z.string().min(1, "Initial section is required"),
-    classTeacherId: z.string().optional()
+    // section: z.string().min(1, "Initial section is required"), // Removed
+    // classTeacherId: z.string().optional() // Removed from Class
 });
 
 const divisionSchema = z.object({
     section: z.string().min(1, "Section is required"),
-    classTeacherId: z.string().optional()
+    classTeacherId: z.string().optional().nullable()
 });
 
 export default function Classes() {
@@ -69,7 +69,7 @@ export default function Classes() {
         handleSubmit: handleSubmitDiv,
         reset: resetDiv,
         formState: { errors: errorsDiv }
-    } = useForm({ resolver: zodResolver(divisionSchema) });
+    } = useForm({ resolver: zodResolver(divisionSchema), defaultValues: { classTeacherId: null } });
 
     useEffect(() => {
         fetchStandards();
@@ -78,9 +78,9 @@ export default function Classes() {
 
     const fetchStandards = async () => {
         try {
-            const response = await academicService.getStandards();
+            const response = await academicService.getAllClasses();
             if (response.data?.success) {
-                setStandards(response.data.data || []);
+                setStandards(response.data.data.classes || []);
             }
         } catch (error) {
         } finally {
@@ -111,8 +111,8 @@ export default function Classes() {
 
     const handleCreateStandard = async (data) => {
         try {
-            // Create class (this creates standard + initial division)
-            const response = await academicService.createClass(data);
+            // Create class (only name)
+            const response = await academicService.createClass({ name: data.name });
             if (response.data?.success) {
                 fetchStandards();
                 onStdClose();
@@ -125,16 +125,16 @@ export default function Classes() {
     const handleCreateDivision = async (data) => {
         try {
             const payload = {
-                name: selectedStandard,
-                section: data.section,
+                classId: selectedStandard.id,
+                name: data.section,
                 classTeacherId: data.classTeacherId
             };
-            const response = await academicService.createClass(payload);
+            const response = await academicService.createSection(payload);
             if (response.data?.success) {
                 // Refresh divisions for this standard
-                const divResponse = await academicService.getDivisions(selectedStandard);
+                const divResponse = await academicService.getDivisions(selectedStandard.name);
                 if (divResponse.data?.success) {
-                    setDivisions(prev => ({ ...prev, [selectedStandard]: divResponse.data.data }));
+                    setDivisions(prev => ({ ...prev, [selectedStandard.name]: divResponse.data.data }));
                 }
                 onDivClose();
                 resetDiv();
@@ -201,18 +201,18 @@ export default function Classes() {
                             <div className="text-center text-default-500 py-8">No standards found. Add one to get started.</div>
                         ) : (
                             <Accordion selectionMode="multiple" variant="splitted">
-                                {standards.map((std) => (
+                                {standards.map((cls) => (
                                     <AccordionItem
-                                        key={std}
+                                        key={cls.id}
                                         title={
                                             <div className="flex items-center gap-2">
-                                                <span className="font-semibold text-lg">{std} Standard</span>
+                                                <span className="font-semibold text-lg">{cls.name} Standard</span>
                                                 <Chip size="sm" variant="flat" color="secondary">
-                                                    {divisions[std] ? divisions[std].length : '?'} Sections
+                                                    {divisions[cls.name] ? divisions[cls.name].length : '?'} Sections
                                                 </Chip>
                                             </div>
                                         }
-                                        onPress={() => fetchDivisions(std)}
+                                        onPress={() => fetchDivisions(cls.name)}
                                     >
                                         <div className="py-2">
                                             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-2 gap-2">
@@ -222,7 +222,7 @@ export default function Classes() {
                                                     variant="flat"
                                                     color="primary"
                                                     startContent={<Icon icon="mdi:plus" />}
-                                                    onPress={() => { setSelectedStandard(std); onDivOpen(); }}
+                                                    onPress={() => { setSelectedStandard(cls); onDivOpen(); }}
                                                     className="w-full sm:w-auto"
                                                 >
                                                     Add Division
@@ -230,7 +230,7 @@ export default function Classes() {
                                             </div>
 
                                             <div className="overflow-x-auto">
-                                                <Table removeWrapper aria-label={`${std} divisions table`} classNames={{
+                                                <Table removeWrapper aria-label={`${cls.name} divisions table`} classNames={{
                                                     wrapper: "bg-content1 border border-default-200 shadow-sm",
                                                     th: "bg-default-100 text-default-500 font-medium"
                                                 }}>
@@ -241,13 +241,13 @@ export default function Classes() {
                                                         <TableColumn>ACTIONS</TableColumn>
                                                     </TableHeader>
                                                     <TableBody
-                                                        emptyContent={divisions[std] ? "No divisions found" : "Loading..."}
-                                                        items={divisions[std] || []}
+                                                        emptyContent={divisions[cls.name] ? "No divisions found" : "Loading..."}
+                                                        items={divisions[cls.name] || []}
                                                     >
-                                                        {(cls) => (
-                                                            <TableRow key={cls.id}>
+                                                        {(section) => (
+                                                            <TableRow key={section.id}>
                                                                 <TableCell>
-                                                                    <Chip color="primary" variant="dot">{cls.section}</Chip>
+                                                                    <Chip color="primary" variant="dot">{section.name}</Chip>
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     <Select
@@ -255,8 +255,8 @@ export default function Classes() {
                                                                         placeholder="Select Teacher"
                                                                         size="sm"
                                                                         className="w-full sm:max-w-xs"
-                                                                        defaultSelectedKeys={cls.classTeacherId ? [cls.classTeacherId] : []}
-                                                                        onChange={(e) => handleAssignTeacher(cls.id, std, e.target.value)}
+                                                                        defaultSelectedKeys={section.classTeacherId ? [section.classTeacherId] : []}
+                                                                        onChange={(e) => handleAssignTeacher(section.id, cls.name, e.target.value)}
                                                                         variant="bordered"
                                                                     >
                                                                         {teachers.map((t) => (
@@ -271,7 +271,7 @@ export default function Classes() {
                                                                         size="sm"
                                                                         variant="light"
                                                                         color="primary"
-                                                                        onPress={() => navigate(`/students?classId=${cls.id}`)}
+                                                                        onPress={() => navigate(`/students?classId=${section.id}`)}
                                                                     >
                                                                         View Students
                                                                     </Button>
@@ -315,7 +315,7 @@ export default function Classes() {
                                         errorMessage={errorsStd.name?.message}
                                         variant="bordered"
                                     />
-                                    <Input
+                                    {/* <Input
                                         {...registerStd('section')}
                                         label="Initial Section"
                                         placeholder="e.g. A"
@@ -332,7 +332,7 @@ export default function Classes() {
                                         {teachers.map((t) => (
                                             <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
                                         ))}
-                                    </Select>
+                                    </Select> */}
                                 </div>
                             </ModalBody>
                             <ModalFooter>
@@ -348,8 +348,8 @@ export default function Classes() {
             <Modal isOpen={isDivOpen} onClose={onDivClose}>
                 <ModalContent>
                     {(onClose) => (
-                        <form onSubmit={handleSubmitDiv(handleCreateDivision)}>
-                            <ModalHeader>Add Division to {selectedStandard}</ModalHeader>
+                        <form onSubmit={handleSubmitDiv(handleCreateDivision, (err) => { console.log(err) })}>
+                            <ModalHeader>Add Division to {selectedStandard?.name}</ModalHeader>
                             <ModalBody>
                                 <div className="grid gap-4">
                                     <Input
@@ -380,6 +380,6 @@ export default function Classes() {
                     )}
                 </ModalContent>
             </Modal>
-        </motion.div>
+        </motion.div >
     );
 }

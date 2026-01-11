@@ -4,7 +4,8 @@ const {
   Student,
   Parent,
   Class,
-  Subject
+  Subject,
+  ClassSection
 } = require("../models");
 
 const { Sequelize } = require("sequelize");
@@ -35,7 +36,7 @@ exports.getSchoolStats = async (req, res) => {
         limit: 5,
         order: [['createdAt', 'DESC']],
         attributes: ['id', 'name', 'admissionNumber', 'createdAt'],
-        include: [{ model: Class, attributes: ['name', 'section'] }]
+        include: [{ model: Class, attributes: ['name'] }, { model: ClassSection, attributes: ['name'] }]
       })
     ]);
 

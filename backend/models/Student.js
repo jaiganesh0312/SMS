@@ -33,6 +33,14 @@ const Student = sequelize.define(
         key: "id",
       },
     },
+    sectionId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: "class_sections",
+        key: "id",
+      },
+    },
     admissionNumber: {
       type: DataTypes.STRING,
       allowNull: false,

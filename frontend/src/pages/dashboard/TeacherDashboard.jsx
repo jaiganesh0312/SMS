@@ -50,7 +50,7 @@ export default function TeacherDashboard() {
         try {
             const payload = {
                 ...data,
-                targetClassId: myClass.id,
+                targetClassId: myClass.Class?.id, // Send Class ID not Section ID (unless announcements support section)
                 priority: data.priority || 'MEDIUM'
             };
             const response = await announcementService.createAnnouncement(payload);
@@ -108,7 +108,7 @@ export default function TeacherDashboard() {
                                         <div className="flex items-center gap-2 mb-2">
                                             <Chip size="sm" variant="shadow" classNames={{ base: "bg-secondary-500 text-primary-900", content: "font-bold tracking-wide" }}>CLASS TEACHER</Chip>
                                         </div>
-                                        <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">{myClass.name} - {myClass.section}</h2>
+                                        <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">{myClass.Class?.name} - {myClass.name}</h2>
                                         <p className="text-primary-100 mt-1 font-medium flex items-center gap-2">
                                             <Icon icon="mdi:account-group" />
                                             {myClass.Students ? myClass.Students.length : 0} Students Assigned

@@ -1,4 +1,4 @@
-const { Exam, ExamResult, Student, Subject, GradeRule, Class, Parent, School } = require("../models");
+const { Exam, ExamResult, Student, Subject, GradeRule, Class, Parent, School, ClassSection } = require("../models");
 const { Op } = require("sequelize");
 const puppeteer = require('puppeteer');
 const generateReportCardTemplate = require('../utils/reportCardTemplate');
@@ -6,11 +6,11 @@ const generateReportCardTemplate = require('../utils/reportCardTemplate');
 // --- Exam Management ---
 exports.createExam = async (req, res) => {
     try {
-        const { classId, name, type, startDate, endDate } = req.body;
+        const { sectionId, classId, name, type, startDate, endDate } = req.body;
         const schoolId = req.user.schoolId;
 
         const newExam = await Exam.create({
-            schoolId, classId, name, type, startDate, endDate
+            schoolId, classId, sectionId, name, type, startDate, endDate
         });
 
         res.status(201).json({
@@ -29,7 +29,7 @@ exports.createExam = async (req, res) => {
 exports.getExams = async (req, res) => {
     try {
         let schoolId = req.user.schoolId;
-        const { classId, schoolId: querySchoolId } = req.query;
+        const { classId, sectionId, schoolId: querySchoolId } = req.query;
 
         if (req.user.role === 'SUPER_ADMIN' && querySchoolId) {
             schoolId = querySchoolId;
@@ -41,7 +41,22 @@ exports.getExams = async (req, res) => {
         }
         if (classId) where.classId = classId;
 
-        const exams = await Exam.findAll({ where, include: [{ model: Class }], order: [["startDate", "DESC"]] });
+        // Filter by section if provided (fetch generic class exams + specific section exams)
+        if (sectionId) {
+            where[Op.or] = [
+                { sectionId: null },
+                { sectionId: sectionId }
+            ];
+        } else if (classId) where.sectionId = null;
+
+        const exams = await Exam.findAll({
+            where,
+            include: [
+                { model: Class },
+                { model: ClassSection }
+            ],
+            order: [["startDate", "DESC"]]
+        });
 
         res.status(200).json({
             success: true,
@@ -193,7 +208,10 @@ exports.getExamResults = async (req, res) => {
                 {
                     model: Student,
                     attributes: ["id", "name", "admissionNumber"],
-                    where: classId ? { classId } : {}
+                    where: {
+                        ...(classId ? { classId } : {}),
+                        ...(req.query.sectionId ? { sectionId: req.query.sectionId } : {})
+                    }
                 },
                 { model: Subject, attributes: ["id", "name", "code"] },
                 { model: Exam, attributes: ["name", "type"] }
@@ -334,7 +352,7 @@ exports.getStudentExamResults = async (req, res) => {
                     examType: result.Exam.type,
                     startDate: result.Exam.startDate,
                     endDate: result.Exam.endDate,
-                    className: student.Class ? `${student.Class.name} - ${student.Class.section}` : 'N/A',
+                    className: student.Class && student.ClassSection ? `${student.Class.name} - ${student.ClassSection.name}` : (student.Class ? student.Class.name : 'N/A'),
                     classId: student.classId,
                     subjects: [],
                     totalObtained: 0,
@@ -375,7 +393,7 @@ exports.getStudentExamResults = async (req, res) => {
                     id: student.id,
                     name: student.name,
                     admissionNumber: student.admissionNumber,
-                    class: student.Class ? `${student.Class.name} - ${student.Class.section}` : 'N/A'
+                    class: student.Class && student.ClassSection ? `${student.Class.name} - ${student.ClassSection.name}` : (student.Class ? student.Class.name : 'N/A')
                 },
                 examResults
             }
@@ -401,6 +419,7 @@ exports.downloadReportCard = async (req, res) => {
             where: { id: studentId, schoolId },
             include: [
                 { model: Class },
+                { model: ClassSection },
                 { model: Parent, include: [{ model: require('../models').User, attributes: ['phone'] }] },
                 { model: School }
             ]

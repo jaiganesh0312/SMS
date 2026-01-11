@@ -32,7 +32,7 @@ const ManageBuses = () => {
     const [formData, setFormData] = useState({
         busNumber: '',
         registrationNumber: '',
-        driverId: '',
+        driverId: null,
         deviceId: '',
         capacity: 40,
     });
